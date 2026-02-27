@@ -3,21 +3,26 @@
   "version": "1.0.0",
   "description": "My Remotion video",
   "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "studio": "remotion studio",
+    "bundle": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "next lint"
   },
   "repository": {},
   "license": "UNLICENSED",
   "dependencies": {
-    "@remotion/cli": "^4.0.0",
-    "@remotion/google-fonts": "4.0.419",
-    "@remotion/transitions": "4.0.419",
+    "@remotion/cli": "4.0.429",
+    "@remotion/google-fonts": "4.0.429",
+    "@remotion/player": "4.0.429",
+    "@remotion/transitions": "4.0.429",
     "firebase": "^12.10.0",
+    "next": "^16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "remotion": "^4.0.0"
+    "remotion": "4.0.429"
   },
   "devDependencies": {
     "@remotion/eslint-config-flat": "^4.0.0",

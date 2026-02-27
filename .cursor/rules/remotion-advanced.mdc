@@ -1,0 +1,101 @@
+---
+description: Remotion advanced features - Lottie animations, Three.js 3D, charts and data visualization
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Lottie
+
+Install: `npx remotion add @remotion/lottie`
+
+```tsx
+import { Lottie, LottieAnimationData } from '@remotion/lottie';
+import { useState, useEffect } from 'react';
+import { cancelRender, continueRender, delayRender } from 'remotion';
+
+export const MyAnimation = () => {
+  const [handle] = useState(() => delayRender('Loading Lottie animation'));
+  const [animationData, setAnimationData] = useState<LottieAnimationData | null>(null);
+
+  useEffect(() => {
+    fetch('https://assets4.lottiefiles.com/packages/lf20_zyquagfl.json')
+      .then(r => r.json())
+      .then(json => { setAnimationData(json); continueRender(handle); })
+      .catch(err => cancelRender(err));
+  }, [handle]);
+
+  if (!animationData) return null;
+  return <Lottie animationData={animationData} style={{ width: 400, height: 400 }} />;
+};
+```
+
+# Three.js / React Three Fiber
+
+Install: `npx remotion add @remotion/three`
+
+**Rules:**
+- Wrap 3D content in `<ThreeCanvas width={width} height={height}>` — always include lighting
+- `useFrame()` from `@react-three/fiber` is **FORBIDDEN** — causes flickering during rendering
+- All animations MUST be driven by `useCurrentFrame()`
+- `<Sequence>` inside `<ThreeCanvas>` must have `layout="none"`
+
+```tsx
+import { ThreeCanvas } from '@remotion/three';
+import { useVideoConfig, useCurrentFrame } from 'remotion';
+
+const { width, height } = useVideoConfig();
+const frame = useCurrentFrame();
+const rotationY = frame * 0.02;
+
+<ThreeCanvas width={width} height={height}>
+  <ambientLight intensity={0.4} />
+  <directionalLight position={[5, 5, 5]} intensity={0.8} />
+  <mesh rotation={[0, rotationY, 0]}>
+    <boxGeometry args={[2, 2, 2]} />
+    <meshStandardMaterial color="#4a9eff" />
+  </mesh>
+</ThreeCanvas>
+```
+
+# Charts & Data Visualization
+
+Disable all third-party library animations — drive everything from `useCurrentFrame()`.
+
+## Bar Chart
+
+```tsx
+const bars = data.map((item, i) => {
+  const height = spring({ frame, fps, delay: i * 5, config: { damping: 200 } });
+  return <div key={i} style={{ height: height * item.value }} />;
+});
+```
+
+## Pie Chart (stroke-dashoffset from 12 o'clock)
+
+```tsx
+const progress = interpolate(frame, [0, 100], [0, 1]);
+const circumference = 2 * Math.PI * radius;
+const segmentLength = (value / total) * circumference;
+const offset = interpolate(progress, [0, 1], [segmentLength, 0]);
+
+<circle r={radius} cx={center} cy={center} fill="none" stroke={color}
+  strokeWidth={strokeWidth} strokeDasharray={`${segmentLength} ${circumference}`}
+  strokeDashoffset={offset} transform={`rotate(-90 ${center} ${center})`} />
+```
+
+## Line Chart / SVG Path Animation
+
+Install `@remotion/paths`: `npx remotion add @remotion/paths`
+
+```tsx
+import { evolvePath } from '@remotion/paths';
+
+const progress = interpolate(frame, [0, 2 * fps], [0, 1], {
+  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+  easing: Easing.out(Easing.quad),
+});
+const { strokeDasharray, strokeDashoffset } = evolvePath(progress, path);
+
+<path d={path} fill="none" stroke="#FF3232" strokeWidth={4}
+  strokeDasharray={strokeDasharray} strokeDashoffset={strokeDashoffset} />
+```

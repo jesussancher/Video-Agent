@@ -1,0 +1,101 @@
+---
+description: Remotion media utilities via Mediabunny - get duration, dimensions, extract frames, decode check
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+# Media Utilities (Mediabunny)
+
+Mediabunny works in browser, Node.js, and Bun environments.
+
+## Get video/audio duration
+
+```tsx
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
+
+export const getMediaDuration = async (src: string) => {
+  const input = new Input({ formats: ALL_FORMATS, source: new UrlSource(src, { getRetryDelay: () => null }) });
+  return input.computeDuration(); // returns seconds
+};
+```
+
+## Get video dimensions
+
+```tsx
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
+
+export const getVideoDimensions = async (src: string) => {
+  const input = new Input({ formats: ALL_FORMATS, source: new UrlSource(src, { getRetryDelay: () => null }) });
+  const videoTrack = await input.getPrimaryVideoTrack();
+  if (!videoTrack) throw new Error('No video track found');
+  return { width: videoTrack.displayWidth, height: videoTrack.displayHeight };
+};
+```
+
+Use with `staticFile()`:
+```tsx
+import { staticFile } from 'remotion';
+const { width, height } = await getVideoDimensions(staticFile('video.mp4'));
+```
+
+Use `FileSource` for local files (File object from input/drag-drop).
+
+## Check if video can be decoded
+
+```tsx
+import { Input, ALL_FORMATS, UrlSource } from 'mediabunny';
+
+export const canDecode = async (src: string): Promise<boolean> => {
+  const input = new Input({ formats: ALL_FORMATS, source: new UrlSource(src, { getRetryDelay: () => null }) });
+  try { await input.getFormat(); } catch { return false; }
+  const videoTrack = await input.getPrimaryVideoTrack();
+  if (videoTrack && !(await videoTrack.canDecode())) return false;
+  const audioTrack = await input.getPrimaryAudioTrack();
+  if (audioTrack && !(await audioTrack.canDecode())) return false;
+  return true;
+};
+```
+
+## Extract frames
+
+```tsx
+import { ALL_FORMATS, Input, UrlSource, VideoSampleSink } from 'mediabunny';
+
+export async function extractFrames({ src, timestampsInSeconds, onVideoSample, signal }) {
+  using input = new Input({ formats: ALL_FORMATS, source: new UrlSource(src) });
+  const [durationInSeconds, format, videoTrack] = await Promise.all([
+    input.computeDuration(), input.getFormat(), input.getPrimaryVideoTrack(),
+  ]);
+  if (!videoTrack) throw new Error('No video track found');
+  if (signal?.aborted) throw new Error('Aborted');
+
+  const timestamps = typeof timestampsInSeconds === 'function'
+    ? await timestampsInSeconds({ track: { width: videoTrack.displayWidth, height: videoTrack.displayHeight }, container: format.name, durationInSeconds })
+    : timestampsInSeconds;
+
+  if (timestamps.length === 0) return;
+
+  const sink = new VideoSampleSink(videoTrack);
+  for await (using videoSample of sink.samplesAtTimestamps(timestamps)) {
+    if (signal?.aborted) break;
+    if (!videoSample) continue;
+    onVideoSample(videoSample);
+  }
+}
+```
+
+Basic usage:
+```tsx
+await extractFrames({
+  src: 'https://remotion.media/video.mp4',
+  timestampsInSeconds: [0, 1, 2, 3, 4],
+  onVideoSample: (sample) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = sample.displayWidth;
+    canvas.height = sample.displayHeight;
+    sample.draw(canvas.getContext('2d')!, 0, 0);
+  },
+});
+```
+
+Use `AbortController` + `signal` for cancellation.

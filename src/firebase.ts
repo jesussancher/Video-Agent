@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp, getApps } from "firebase/app";
+import type { Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD35avrv9uT7V9OkbshAa2WHUgg_VicikU",
@@ -11,5 +11,11 @@ const firebaseConfig = {
   measurementId: "G-TE2ZP1EQVC",
 };
 
-export const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
+export const app =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+
+export async function getAnalyticsInstance(): Promise<Analytics | null> {
+  if (typeof window === "undefined") return null;
+  const { getAnalytics } = await import("firebase/analytics");
+  return getAnalytics(app);
+}

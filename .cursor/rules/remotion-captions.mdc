@@ -1,0 +1,125 @@
+---
+description: Remotion captions and subtitles - transcribing, importing SRT, displaying with word highlighting
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+# Captions
+
+All captions use the `Caption` type from `@remotion/captions`:
+
+```ts
+type Caption = {
+  text: string;
+  startMs: number;
+  endMs: number;
+  timestampMs: number | null;
+  confidence: number | null;
+};
+```
+
+Install: `npx remotion add @remotion/captions`
+
+# Transcribing Audio (Whisper.cpp)
+
+Install: `npx remotion add @remotion/install-whisper-cpp`
+
+```ts
+import { installWhisperCpp, downloadWhisperModel, transcribe, toCaptions } from '@remotion/install-whisper-cpp';
+import path from 'path';
+import fs from 'fs';
+
+const to = path.join(process.cwd(), 'whisper.cpp');
+await installWhisperCpp({ to, version: '1.5.5' });
+await downloadWhisperModel({ model: 'medium.en', folder: to });
+
+const whisperCppOutput = await transcribe({
+  model: 'medium.en',
+  whisperPath: to,
+  whisperCppVersion: '1.5.5',
+  inputPath: '/path/to/audio.wav',  // Convert to 16KHz wav first if needed
+  tokenLevelTimestamps: true,
+});
+
+const { captions } = toCaptions({ whisperCppOutput });
+fs.writeFileSync('captions.json', JSON.stringify(captions, null, 2));
+// Move to public/ folder so Remotion can fetch it
+```
+
+# Importing .srt Files
+
+```tsx
+import { parseSrt } from '@remotion/captions';
+import { useDelayRender, staticFile } from 'remotion';
+
+const { delayRender, continueRender, cancelRender } = useDelayRender();
+const [handle] = useState(() => delayRender());
+
+useEffect(() => {
+  fetch(staticFile('subtitles.srt'))
+    .then(r => r.text())
+    .then(text => {
+      const { captions: parsed } = parseSrt({ input: text });
+      setCaptions(parsed);
+      continueRender(handle);
+    })
+    .catch(cancelRender);
+}, []);
+```
+
+# Displaying Captions (TikTok style)
+
+Put captioning logic in a **separate component file**.
+
+```tsx
+import { createTikTokStyleCaptions } from '@remotion/captions';
+import { Sequence, useVideoConfig, AbsoluteFill, useCurrentFrame } from 'remotion';
+
+const SWITCH_CAPTIONS_EVERY_MS = 1200;
+
+const { pages } = useMemo(() =>
+  createTikTokStyleCaptions({ captions, combineTokensWithinMilliseconds: SWITCH_CAPTIONS_EVERY_MS }),
+  [captions]
+);
+
+// Render pages as Sequences
+const { fps } = useVideoConfig();
+{pages.map((page, index) => {
+  const nextPage = pages[index + 1] ?? null;
+  const startFrame = (page.startMs / 1000) * fps;
+  const endFrame = Math.min(
+    nextPage ? (nextPage.startMs / 1000) * fps : Infinity,
+    startFrame + (SWITCH_CAPTIONS_EVERY_MS / 1000) * fps,
+  );
+  const durationInFrames = endFrame - startFrame;
+  if (durationInFrames <= 0) return null;
+  return <Sequence key={index} from={startFrame} durationInFrames={durationInFrames}><CaptionPage page={page} /></Sequence>;
+})}
+```
+
+## Word highlighting
+
+Use `page.tokens` for word-level highlighting. Use `whiteSpace: "pre"` to preserve whitespace:
+
+```tsx
+const frame = useCurrentFrame();
+const { fps } = useVideoConfig();
+const absoluteTimeMs = page.startMs + (frame / fps) * 1000;
+
+{page.tokens.map((token) => (
+  <span
+    key={token.fromMs}
+    style={{ color: token.fromMs <= absoluteTimeMs && token.toMs > absoluteTimeMs ? '#39E508' : 'white' }}
+  >
+    {token.text}
+  </span>
+))}
+```
+
+Place captions alongside video content:
+```tsx
+<AbsoluteFill>
+  <Video src={staticFile('video.mp4')} />
+  <CaptionPage page={page} />
+</AbsoluteFill>
+```

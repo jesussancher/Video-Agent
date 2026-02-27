@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[34833,["/_next/static/chunks/ff2045fe8d5b38de.js"],"default"]
+3:I[97367,["/_next/static/chunks/2f236954d6a65e12.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"TA49iJKS3wJgFHg1iRcCK","rsc":["$","$1","c",{"children":[["$","main",null,{"style":{"minHeight":"100vh","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center","backgroundColor":"#050508","padding":"40px 20px","gap":32},"children":[["$","header",null,{"style":{"textAlign":"center"},"children":[["$","h1",null,{"style":{"fontSize":28,"fontWeight":700,"color":"#9DFF20","letterSpacing":4,"textTransform":"uppercase","marginBottom":8},"children":"Lait Technology"}],["$","p",null,{"style":{"fontSize":14,"color":"rgba(255,255,255,0.4)","letterSpacing":2,"textTransform":"uppercase"},"children":"Video Agent — Presentation Preview"}]]}],["$","$L2",null,{}],["$","footer",null,{"style":{"color":"rgba(255,255,255,0.2)","fontSize":12,"letterSpacing":1},"children":"Powered by Remotion · Next.js"}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/ff2045fe8d5b38de.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null

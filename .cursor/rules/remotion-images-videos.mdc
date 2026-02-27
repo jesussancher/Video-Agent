@@ -1,0 +1,98 @@
+---
+description: Remotion images, videos, assets - Img, Video, staticFile, public folder
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Assets
+
+Place assets in the `public/` folder. Always use `staticFile()` to reference them:
+
+```tsx
+import { Img, staticFile } from 'remotion';
+import { Video } from '@remotion/media';
+import { Audio } from '@remotion/media';
+
+<Img src={staticFile('logo.png')} />
+<Video src={staticFile('clip.mp4')} />
+<Audio src={staticFile('music.mp3')} />
+```
+
+Remote URLs work directly without `staticFile()`.
+Remotion components ensure assets are fully loaded before rendering.
+
+# Images
+
+**Always use `<Img>` from `remotion`.** Never use:
+- Native HTML `<img>`
+- Next.js `<Image>`
+- CSS `background-image`
+
+```tsx
+import { Img, staticFile } from 'remotion';
+
+<Img src={staticFile('photo.png')} style={{ width: 500, height: 300, objectFit: 'cover' }} />
+```
+
+Dynamic paths:
+```tsx
+<Img src={staticFile(`frames/frame${frame}.png`)} />
+```
+
+Get image dimensions:
+```tsx
+import { getImageDimensions } from 'remotion';
+const { width, height } = await getImageDimensions(staticFile('photo.png'));
+```
+
+For animated GIFs use `<AnimatedImage>` (see remotion-audio rule for GIFs).
+
+# Videos
+
+Install if needed: `npx remotion add @remotion/media`
+
+```tsx
+import { Video } from '@remotion/media';
+import { Sequence, staticFile } from 'remotion';
+
+const { fps } = useVideoConfig();
+
+// Trim
+<Video src={staticFile('video.mp4')} trimBefore={2 * fps} trimAfter={10 * fps} />
+
+// Delay
+<Sequence from={1 * fps}>
+  <Video src={staticFile('video.mp4')} />
+</Sequence>
+
+// Volume (dynamic)
+<Video
+  src={staticFile('video.mp4')}
+  volume={(f) => interpolate(f, [0, 1 * fps], [0, 1], { extrapolateRight: 'clamp' })}
+/>
+
+// Loop
+<Video src={staticFile('video.mp4')} loop />
+
+// Speed
+<Video src={staticFile('video.mp4')} playbackRate={2} />
+```
+
+`toneFrequency` (0.01–2) adjusts pitch without affecting speed — only works during server-side rendering.
+
+# Transparent Videos
+
+**ProRes** (for video editors):
+```bash
+npx remotion render --image-format=png --pixel-format=yuva444p10le --codec=prores --prores-profile=4444 MyComp out.mov
+```
+
+**WebM/VP9** (for browser playback):
+```bash
+npx remotion render --image-format=png --pixel-format=yuva420p --codec=vp9 MyComp out.webm
+```
+
+Or set defaults via `calculateMetadata`:
+```tsx
+return { defaultCodec: 'prores', defaultVideoImageFormat: 'png', defaultPixelFormat: 'yuva444p10le', defaultProResProfile: '4444' };
+```

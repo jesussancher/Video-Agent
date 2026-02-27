@@ -1,0 +1,84 @@
+---
+description: Remotion scene transitions, TransitionSeries, overlays, light leaks
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# TransitionSeries
+
+Install: `npx remotion add @remotion/transitions`
+
+`<TransitionSeries>` arranges scenes with two ways to enhance cuts:
+- **Transitions** — crossfade/slide/wipe between scenes (shortens timeline since both scenes overlap)
+- **Overlays** — effect on top of cut without shortening the timeline
+
+Children are absolutely positioned.
+
+## Transition example
+
+```tsx
+import { TransitionSeries, linearTiming } from '@remotion/transitions';
+import { fade } from '@remotion/transitions/fade';
+
+<TransitionSeries>
+  <TransitionSeries.Sequence durationInFrames={60}><SceneA /></TransitionSeries.Sequence>
+  <TransitionSeries.Transition presentation={fade()} timing={linearTiming({ durationInFrames: 15 })} />
+  <TransitionSeries.Sequence durationInFrames={60}><SceneB /></TransitionSeries.Sequence>
+</TransitionSeries>
+```
+
+Total duration = 60 + 60 - 15 = **105 frames** (transitions shorten the timeline).
+
+## Available transitions
+
+```tsx
+import { fade }      from '@remotion/transitions/fade';
+import { slide }     from '@remotion/transitions/slide';   // directions: from-left/right/top/bottom
+import { wipe }      from '@remotion/transitions/wipe';
+import { flip }      from '@remotion/transitions/flip';
+import { clockWipe } from '@remotion/transitions/clock-wipe';
+```
+
+## Timing
+
+```tsx
+import { linearTiming, springTiming } from '@remotion/transitions';
+
+linearTiming({ durationInFrames: 20 });
+springTiming({ config: { damping: 200 }, durationInFrames: 25 });
+```
+
+Get duration: `linearTiming({ durationInFrames: 20 }).getDurationInFrames({ fps: 30 })`
+
+## Overlay example
+
+```tsx
+<TransitionSeries>
+  <TransitionSeries.Sequence durationInFrames={60}><SceneA /></TransitionSeries.Sequence>
+  <TransitionSeries.Overlay durationInFrames={20}>
+    <LightLeak />
+  </TransitionSeries.Overlay>
+  <TransitionSeries.Sequence durationInFrames={60}><SceneB /></TransitionSeries.Sequence>
+</TransitionSeries>
+```
+
+An overlay cannot be adjacent to a transition or another overlay.
+
+# Light Leaks
+
+Requires Remotion 4.0.415+. Install: `npx remotion add @remotion/light-leaks`
+
+```tsx
+import { LightLeak } from '@remotion/light-leaks';
+
+// In a TransitionSeries overlay
+<TransitionSeries.Overlay durationInFrames={30}>
+  <LightLeak seed={5} hueShift={240} />  // seed=pattern, hueShift: 0=yellow, 120=green, 240=blue
+</TransitionSeries.Overlay>
+
+// Standalone overlay
+<AbsoluteFill>
+  <MyContent />
+  <LightLeak durationInFrames={60} seed={3} />
+</AbsoluteFill>
+```

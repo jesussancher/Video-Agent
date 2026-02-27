@@ -1,0 +1,95 @@
+---
+description: Remotion fonts, text animations, text measurement, Tailwind usage
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Fonts
+
+## Google Fonts (recommended)
+
+```bash
+npx remotion add @remotion/google-fonts
+```
+
+```tsx
+import { loadFont } from '@remotion/google-fonts/Montserrat';
+
+const { fontFamily } = loadFont('normal', {
+  weights: ['400', '700'],
+  subsets: ['latin'],
+});
+
+export const Title = ({ text }: { text: string }) => (
+  <h1 style={{ fontFamily, fontSize: 80 }}>{text}</h1>
+);
+```
+
+Use `waitUntilDone()` if you need to know when the font is ready.
+
+## Local Fonts
+
+```bash
+npx remotion add @remotion/fonts
+```
+
+```tsx
+import { loadFont } from '@remotion/fonts';
+import { staticFile } from 'remotion';
+
+await loadFont({ family: 'MyFont', url: staticFile('MyFont-Regular.woff2'), weight: '400' });
+```
+
+Call `loadFont()` at the top level (module scope), not inside a component.
+
+# Text Animations
+
+Use `useCurrentFrame()` for typewriter effects — always use string slicing, never per-character opacity:
+
+```tsx
+const frame = useCurrentFrame();
+const { fps } = useVideoConfig();
+const charsToShow = Math.floor(interpolate(frame, [0, 2 * fps], [0, fullText.length], { extrapolateRight: 'clamp' }));
+const text = fullText.slice(0, charsToShow);
+```
+
+# Measuring Text
+
+```bash
+npx remotion add @remotion/layout-utils
+```
+
+```tsx
+import { measureText, fitText, fillTextBox } from '@remotion/layout-utils';
+
+// Measure
+const { width, height } = measureText({ text: 'Hello', fontFamily: 'Arial', fontSize: 32, fontWeight: 'bold' });
+
+// Fit to container
+const { fontSize } = fitText({ text: 'Hello', withinWidth: 600, fontFamily: 'Inter', fontWeight: 'bold' });
+
+// Check overflow
+const box = fillTextBox({ maxBoxWidth: 400, maxLines: 3 });
+const { exceedsBox } = box.add({ text: word + ' ', fontFamily: 'Arial', fontSize: 24 });
+```
+
+Always load fonts before measuring. Use `validateFontIsLoaded: true` in `measureText()` to catch loading issues early.
+Match all font properties between measurement and rendering (fontFamily, fontSize, fontWeight, letterSpacing).
+
+# Measuring DOM Nodes
+
+Remotion applies a `scale()` transform — divide `getBoundingClientRect()` values by `useCurrentScale()`:
+
+```tsx
+import { useCurrentScale } from 'remotion';
+
+const scale = useCurrentScale();
+const rect = ref.current.getBoundingClientRect();
+const width = rect.width / scale;
+const height = rect.height / scale;
+```
+
+# Tailwind
+
+Use TailwindCSS if it's installed in the project.
+**Never use `transition-*` or `animate-*` classes** — always animate via `useCurrentFrame()`.

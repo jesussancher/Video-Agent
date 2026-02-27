@@ -1,0 +1,120 @@
+---
+description: Remotion animation fundamentals - useCurrentFrame, interpolate, spring, sequencing, trimming
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Animations
+
+All animations MUST be driven by the `useCurrentFrame()` hook.
+Write animations in seconds and multiply by `fps` from `useVideoConfig()`.
+
+```tsx
+const frame = useCurrentFrame();
+const { fps } = useVideoConfig();
+
+const opacity = interpolate(frame, [0, 2 * fps], [0, 1], {
+  extrapolateRight: 'clamp',
+});
+```
+
+CSS transitions/animations and Tailwind `transition-*`/`animate-*` classes are FORBIDDEN — they will not render correctly.
+
+# Timing
+
+## interpolate
+
+```ts
+const opacity = interpolate(frame, [0, 100], [0, 1], {
+  extrapolateRight: 'clamp',
+  extrapolateLeft: 'clamp',
+});
+```
+
+## Spring
+
+```ts
+import { spring } from 'remotion';
+
+const scale = spring({ frame, fps });
+```
+
+Common configs:
+```ts
+const smooth = { damping: 200 };           // No bounce (subtle reveals)
+const snappy = { damping: 20, stiffness: 200 }; // Minimal bounce (UI elements)
+const bouncy = { damping: 8 };             // Playful entrance
+const heavy  = { damping: 15, stiffness: 80, mass: 2 };
+```
+
+Combine with `interpolate()` to map to custom ranges:
+```ts
+const rotation = interpolate(spring({ frame, fps }), [0, 1], [0, 360]);
+```
+
+## Easing
+
+```ts
+import { interpolate, Easing } from 'remotion';
+
+const value = interpolate(frame, [0, 100], [0, 1], {
+  easing: Easing.inOut(Easing.quad),
+  extrapolateLeft: 'clamp',
+  extrapolateRight: 'clamp',
+});
+```
+
+Convexities: `Easing.in`, `Easing.out`, `Easing.inOut`
+Curves (most linear → most curved): `Easing.quad`, `Easing.sin`, `Easing.exp`, `Easing.circle`
+Cubic bezier: `Easing.bezier(0.8, 0.22, 0.96, 0.65)`
+
+# Sequencing
+
+Use `<Sequence>` to delay when elements appear. Always set `premountFor`:
+
+```tsx
+import { Sequence } from "remotion";
+
+<Sequence from={1 * fps} durationInFrames={2 * fps} premountFor={1 * fps}>
+  <Title />
+</Sequence>
+```
+
+`useCurrentFrame()` inside a Sequence returns the **local** frame (starts at 0).
+
+Use `layout="none"` to avoid wrapping in AbsoluteFill:
+```tsx
+<Sequence layout="none"><Title /></Sequence>
+```
+
+## Series
+
+Use `<Series>` for sequential non-overlapping scenes:
+
+```tsx
+import { Series } from 'remotion';
+
+<Series>
+  <Series.Sequence durationInFrames={45}><Intro /></Series.Sequence>
+  <Series.Sequence durationInFrames={60}><MainContent /></Series.Sequence>
+  <Series.Sequence offset={-15} durationInFrames={60}><SceneB /></Series.Sequence>
+</Series>
+```
+
+# Trimming
+
+Negative `from` trims the start of an animation:
+```tsx
+<Sequence from={-0.5 * fps}>
+  <MyAnimation />  {/* starts midway through its animation */}
+</Sequence>
+```
+
+Trim end with `durationInFrames`. Combine both by nesting:
+```tsx
+<Sequence from={30}>
+  <Sequence from={-15}>
+    <MyAnimation />
+  </Sequence>
+</Sequence>
+```

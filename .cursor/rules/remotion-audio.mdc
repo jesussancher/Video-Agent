@@ -1,0 +1,84 @@
+---
+description: Remotion audio, GIFs, animated images - Audio component, trimming, volume, looping
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Audio
+
+Install if needed: `npx remotion add @remotion/media`
+
+```tsx
+import { Audio } from '@remotion/media';
+import { Sequence, staticFile } from 'remotion';
+
+const { fps } = useVideoConfig();
+
+// Basic
+<Audio src={staticFile('audio.mp3')} />
+
+// Trim (frames)
+<Audio src={staticFile('audio.mp3')} trimBefore={2 * fps} trimAfter={10 * fps} />
+
+// Delay
+<Sequence from={1 * fps}>
+  <Audio src={staticFile('audio.mp3')} />
+</Sequence>
+
+// Dynamic volume
+<Audio
+  src={staticFile('audio.mp3')}
+  volume={(f) => interpolate(f, [0, 1 * fps], [0, 1], { extrapolateRight: 'clamp' })}
+/>
+// Note: `f` starts at 0 when audio begins, not the composition frame
+
+// Mute dynamically
+<Audio src={staticFile('audio.mp3')} muted={frame >= 2 * fps && frame <= 4 * fps} />
+
+// Loop
+<Audio src={staticFile('audio.mp3')} loop />
+<Audio src={staticFile('audio.mp3')} loop loopVolumeCurveBehavior="extend"
+  volume={(f) => interpolate(f, [0, 300], [1, 0])} />
+
+// Speed
+<Audio src={staticFile('audio.mp3')} playbackRate={2} />
+
+// Pitch (server-side rendering only)
+<Audio src={staticFile('audio.mp3')} toneFrequency={1.5} />
+```
+
+Multiple `<Audio>` components can be layered.
+
+# GIFs / Animated Images
+
+Use `<AnimatedImage>` for GIF, APNG, AVIF, WebP (Chrome/Firefox):
+
+```tsx
+import { AnimatedImage, staticFile } from 'remotion';
+
+<AnimatedImage
+  src={staticFile('animation.gif')}
+  width={500}
+  height={500}
+  fit="cover"          // "fill" | "contain" | "cover"
+  playbackRate={1}
+  loopBehavior="loop"  // "loop" | "pause-after-finish" | "clear-after-finish"
+/>
+```
+
+For GIF-only fallback, use `<Gif>` from `@remotion/gif`:
+```bash
+npx remotion add @remotion/gif
+```
+
+```tsx
+import { Gif } from '@remotion/gif';
+<Gif src={staticFile('animation.gif')} width={500} height={500} />
+```
+
+Get GIF duration:
+```tsx
+import { getGifDurationInSeconds } from '@remotion/gif';
+const duration = await getGifDurationInSeconds(staticFile('animation.gif'));
+// Use in calculateMetadata: durationInFrames: Math.ceil(duration * 30)
+```
