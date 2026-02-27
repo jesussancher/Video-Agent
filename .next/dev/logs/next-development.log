@@ -49,3 +49,49 @@
 [00:00:12.071] Browser WARN    {}
 [00:00:12.071] Browser WARN    {}
 [00:03:10.001] Server  LOG     ✓ Compiled in 35ms
+[00:05:21.984] Server  ERROR   ⨯ ./app/editor/page.tsx:4:1
+Module not found: Can't resolve './EditorClient'
+  2 | import { jwtVerify } from "jose";
+  3 | import { redirect } from "next/navigation";
+> 4 | import EditorClient from "./EditorClient";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET!);
+  7 |
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:21.985] Server  ERROR   ⨯ ./app/editor/page.tsx:4:1
+Module not found: Can't resolve './EditorClient'
+  2 | import { jwtVerify } from "jose";
+  3 | import { redirect } from "next/navigation";
+> 4 | import EditorClient from "./EditorClient";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET!);
+  7 |
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:22.018] Server  LOG     ✓ Compiled in 63ms
+[00:05:22.122] Browser ERROR   ./app/editor/page.tsx:4:1
+Module not found: Can't resolve './EditorClient'
+  2 | import { jwtVerify } from "jose";
+  3 | import { redirect } from "next/navigation";
+> 4 | import EditorClient from "./EditorClient";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET!);
+  7 |
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:27.252] Server  LOG     ✓ Compiled in 13ms
+[00:05:35.348] Server  LOG     ✓ Compiled in 3ms
+[00:05:44.692] Server  LOG       Reload env: .env
+[00:05:45.071] Server  LOG     ✓ Compiled in 345ms
