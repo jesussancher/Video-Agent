@@ -19,14 +19,14 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
       />
       {/* 9:16 Vertical (Reels / TikTok / Shorts) */}
-      <Composition
+      {/* <Composition
         id="LaitPresentation-Vertical"
         component={MyComposition}
         durationInFrames={TOTAL_DURATION}
         fps={30}
         width={1080}
         height={1920}
-      />
+      /> */}
     </>
   );
 };
