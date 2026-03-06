@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import type { Sequence, SceneType } from "../../../src/types";
 import { COMPONENT_PALETTE_ITEMS } from "../../../src/constants/componentPalette";
 
@@ -34,16 +34,22 @@ export interface TimelineProps {
   sequences: Sequence[];
   fps: number;
   totalDurationInFrames: number;
+  currentFrame: number;
+  onSeek: (frame: number) => void;
   selectedId: string | null;
   onSelect: (id: string | null) => void;
   onDrop: (type: SceneType) => void;
   onChange: (sequences: Sequence[]) => void;
 }
 
+const PADDING_LEFT = 8;
+
 export function Timeline({
   sequences,
   fps,
   totalDurationInFrames,
+  currentFrame,
+  onSeek,
   selectedId,
   onSelect,
   onDrop,
@@ -51,6 +57,72 @@ export function Timeline({
 }: TimelineProps) {
   const fromFrames = useMemo(() => computeFromFrames(sequences), [sequences]);
   const width = totalDurationInFrames * PIXELS_PER_FRAME;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const getFrameFromClientX = useCallback(
+    (clientX: number) => {
+      const el = scrollRef.current;
+      if (!el) return 0;
+      const rect = el.getBoundingClientRect();
+      const contentX = clientX - rect.left + el.scrollLeft - PADDING_LEFT;
+      const frame = Math.round(contentX / PIXELS_PER_FRAME);
+      return Math.max(0, Math.min(frame, Math.max(0, totalDurationInFrames - 1)));
+    },
+    [totalDurationInFrames]
+  );
+
+  const handlePlayheadMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(true);
+      onSeek(getFrameFromClientX(e.clientX));
+    },
+    [getFrameFromClientX, onSeek]
+  );
+
+  const handlePlayheadClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onSeek(getFrameFromClientX(e.clientX));
+    },
+    [getFrameFromClientX, onSeek]
+  );
+
+  const handleRulerClick = useCallback(
+    (e: React.MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("[data-playhead]")) return;
+      onSeek(getFrameFromClientX(e.clientX));
+    },
+    [getFrameFromClientX, onSeek]
+  );
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging) return;
+      onSeek(getFrameFromClientX(e.clientX));
+    },
+    [isDragging, getFrameFromClientX, onSeek]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isDragging) return;
+    const prevSelect = document.body.style.userSelect;
+    document.body.style.userSelect = "none";
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.body.style.userSelect = prevSelect;
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -106,55 +178,98 @@ export function Timeline({
         borderTop: "1px solid rgba(157,255,32,0.15)",
       }}
     >
-      {/* Ruler */}
+      {/* Ruler + Tracks + Playhead (scroll together) */}
       <div
-        style={{
-          height: RULER_HEIGHT,
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          paddingLeft: 8,
-          fontSize: 10,
-          color: "rgba(255,255,255,0.5)",
-          borderBottom: "1px solid rgba(157,255,32,0.1)",
-        }}
-      >
-        {Array.from({ length: Math.ceil(totalDurationInFrames / fps) + 1 }).map(
-          (_, i) => (
-            <div
-              key={i}
-              style={{
-                position: "absolute",
-                left: 8 + i * fps * PIXELS_PER_FRAME,
-                width: 1,
-                height: RULER_HEIGHT,
-                backgroundColor: "rgba(255,255,255,0.2)",
-              }}
-            />
-          )
-        )}
-        <span>0s</span>
-        <span
-          style={{
-            position: "absolute",
-            right: 8,
-          }}
-        >
-          {(totalDurationInFrames / fps).toFixed(1)}s
-        </span>
-      </div>
-
-      {/* Tracks */}
-      <div
+        ref={scrollRef}
         style={{
           flex: 1,
           overflowX: "auto",
           overflowY: "auto",
-          padding: 8,
+          position: "relative",
         }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
+        <div
+          style={{
+            minWidth: width + PADDING_LEFT * 2,
+            position: "relative",
+            padding: PADDING_LEFT,
+          }}
+        >
+          {/* Ruler */}
+          <div
+            onClick={handleRulerClick}
+            style={{
+              height: RULER_HEIGHT,
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              fontSize: 10,
+              color: "rgba(255,255,255,0.5)",
+              borderBottom: "1px solid rgba(157,255,32,0.1)",
+              cursor: "pointer",
+            }}
+          >
+            {Array.from({ length: Math.ceil(totalDurationInFrames / fps) + 1 }).map(
+              (_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "absolute",
+                    left: PADDING_LEFT + i * fps * PIXELS_PER_FRAME,
+                    width: 1,
+                    height: RULER_HEIGHT,
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                  }}
+                />
+              )
+            )}
+            <span>0s</span>
+            <span
+              style={{
+                position: "absolute",
+                right: PADDING_LEFT,
+              }}
+            >
+              {(totalDurationInFrames / fps).toFixed(1)}s
+            </span>
+          </div>
+
+          {/* Playhead */}
+          <div
+            data-playhead
+            onMouseDown={handlePlayheadMouseDown}
+            onClick={handlePlayheadClick}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: PADDING_LEFT + currentFrame * PIXELS_PER_FRAME,
+              width: 2,
+              marginLeft: -1,
+              backgroundColor: "#9DFF20",
+              pointerEvents: "auto",
+              cursor: "ew-resize",
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: -2,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 10,
+                height: 10,
+                backgroundColor: "#9DFF20",
+                borderRadius: 2,
+              }}
+            />
+          </div>
+
+          {/* Tracks */}
+          <div style={{ marginTop: 8 }}>
         {sorted.length === 0 ? (
           <div
             style={{
@@ -232,6 +347,8 @@ export function Timeline({
             })}
           </div>
         )}
+          </div>
+        </div>
       </div>
     </div>
   );

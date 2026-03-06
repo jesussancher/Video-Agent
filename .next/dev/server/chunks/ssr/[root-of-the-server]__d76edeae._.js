@@ -4619,11 +4619,75 @@ function getSequenceLabel(seq) {
     }
     return map;
 }
-function Timeline({ sequences, fps, totalDurationInFrames, selectedId, onSelect, onDrop, onChange }) {
+const PADDING_LEFT = 8;
+function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek, selectedId, onSelect, onDrop, onChange }) {
     const fromFrames = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>computeFromFrames(sequences), [
         sequences
     ]);
     const width = totalDurationInFrames * PIXELS_PER_FRAME;
+    const scrollRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [isDragging, setIsDragging] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const getFrameFromClientX = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((clientX)=>{
+        const el = scrollRef.current;
+        if (!el) return 0;
+        const rect = el.getBoundingClientRect();
+        const contentX = clientX - rect.left + el.scrollLeft - PADDING_LEFT;
+        const frame = Math.round(contentX / PIXELS_PER_FRAME);
+        return Math.max(0, Math.min(frame, Math.max(0, totalDurationInFrames - 1)));
+    }, [
+        totalDurationInFrames
+    ]);
+    const handlePlayheadMouseDown = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+        onSeek(getFrameFromClientX(e.clientX));
+    }, [
+        getFrameFromClientX,
+        onSeek
+    ]);
+    const handlePlayheadClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        e.stopPropagation();
+        onSeek(getFrameFromClientX(e.clientX));
+    }, [
+        getFrameFromClientX,
+        onSeek
+    ]);
+    const handleRulerClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        const target = e.target;
+        if (target.closest("[data-playhead]")) return;
+        onSeek(getFrameFromClientX(e.clientX));
+    }, [
+        getFrameFromClientX,
+        onSeek
+    ]);
+    const handleMouseMove = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        if (!isDragging) return;
+        onSeek(getFrameFromClientX(e.clientX));
+    }, [
+        isDragging,
+        getFrameFromClientX,
+        onSeek
+    ]);
+    const handleMouseUp = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        setIsDragging(false);
+    }, []);
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].useEffect(()=>{
+        if (!isDragging) return;
+        const prevSelect = document.body.style.userSelect;
+        document.body.style.userSelect = "none";
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+        return ()=>{
+            document.body.style.userSelect = prevSelect;
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [
+        isDragging,
+        handleMouseMove,
+        handleMouseUp
+    ]);
     const handleDragOver = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
         e.preventDefault();
         e.dataTransfer.dropEffect = "copy";
@@ -4668,175 +4732,234 @@ function Timeline({ sequences, fps, totalDurationInFrames, selectedId, onSelect,
             backgroundColor: "#0a0a0c",
             borderTop: "1px solid rgba(157,255,32,0.15)"
         },
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            ref: scrollRef,
+            style: {
+                flex: 1,
+                overflowX: "auto",
+                overflowY: "auto",
+                position: "relative"
+            },
+            onDragOver: handleDragOver,
+            onDrop: handleDrop,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
-                    height: RULER_HEIGHT,
+                    minWidth: width + PADDING_LEFT * 2,
                     position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    paddingLeft: 8,
-                    fontSize: 10,
-                    color: "rgba(255,255,255,0.5)",
-                    borderBottom: "1px solid rgba(157,255,32,0.1)"
+                    padding: PADDING_LEFT
                 },
                 children: [
-                    Array.from({
-                        length: Math.ceil(totalDurationInFrames / fps) + 1
-                    }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                position: "absolute",
-                                left: 8 + i * fps * PIXELS_PER_FRAME,
-                                width: 1,
-                                height: RULER_HEIGHT,
-                                backgroundColor: "rgba(255,255,255,0.2)"
-                            }
-                        }, i, false, {
-                            fileName: "[project]/app/editor/components/Timeline.tsx",
-                            lineNumber: 124,
-                            columnNumber: 13
-                        }, this)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        children: "0s"
-                    }, void 0, false, {
-                        fileName: "[project]/app/editor/components/Timeline.tsx",
-                        lineNumber: 136,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        onClick: handleRulerClick,
                         style: {
-                            position: "absolute",
-                            right: 8
+                            height: RULER_HEIGHT,
+                            position: "relative",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: 10,
+                            color: "rgba(255,255,255,0.5)",
+                            borderBottom: "1px solid rgba(157,255,32,0.1)",
+                            cursor: "pointer"
                         },
                         children: [
-                            (totalDurationInFrames / fps).toFixed(1),
-                            "s"
+                            Array.from({
+                                length: Math.ceil(totalDurationInFrames / fps) + 1
+                            }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        position: "absolute",
+                                        left: PADDING_LEFT + i * fps * PIXELS_PER_FRAME,
+                                        width: 1,
+                                        height: RULER_HEIGHT,
+                                        backgroundColor: "rgba(255,255,255,0.2)"
+                                    }
+                                }, i, false, {
+                                    fileName: "[project]/app/editor/components/Timeline.tsx",
+                                    lineNumber: 216,
+                                    columnNumber: 17
+                                }, this)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: "0s"
+                            }, void 0, false, {
+                                fileName: "[project]/app/editor/components/Timeline.tsx",
+                                lineNumber: 228,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    position: "absolute",
+                                    right: PADDING_LEFT
+                                },
+                                children: [
+                                    (totalDurationInFrames / fps).toFixed(1),
+                                    "s"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/editor/components/Timeline.tsx",
+                                lineNumber: 229,
+                                columnNumber: 13
+                            }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/Timeline.tsx",
-                        lineNumber: 137,
-                        columnNumber: 9
+                        lineNumber: 201,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        "data-playhead": true,
+                        onMouseDown: handlePlayheadMouseDown,
+                        onClick: handlePlayheadClick,
+                        style: {
+                            position: "absolute",
+                            top: 0,
+                            bottom: 0,
+                            left: PADDING_LEFT + currentFrame * PIXELS_PER_FRAME,
+                            width: 2,
+                            marginLeft: -1,
+                            backgroundColor: "#9DFF20",
+                            pointerEvents: "auto",
+                            cursor: "ew-resize",
+                            zIndex: 10
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                position: "absolute",
+                                top: -2,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                width: 10,
+                                height: 10,
+                                backgroundColor: "#9DFF20",
+                                borderRadius: 2
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/app/editor/components/Timeline.tsx",
+                            lineNumber: 257,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/editor/components/Timeline.tsx",
+                        lineNumber: 240,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            marginTop: 8
+                        },
+                        children: sorted.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                height: 80,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "2px dashed rgba(157,255,32,0.2)",
+                                borderRadius: 8,
+                                color: "rgba(255,255,255,0.4)",
+                                fontSize: 13
+                            },
+                            children: "Arrastra componentes aquí"
+                        }, void 0, false, {
+                            fileName: "[project]/app/editor/components/Timeline.tsx",
+                            lineNumber: 274,
+                            columnNumber: 11
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 6
+                            },
+                            children: sorted.map((seq)=>{
+                                const from = fromFrames.get(seq.id) ?? 0;
+                                const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
+                                const isSelected = selectedId === seq.id;
+                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        display: "flex",
+                                        alignItems: "center",
+                                        height: TRACK_HEIGHT
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                width: 120,
+                                                fontSize: 12,
+                                                color: "rgba(255,255,255,0.7)",
+                                                flexShrink: 0
+                                            },
+                                            children: getSequenceLabel(seq)
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/editor/components/Timeline.tsx",
+                                            lineNumber: 304,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                position: "relative",
+                                                width: `${width}px`,
+                                                minWidth: width,
+                                                height: TRACK_HEIGHT - 4
+                                            },
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                onClick: ()=>handleTrackClick(seq.id),
+                                                style: {
+                                                    position: "absolute",
+                                                    left: from * PIXELS_PER_FRAME,
+                                                    width: trackWidth,
+                                                    height: "100%",
+                                                    backgroundColor: isSelected ? "rgba(157,255,32,0.25)" : "rgba(157,255,32,0.12)",
+                                                    border: `1px solid ${isSelected ? "#9DFF20" : "rgba(157,255,32,0.3)"}`,
+                                                    borderRadius: 6,
+                                                    cursor: "pointer",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    paddingLeft: 8,
+                                                    fontSize: 11,
+                                                    color: `${seq.durationInFrames / fps}s`
+                                                },
+                                                children: [
+                                                    (seq.durationInFrames / fps).toFixed(1),
+                                                    "s"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/editor/components/Timeline.tsx",
+                                                lineNumber: 322,
+                                                columnNumber: 21
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/editor/components/Timeline.tsx",
+                                            lineNumber: 314,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, seq.id, true, {
+                                    fileName: "[project]/app/editor/components/Timeline.tsx",
+                                    lineNumber: 296,
+                                    columnNumber: 17
+                                }, this);
+                            })
+                        }, void 0, false, {
+                            fileName: "[project]/app/editor/components/Timeline.tsx",
+                            lineNumber: 289,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/editor/components/Timeline.tsx",
+                        lineNumber: 272,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/Timeline.tsx",
-                lineNumber: 110,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    flex: 1,
-                    overflowX: "auto",
-                    overflowY: "auto",
-                    padding: 8
-                },
-                onDragOver: handleDragOver,
-                onDrop: handleDrop,
-                children: sorted.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    style: {
-                        height: 80,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        border: "2px dashed rgba(157,255,32,0.2)",
-                        borderRadius: 8,
-                        color: "rgba(255,255,255,0.4)",
-                        fontSize: 13
-                    },
-                    children: "Arrastra componentes aquí"
-                }, void 0, false, {
-                    fileName: "[project]/app/editor/components/Timeline.tsx",
-                    lineNumber: 159,
-                    columnNumber: 11
-                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    style: {
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 6
-                    },
-                    children: sorted.map((seq)=>{
-                        const from = fromFrames.get(seq.id) ?? 0;
-                        const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
-                        const isSelected = selectedId === seq.id;
-                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                display: "flex",
-                                alignItems: "center",
-                                height: TRACK_HEIGHT
-                            },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        width: 120,
-                                        fontSize: 12,
-                                        color: "rgba(255,255,255,0.7)",
-                                        flexShrink: 0
-                                    },
-                                    children: getSequenceLabel(seq)
-                                }, void 0, false, {
-                                    fileName: "[project]/app/editor/components/Timeline.tsx",
-                                    lineNumber: 189,
-                                    columnNumber: 19
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        position: "relative",
-                                        width: `${width}px`,
-                                        minWidth: width,
-                                        height: TRACK_HEIGHT - 4
-                                    },
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        onClick: ()=>handleTrackClick(seq.id),
-                                        style: {
-                                            position: "absolute",
-                                            left: from * PIXELS_PER_FRAME,
-                                            width: trackWidth,
-                                            height: "100%",
-                                            backgroundColor: isSelected ? "rgba(157,255,32,0.25)" : "rgba(157,255,32,0.12)",
-                                            border: `1px solid ${isSelected ? "#9DFF20" : "rgba(157,255,32,0.3)"}`,
-                                            borderRadius: 6,
-                                            cursor: "pointer",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            paddingLeft: 8,
-                                            fontSize: 11,
-                                            color: `${seq.durationInFrames / fps}s`
-                                        },
-                                        children: [
-                                            (seq.durationInFrames / fps).toFixed(1),
-                                            "s"
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/app/editor/components/Timeline.tsx",
-                                        lineNumber: 207,
-                                        columnNumber: 21
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/app/editor/components/Timeline.tsx",
-                                    lineNumber: 199,
-                                    columnNumber: 19
-                                }, this)
-                            ]
-                        }, seq.id, true, {
-                            fileName: "[project]/app/editor/components/Timeline.tsx",
-                            lineNumber: 181,
-                            columnNumber: 17
-                        }, this);
-                    })
-                }, void 0, false, {
-                    fileName: "[project]/app/editor/components/Timeline.tsx",
-                    lineNumber: 174,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/app/editor/components/Timeline.tsx",
-                lineNumber: 148,
-                columnNumber: 7
+                lineNumber: 193,
+                columnNumber: 9
             }, this)
-        ]
-    }, void 0, true, {
+        }, void 0, false, {
+            fileName: "[project]/app/editor/components/Timeline.tsx",
+            lineNumber: 182,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
         fileName: "[project]/app/editor/components/Timeline.tsx",
-        lineNumber: 99,
+        lineNumber: 171,
         columnNumber: 5
     }, this);
 }
@@ -6619,6 +6742,7 @@ function EditorClient({ composition: initialComposition }) {
     const [composition, setComposition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(initialComposition);
     const [sequences, setSequences] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(initialComposition?.sequences ?? []);
     const [selectedId, setSelectedId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [currentFrame, setCurrentFrame] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
     const playerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const totalDurationInFrames = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$duration$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["calcTotalDuration"])(sequences), [
         sequences
@@ -6676,6 +6800,24 @@ function EditorClient({ composition: initialComposition }) {
         composition?.id,
         sequences
     ]);
+    const handleSeek = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((frame)=>{
+        const maxFrame = Math.max(0, totalDurationInFrames - 1);
+        const clamped = Math.max(0, Math.min(frame, maxFrame));
+        setCurrentFrame(clamped);
+        playerRef.current?.seekTo(clamped);
+    }, [
+        totalDurationInFrames
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const maxFrame = Math.max(0, totalDurationInFrames - 1);
+        if (currentFrame > maxFrame) {
+            setCurrentFrame(maxFrame);
+            playerRef.current?.seekTo(maxFrame);
+        }
+    }, [
+        totalDurationInFrames,
+        currentFrame
+    ]);
     const selectedSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>sequences.find((s)=>s.id === selectedId) ?? null, [
         sequences,
         selectedId
@@ -6715,7 +6857,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: composition?.title ?? "Editor"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 115,
+                                lineNumber: 131,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6727,13 +6869,13 @@ function EditorClient({ composition: initialComposition }) {
                                 children: !composition ? "Sin composición — crea una desde el dashboard para guardar" : `${sequences.length} secuencias · ${(totalDurationInFrames / fps).toFixed(1)}s`
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 127,
+                                lineNumber: 143,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 114,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6753,7 +6895,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Dashboard"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 140,
+                                lineNumber: 156,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6772,7 +6914,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Guardar"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 150,
+                                lineNumber: 166,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -6787,19 +6929,19 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Remotion Studio →"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 168,
+                                lineNumber: 184,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 139,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 104,
+                lineNumber: 120,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6811,7 +6953,7 @@ function EditorClient({ composition: initialComposition }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$ComponentPalette$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ComponentPalette"], {}, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 191,
+                        lineNumber: 207,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6856,36 +6998,38 @@ function EditorClient({ composition: initialComposition }) {
                                         acknowledgeRemotionLicense: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                        lineNumber: 221,
+                                        lineNumber: 237,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                    lineNumber: 212,
+                                    lineNumber: 228,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 202,
+                                lineNumber: 218,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$Timeline$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Timeline"], {
                                 sequences: sequences,
                                 fps: fps,
                                 totalDurationInFrames: Math.max(1, totalDurationInFrames),
+                                currentFrame: currentFrame,
+                                onSeek: handleSeek,
                                 selectedId: selectedId,
                                 onSelect: setSelectedId,
                                 onDrop: handleDrop,
                                 onChange: handleSequencesChange
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 238,
+                                lineNumber: 254,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 193,
+                        lineNumber: 209,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$PropertiesPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PropertiesPanel"], {
@@ -6893,19 +7037,19 @@ function EditorClient({ composition: initialComposition }) {
                         onChange: handleSequenceChange
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 249,
+                        lineNumber: 267,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 184,
+                lineNumber: 200,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/editor/components/EditorClient.tsx",
-        lineNumber: 95,
+        lineNumber: 111,
         columnNumber: 5
     }, this);
 }

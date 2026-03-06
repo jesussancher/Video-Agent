@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Player } from "@remotion/player";
 import { DynamicComposition } from "../../../src/Composition";
 import { ComponentPalette } from "./ComponentPalette";
@@ -31,6 +31,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
     initialComposition?.sequences ?? []
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [currentFrame, setCurrentFrame] = useState(0);
   const playerRef = useRef<ReturnType<typeof Player> | null>(null);
 
   const totalDurationInFrames = useMemo(
@@ -81,6 +82,21 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       console.error("Error saving:", err);
     }
   }, [composition?.id, sequences]);
+
+  const handleSeek = useCallback((frame: number) => {
+    const maxFrame = Math.max(0, totalDurationInFrames - 1);
+    const clamped = Math.max(0, Math.min(frame, maxFrame));
+    setCurrentFrame(clamped);
+    playerRef.current?.seekTo(clamped);
+  }, [totalDurationInFrames]);
+
+  useEffect(() => {
+    const maxFrame = Math.max(0, totalDurationInFrames - 1);
+    if (currentFrame > maxFrame) {
+      setCurrentFrame(maxFrame);
+      playerRef.current?.seekTo(maxFrame);
+    }
+  }, [totalDurationInFrames, currentFrame]);
 
   const selectedSequence = useMemo(
     () => sequences.find((s) => s.id === selectedId) ?? null,
@@ -239,6 +255,8 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
             sequences={sequences}
             fps={fps}
             totalDurationInFrames={Math.max(1, totalDurationInFrames)}
+            currentFrame={currentFrame}
+            onSeek={handleSeek}
             selectedId={selectedId}
             onSelect={setSelectedId}
             onDrop={handleDrop}
