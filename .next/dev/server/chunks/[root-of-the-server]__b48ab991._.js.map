@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///Users/JesusSanchez/Projects/Social%20Cognitive/Video-Agent/app/api/auth/logout/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\";\n\nexport async function POST() {\n  const response = NextResponse.json({ success: true });\n  response.cookies.delete(\"session\");\n  return response;\n}\n"],"names":[],"mappings":";;;;AAAA;;AAEO,eAAe;IACpB,MAAM,WAAW,gJAAY,CAAC,IAAI,CAAC;QAAE,SAAS;IAAK;IACnD,SAAS,OAAO,CAAC,MAAM,CAAC;IACxB,OAAO;AACT"}}]
+}
