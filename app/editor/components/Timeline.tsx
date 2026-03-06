@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import type { Sequence, SceneType } from "../../../src/types";
+import type { ContextMenuTarget } from "./EditorClient";
 import { COMPONENT_PALETTE_ITEMS } from "../../../src/constants/componentPalette";
 
 const TIMELINE_HEIGHT = 180;
@@ -40,6 +41,8 @@ export interface TimelineProps {
   onSelect: (id: string | null) => void;
   onDrop: (type: SceneType) => void;
   onChange: (sequences: Sequence[]) => void;
+  onReorder?: (draggedId: string, targetOrder: number) => void;
+  onContextMenu?: (e: React.MouseEvent, target: ContextMenuTarget) => void;
 }
 
 const PADDING_LEFT = 8;
@@ -54,6 +57,8 @@ export function Timeline({
   onSelect,
   onDrop,
   onChange,
+  onReorder,
+  onContextMenu,
 }: TimelineProps) {
   const fromFrames = useMemo(() => computeFromFrames(sequences), [sequences]);
   const width = totalDurationInFrames * PIXELS_PER_FRAME;
@@ -129,17 +134,33 @@ export function Timeline({
     e.dataTransfer.dropEffect = "copy";
   }, []);
 
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+  const handleDropAny = useCallback(
+    (e: React.DragEvent, targetOrder: number) => {
       e.preventDefault();
+      e.stopPropagation();
       try {
         const data = JSON.parse(e.dataTransfer.getData("application/json"));
-        if (data?.type) onDrop(data.type);
+        if (data?.type === "timeline-clip" && data?.sequenceId && onReorder) {
+          onReorder(data.sequenceId, targetOrder);
+        } else if (data?.type && typeof data.type === "string") {
+          onDrop(data.type);
+        }
       } catch {
         // ignore
       }
     },
-    [onDrop]
+    [onDrop, onReorder]
+  );
+
+  const handleTrackDragStart = useCallback(
+    (e: React.DragEvent, sequenceId: string) => {
+      e.dataTransfer.setData(
+        "application/json",
+        JSON.stringify({ type: "timeline-clip", sequenceId })
+      );
+      e.dataTransfer.effectAllowed = "move";
+    },
+    []
   );
 
   const handleTrackClick = useCallback(
@@ -167,6 +188,51 @@ export function Timeline({
     [sequences]
   );
 
+  const getInsertOrderFromFrame = useCallback(
+    (frame: number) => {
+      let order = 0;
+      for (const s of sorted) {
+        const from = fromFrames.get(s.id) ?? 0;
+        if (frame < from) break;
+        order++;
+      }
+      return order;
+    },
+    [sorted, fromFrames]
+  );
+
+  const handleRulerContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      if (!onContextMenu) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const frame = getFrameFromClientX(e.clientX);
+      const insertOrder = getInsertOrderFromFrame(frame);
+      onContextMenu(e, { type: "timeline-empty", insertOrder, frame });
+    },
+    [onContextMenu, getFrameFromClientX, getInsertOrderFromFrame]
+  );
+
+  const handleTrackContextMenu = useCallback(
+    (e: React.MouseEvent, sequenceId: string) => {
+      if (!onContextMenu) return;
+      e.preventDefault();
+      e.stopPropagation();
+      onContextMenu(e, { type: "track", sequenceId });
+    },
+    [onContextMenu]
+  );
+
+  const handleEmptyAreaContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      if (!onContextMenu) return;
+      e.preventDefault();
+      e.stopPropagation();
+      onContextMenu(e, { type: "timeline-empty", insertOrder: sequences.length, frame: 0 });
+    },
+    [onContextMenu, sequences.length]
+  );
+
   return (
     <div
       style={{
@@ -188,7 +254,7 @@ export function Timeline({
           position: "relative",
         }}
         onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        onDrop={(e) => handleDropAny(e, sequences.length)}
       >
         <div
           style={{
@@ -200,6 +266,7 @@ export function Timeline({
           {/* Ruler */}
           <div
             onClick={handleRulerClick}
+            onContextMenu={handleRulerContextMenu}
             style={{
               height: RULER_HEIGHT,
               position: "relative",
@@ -272,6 +339,7 @@ export function Timeline({
           <div style={{ marginTop: 8 }}>
         {sorted.length === 0 ? (
           <div
+            onContextMenu={handleEmptyAreaContextMenu}
             style={{
               height: 80,
               display: "flex",
@@ -287,7 +355,7 @@ export function Timeline({
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {sorted.map((seq) => {
+            {sorted.map((seq, idx) => {
               const from = fromFrames.get(seq.id) ?? 0;
               const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
               const isSelected = selectedId === seq.id;
@@ -295,10 +363,19 @@ export function Timeline({
               return (
                 <div
                   key={seq.id}
+                  draggable={!!onReorder}
+                  onDragStart={(e) => onReorder && handleTrackDragStart(e, seq.id)}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = "move";
+                  }}
+                  onDrop={(e) => handleDropAny(e, idx)}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     height: TRACK_HEIGHT,
+                    cursor: onReorder ? "grab" : undefined,
                   }}
                 >
                   <div
@@ -321,6 +398,7 @@ export function Timeline({
                   >
                     <div
                       onClick={() => handleTrackClick(seq.id)}
+                      onContextMenu={(e) => handleTrackContextMenu(e, seq.id)}
                       style={{
                         position: "absolute",
                         left: from * PIXELS_PER_FRAME,

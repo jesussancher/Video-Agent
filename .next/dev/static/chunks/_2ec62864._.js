@@ -7000,6 +7000,8 @@ function EditorClient({ composition: initialComposition }) {
     const [sequences, setSequences] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initialComposition?.sequences ?? []);
     const [selectedId, setSelectedId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [currentFrame, setCurrentFrame] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [contextMenu, setContextMenu] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [clipboard, setClipboard] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const playerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const totalDurationInFrames = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "EditorClient.useMemo[totalDurationInFrames]": ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$duration$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["calcTotalDuration"])(sequences)
@@ -7087,6 +7089,355 @@ function EditorClient({ composition: initialComposition }) {
     }["EditorClient.useCallback[handleSeek]"], [
         totalDurationInFrames
     ]);
+    const handleContextMenu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleContextMenu]": (e, target)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            setContextMenu({
+                x: e.clientX,
+                y: e.clientY,
+                target
+            });
+        }
+    }["EditorClient.useCallback[handleContextMenu]"], []);
+    const handleDuplicateSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleDuplicateSequence]": (id)=>{
+            const idx = sequences.findIndex({
+                "EditorClient.useCallback[handleDuplicateSequence].idx": (s)=>s.id === id
+            }["EditorClient.useCallback[handleDuplicateSequence].idx"]);
+            if (idx < 0) return;
+            const seq = sequences[idx];
+            const newSeq = {
+                ...JSON.parse(JSON.stringify(seq)),
+                id: generateId()
+            };
+            const next = [
+                ...sequences.slice(0, idx + 1),
+                newSeq,
+                ...sequences.slice(idx + 1)
+            ].map({
+                "EditorClient.useCallback[handleDuplicateSequence].next": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handleDuplicateSequence].next"]);
+            setSequences(next);
+            setSelectedId(newSeq.id);
+        }
+    }["EditorClient.useCallback[handleDuplicateSequence]"], [
+        sequences
+    ]);
+    const handleDeleteSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleDeleteSequence]": (id)=>{
+            setSequences({
+                "EditorClient.useCallback[handleDeleteSequence]": (prev)=>{
+                    const next = prev.filter({
+                        "EditorClient.useCallback[handleDeleteSequence].next": (s)=>s.id !== id
+                    }["EditorClient.useCallback[handleDeleteSequence].next"]).map({
+                        "EditorClient.useCallback[handleDeleteSequence].next": (s, i)=>({
+                                ...s,
+                                order: i
+                            })
+                    }["EditorClient.useCallback[handleDeleteSequence].next"]);
+                    setSelectedId({
+                        "EditorClient.useCallback[handleDeleteSequence]": (sel)=>sel === id ? next[0]?.id ?? null : sel
+                    }["EditorClient.useCallback[handleDeleteSequence]"]);
+                    return next;
+                }
+            }["EditorClient.useCallback[handleDeleteSequence]"]);
+            setClipboard({
+                "EditorClient.useCallback[handleDeleteSequence]": (c)=>c?.cut && c.sequence.id === id ? null : c
+            }["EditorClient.useCallback[handleDeleteSequence]"]);
+        }
+    }["EditorClient.useCallback[handleDeleteSequence]"], []);
+    const handleCopySequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleCopySequence]": (id)=>{
+            const seq = sequences.find({
+                "EditorClient.useCallback[handleCopySequence].seq": (s)=>s.id === id
+            }["EditorClient.useCallback[handleCopySequence].seq"]);
+            if (seq) setClipboard({
+                sequence: JSON.parse(JSON.stringify(seq)),
+                cut: false
+            });
+        }
+    }["EditorClient.useCallback[handleCopySequence]"], [
+        sequences
+    ]);
+    const handleCutSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleCutSequence]": (id)=>{
+            const seq = sequences.find({
+                "EditorClient.useCallback[handleCutSequence].seq": (s)=>s.id === id
+            }["EditorClient.useCallback[handleCutSequence].seq"]);
+            if (seq) {
+                setClipboard({
+                    sequence: JSON.parse(JSON.stringify(seq)),
+                    cut: true
+                });
+                handleDeleteSequence(id);
+            }
+        }
+    }["EditorClient.useCallback[handleCutSequence]"], [
+        sequences,
+        handleDeleteSequence
+    ]);
+    const handlePasteSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handlePasteSequence]": (insertOrder)=>{
+            if (!clipboard) return;
+            const newSeq = {
+                ...JSON.parse(JSON.stringify(clipboard.sequence)),
+                id: generateId(),
+                order: insertOrder
+            };
+            const next = sequences.map({
+                "EditorClient.useCallback[handlePasteSequence].next": (s)=>s.order >= insertOrder ? {
+                        ...s,
+                        order: s.order + 1
+                    } : s
+            }["EditorClient.useCallback[handlePasteSequence].next"]).concat(newSeq).sort({
+                "EditorClient.useCallback[handlePasteSequence].next": (a, b)=>a.order - b.order
+            }["EditorClient.useCallback[handlePasteSequence].next"]).map({
+                "EditorClient.useCallback[handlePasteSequence].next": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handlePasteSequence].next"]);
+            setSequences(next);
+            setSelectedId(newSeq.id);
+            if (clipboard.cut) setClipboard(null);
+        }
+    }["EditorClient.useCallback[handlePasteSequence]"], [
+        clipboard,
+        sequences
+    ]);
+    const handleMoveSequenceUp = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleMoveSequenceUp]": (id)=>{
+            const idx = sequences.findIndex({
+                "EditorClient.useCallback[handleMoveSequenceUp].idx": (s)=>s.id === id
+            }["EditorClient.useCallback[handleMoveSequenceUp].idx"]);
+            if (idx <= 0) return;
+            const next = [
+                ...sequences
+            ];
+            [next[idx - 1], next[idx]] = [
+                next[idx],
+                next[idx - 1]
+            ];
+            setSequences(next.map({
+                "EditorClient.useCallback[handleMoveSequenceUp]": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handleMoveSequenceUp]"]));
+        }
+    }["EditorClient.useCallback[handleMoveSequenceUp]"], [
+        sequences
+    ]);
+    const handleMoveSequenceDown = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleMoveSequenceDown]": (id)=>{
+            const idx = sequences.findIndex({
+                "EditorClient.useCallback[handleMoveSequenceDown].idx": (s)=>s.id === id
+            }["EditorClient.useCallback[handleMoveSequenceDown].idx"]);
+            if (idx < 0 || idx >= sequences.length - 1) return;
+            const next = [
+                ...sequences
+            ];
+            [next[idx], next[idx + 1]] = [
+                next[idx + 1],
+                next[idx]
+            ];
+            setSequences(next.map({
+                "EditorClient.useCallback[handleMoveSequenceDown]": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handleMoveSequenceDown]"]));
+        }
+    }["EditorClient.useCallback[handleMoveSequenceDown]"], [
+        sequences
+    ]);
+    const handleAddFromPalette = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleAddFromPalette]": (sceneType)=>{
+            const newSeq = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSequenceFromType"])(sceneType, sequences.length, generateId);
+            const next = [
+                ...sequences,
+                newSeq
+            ].map({
+                "EditorClient.useCallback[handleAddFromPalette].next": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handleAddFromPalette].next"]);
+            setSequences(next);
+            setSelectedId(newSeq.id);
+        }
+    }["EditorClient.useCallback[handleAddFromPalette]"], [
+        sequences
+    ]);
+    const contextMenuItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "EditorClient.useMemo[contextMenuItems]": ()=>{
+            if (!contextMenu) return [];
+            const target = contextMenu.target;
+            if (target.type === "track") {
+                const seq = sequences.find({
+                    "EditorClient.useMemo[contextMenuItems].seq": (s)=>s.id === target.sequenceId
+                }["EditorClient.useMemo[contextMenuItems].seq"]);
+                const idx = seq ? sequences.findIndex({
+                    "EditorClient.useMemo[contextMenuItems]": (s)=>s.id === seq.id
+                }["EditorClient.useMemo[contextMenuItems]"]) : -1;
+                const canMoveUp = idx > 0;
+                const canMoveDown = idx >= 0 && idx < sequences.length - 1;
+                return [
+                    {
+                        id: "duplicate",
+                        label: "Duplicar",
+                        shortcut: "Ctrl+D",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleDuplicateSequence(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "sep1",
+                        separator: true
+                    },
+                    {
+                        id: "cut",
+                        label: "Cortar",
+                        shortcut: "Ctrl+X",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleCutSequence(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "copy",
+                        label: "Copiar",
+                        shortcut: "Ctrl+C",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleCopySequence(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "paste",
+                        label: "Pegar",
+                        shortcut: "Ctrl+V",
+                        disabled: !clipboard,
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>seq && handlePasteSequence(seq.order + 1)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "sep2",
+                        separator: true
+                    },
+                    {
+                        id: "move-up",
+                        label: "Mover arriba",
+                        disabled: !canMoveUp,
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleMoveSequenceUp(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "move-down",
+                        label: "Mover abajo",
+                        disabled: !canMoveDown,
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleMoveSequenceDown(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "sep3",
+                        separator: true
+                    },
+                    {
+                        id: "delete",
+                        label: "Eliminar",
+                        shortcut: "Supr",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleDeleteSequence(target.sequenceId)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    }
+                ];
+            }
+            if (target.type === "timeline-empty") {
+                return [
+                    {
+                        id: "paste",
+                        label: "Pegar aquí",
+                        shortcut: "Ctrl+V",
+                        disabled: !clipboard,
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handlePasteSequence(target.insertOrder)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "add-text",
+                        label: "Añadir texto",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleAddFromPalette("text")
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "add-image",
+                        label: "Añadir imagen",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleAddFromPalette("image")
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "add-video",
+                        label: "Añadir video",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleAddFromPalette("video")
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    }
+                ];
+            }
+            if (target.type === "palette-item") {
+                return [
+                    {
+                        id: "add",
+                        label: "Añadir al final",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handleAddFromPalette(target.sceneType)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    }
+                ];
+            }
+            if (target.type === "preview") {
+                return [
+                    {
+                        id: "deselect",
+                        label: "Deseleccionar",
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>setSelectedId(null)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    },
+                    {
+                        id: "paste",
+                        label: "Pegar al final",
+                        shortcut: "Ctrl+V",
+                        disabled: !clipboard,
+                        onClick: {
+                            "EditorClient.useMemo[contextMenuItems]": ()=>handlePasteSequence(sequences.length)
+                        }["EditorClient.useMemo[contextMenuItems]"]
+                    }
+                ];
+            }
+            return [];
+        }
+    }["EditorClient.useMemo[contextMenuItems]"], [
+        contextMenu,
+        sequences,
+        clipboard,
+        handleDuplicateSequence,
+        handleCutSequence,
+        handleCopySequence,
+        handlePasteSequence,
+        handleMoveSequenceUp,
+        handleMoveSequenceDown,
+        handleDeleteSequence,
+        handleAddFromPalette
+    ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "EditorClient.useEffect": ()=>{
             const maxFrame = Math.max(0, totalDurationInFrames - 1);
@@ -7142,7 +7493,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: composition?.title ?? "Editor"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 131,
+                                lineNumber: 368,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -7154,13 +7505,13 @@ function EditorClient({ composition: initialComposition }) {
                                 children: !composition ? "Sin composición — crea una desde el dashboard para guardar" : `${sequences.length} secuencias · ${(totalDurationInFrames / fps).toFixed(1)}s`
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 143,
+                                lineNumber: 380,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 130,
+                        lineNumber: 367,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7180,7 +7531,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Dashboard"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 156,
+                                lineNumber: 393,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7199,7 +7550,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Guardar"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 166,
+                                lineNumber: 403,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -7214,19 +7565,19 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Remotion Studio →"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 184,
+                                lineNumber: 421,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 155,
+                        lineNumber: 392,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 120,
+                lineNumber: 357,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7236,9 +7587,14 @@ function EditorClient({ composition: initialComposition }) {
                     minHeight: 0
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$ComponentPalette$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ComponentPalette"], {}, void 0, false, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$ComponentPalette$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ComponentPalette"], {
+                        onContextMenu: (e, sceneType)=>handleContextMenu(e, {
+                                type: "palette-item",
+                                sceneType
+                            })
+                    }, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 207,
+                        lineNumber: 444,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7258,6 +7614,9 @@ function EditorClient({ composition: initialComposition }) {
                                     padding: 20,
                                     minHeight: 0
                                 },
+                                onContextMenu: (e)=>handleContextMenu(e, {
+                                        type: "preview"
+                                    }),
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
                                         width: "100%",
@@ -7283,17 +7642,17 @@ function EditorClient({ composition: initialComposition }) {
                                         acknowledgeRemotionLicense: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                        lineNumber: 237,
+                                        lineNumber: 479,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                    lineNumber: 228,
+                                    lineNumber: 470,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 218,
+                                lineNumber: 459,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$Timeline$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Timeline"], {
@@ -7305,16 +7664,17 @@ function EditorClient({ composition: initialComposition }) {
                                 selectedId: selectedId,
                                 onSelect: setSelectedId,
                                 onDrop: handleDrop,
-                                onChange: handleSequencesChange
+                                onChange: handleSequencesChange,
+                                onContextMenu: handleContextMenu
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 254,
+                                lineNumber: 496,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 209,
+                        lineNumber: 450,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$PropertiesPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PropertiesPanel"], {
@@ -7322,23 +7682,23 @@ function EditorClient({ composition: initialComposition }) {
                         onChange: handleSequenceChange
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 267,
+                        lineNumber: 510,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 200,
+                lineNumber: 437,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/editor/components/EditorClient.tsx",
-        lineNumber: 111,
+        lineNumber: 348,
         columnNumber: 5
     }, this);
 }
-_s(EditorClient, "QpnjMjvMeZ+9Y4/mu6cDHr/ZOP8=");
+_s(EditorClient, "NoLEQWl4Is1zX4+g++XlIxj09qg=");
 _c = EditorClient;
 var _c;
 __turbopack_context__.k.register(_c, "EditorClient");

@@ -6,9 +6,16 @@ import { DynamicComposition } from "../../../src/Composition";
 import { ComponentPalette } from "./ComponentPalette";
 import { Timeline } from "./Timeline";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { ContextMenu, type ContextMenuItem } from "./ContextMenu";
 import { createSequenceFromType } from "../../../src/constants/componentPalette";
 import { calcTotalDuration } from "../../../src/utils/duration";
 import type { CompositionDTO, Sequence } from "../../../src/types";
+
+export type ContextMenuTarget =
+  | { type: "track"; sequenceId: string }
+  | { type: "timeline-empty"; insertOrder: number; frame: number }
+  | { type: "palette-item"; sceneType: import("../../../src/types").SceneType }
+  | { type: "preview" };
 
 const API_URL =
   (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_API_URL) ||
@@ -32,6 +39,12 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [currentFrame, setCurrentFrame] = useState(0);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    target: ContextMenuTarget;
+  } | null>(null);
+  const [clipboard, setClipboard] = useState<{ sequence: Sequence; cut: boolean } | null>(null);
   const playerRef = useRef<ReturnType<typeof Player> | null>(null);
 
   const totalDurationInFrames = useMemo(
@@ -58,6 +71,18 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
     const reordered = next.map((s, i) => ({ ...s, order: i }));
     setSequences(reordered);
   }, []);
+
+  const handleReorder = useCallback(
+    (draggedId: string, targetOrder: number) => {
+      const idx = sequences.findIndex((s) => s.id === draggedId);
+      if (idx < 0 || idx === targetOrder) return;
+      const next = [...sequences];
+      const [moved] = next.splice(idx, 1);
+      next.splice(targetOrder, 0, moved);
+      setSequences(next.map((s, i) => ({ ...s, order: i })));
+    },
+    [sequences]
+  );
 
   const handleSequenceChange = useCallback((updated: Sequence) => {
     setSequences((prev) =>
@@ -90,6 +115,230 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
     playerRef.current?.seekTo(clamped);
   }, [totalDurationInFrames]);
 
+  const handleContextMenu = useCallback((e: React.MouseEvent, target: ContextMenuTarget) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setContextMenu({ x: e.clientX, y: e.clientY, target });
+  }, []);
+
+  const handleDuplicateSequence = useCallback(
+    (id: string) => {
+      const idx = sequences.findIndex((s) => s.id === id);
+      if (idx < 0) return;
+      const seq = sequences[idx];
+      const newSeq: Sequence = {
+        ...JSON.parse(JSON.stringify(seq)),
+        id: generateId(),
+      };
+      const next = [
+        ...sequences.slice(0, idx + 1),
+        newSeq,
+        ...sequences.slice(idx + 1),
+      ].map((s, i) => ({ ...s, order: i }));
+      setSequences(next);
+      setSelectedId(newSeq.id);
+    },
+    [sequences]
+  );
+
+  const handleDeleteSequence = useCallback(
+    (id: string) => {
+      setSequences((prev) => {
+        const next = prev.filter((s) => s.id !== id).map((s, i) => ({ ...s, order: i }));
+        setSelectedId((sel) => (sel === id ? (next[0]?.id ?? null) : sel));
+        return next;
+      });
+      setClipboard((c) => (c?.cut && c.sequence.id === id ? null : c));
+    },
+    []
+  );
+
+  const handleCopySequence = useCallback((id: string) => {
+    const seq = sequences.find((s) => s.id === id);
+    if (seq) setClipboard({ sequence: JSON.parse(JSON.stringify(seq)), cut: false });
+  }, [sequences]);
+
+  const handleCutSequence = useCallback(
+    (id: string) => {
+      const seq = sequences.find((s) => s.id === id);
+      if (seq) {
+        setClipboard({ sequence: JSON.parse(JSON.stringify(seq)), cut: true });
+        handleDeleteSequence(id);
+      }
+    },
+    [sequences, handleDeleteSequence]
+  );
+
+  const handlePasteSequence = useCallback(
+    (insertOrder: number) => {
+      if (!clipboard) return;
+      const newSeq: Sequence = {
+        ...JSON.parse(JSON.stringify(clipboard.sequence)),
+        id: generateId(),
+        order: insertOrder,
+      };
+      const next = sequences
+        .map((s) => (s.order >= insertOrder ? { ...s, order: s.order + 1 } : s))
+        .concat(newSeq)
+        .sort((a, b) => a.order - b.order)
+        .map((s, i) => ({ ...s, order: i }));
+      setSequences(next);
+      setSelectedId(newSeq.id);
+      if (clipboard.cut) setClipboard(null);
+    },
+    [clipboard, sequences]
+  );
+
+  const handleMoveSequenceUp = useCallback(
+    (id: string) => {
+      const idx = sequences.findIndex((s) => s.id === id);
+      if (idx <= 0) return;
+      const next = [...sequences];
+      [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
+      setSequences(next.map((s, i) => ({ ...s, order: i })));
+    },
+    [sequences]
+  );
+
+  const handleMoveSequenceDown = useCallback(
+    (id: string) => {
+      const idx = sequences.findIndex((s) => s.id === id);
+      if (idx < 0 || idx >= sequences.length - 1) return;
+      const next = [...sequences];
+      [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+      setSequences(next.map((s, i) => ({ ...s, order: i })));
+    },
+    [sequences]
+  );
+
+  const handleAddFromPalette = useCallback(
+    (sceneType: import("../../../src/types").SceneType) => {
+      const newSeq = createSequenceFromType(sceneType, sequences.length, generateId);
+      const next = [...sequences, newSeq].map((s, i) => ({ ...s, order: i }));
+      setSequences(next);
+      setSelectedId(newSeq.id);
+    },
+    [sequences]
+  );
+
+  const contextMenuItems: ContextMenuItem[] = useMemo(() => {
+    if (!contextMenu) return [];
+    const target = contextMenu.target;
+
+    if (target.type === "track") {
+      const seq = sequences.find((s) => s.id === target.sequenceId);
+      const idx = seq ? sequences.findIndex((s) => s.id === seq.id) : -1;
+      const canMoveUp = idx > 0;
+      const canMoveDown = idx >= 0 && idx < sequences.length - 1;
+      return [
+        {
+          id: "duplicate",
+          label: "Duplicar",
+          shortcut: "Ctrl+D",
+          onClick: () => handleDuplicateSequence(target.sequenceId),
+        },
+        { id: "sep1", separator: true },
+        { id: "cut", label: "Cortar", shortcut: "Ctrl+X", onClick: () => handleCutSequence(target.sequenceId) },
+        { id: "copy", label: "Copiar", shortcut: "Ctrl+C", onClick: () => handleCopySequence(target.sequenceId) },
+        {
+          id: "paste",
+          label: "Pegar",
+          shortcut: "Ctrl+V",
+          disabled: !clipboard,
+          onClick: () => seq && handlePasteSequence(seq.order + 1),
+        },
+        { id: "sep2", separator: true },
+        {
+          id: "move-up",
+          label: "Mover arriba",
+          disabled: !canMoveUp,
+          onClick: () => handleMoveSequenceUp(target.sequenceId),
+        },
+        {
+          id: "move-down",
+          label: "Mover abajo",
+          disabled: !canMoveDown,
+          onClick: () => handleMoveSequenceDown(target.sequenceId),
+        },
+        { id: "sep3", separator: true },
+        {
+          id: "delete",
+          label: "Eliminar",
+          shortcut: "Supr",
+          onClick: () => handleDeleteSequence(target.sequenceId),
+        },
+      ];
+    }
+
+    if (target.type === "timeline-empty") {
+      return [
+        {
+          id: "paste",
+          label: "Pegar aquí",
+          shortcut: "Ctrl+V",
+          disabled: !clipboard,
+          onClick: () => handlePasteSequence(target.insertOrder),
+        },
+        {
+          id: "add-text",
+          label: "Añadir texto",
+          onClick: () => handleAddFromPalette("text"),
+        },
+        {
+          id: "add-image",
+          label: "Añadir imagen",
+          onClick: () => handleAddFromPalette("image"),
+        },
+        {
+          id: "add-video",
+          label: "Añadir video",
+          onClick: () => handleAddFromPalette("video"),
+        },
+      ];
+    }
+
+    if (target.type === "palette-item") {
+      return [
+        {
+          id: "add",
+          label: "Añadir al final",
+          onClick: () => handleAddFromPalette(target.sceneType),
+        },
+      ];
+    }
+
+    if (target.type === "preview") {
+      return [
+        {
+          id: "deselect",
+          label: "Deseleccionar",
+          onClick: () => setSelectedId(null),
+        },
+        {
+          id: "paste",
+          label: "Pegar al final",
+          shortcut: "Ctrl+V",
+          disabled: !clipboard,
+          onClick: () => handlePasteSequence(sequences.length),
+        },
+      ];
+    }
+
+    return [];
+  }, [
+    contextMenu,
+    sequences,
+    clipboard,
+    handleDuplicateSequence,
+    handleCutSequence,
+    handleCopySequence,
+    handlePasteSequence,
+    handleMoveSequenceUp,
+    handleMoveSequenceDown,
+    handleDeleteSequence,
+    handleAddFromPalette,
+  ]);
+
   useEffect(() => {
     const maxFrame = Math.max(0, totalDurationInFrames - 1);
     if (currentFrame > maxFrame) {
@@ -97,6 +346,37 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       playerRef.current?.seekTo(maxFrame);
     }
   }, [totalDurationInFrames, currentFrame]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedId) return;
+      const isMod = e.metaKey || e.ctrlKey;
+      if (isMod && e.key === "c") {
+        e.preventDefault();
+        handleCopySequence(selectedId);
+      } else if (isMod && e.key === "x") {
+        e.preventDefault();
+        handleCutSequence(selectedId);
+      } else if (isMod && e.key === "v") {
+        e.preventDefault();
+        const seq = sequences.find((s) => s.id === selectedId);
+        if (seq) handlePasteSequence(seq.order + 1);
+        else handlePasteSequence(sequences.length);
+      } else if (e.key === "Delete" || e.key === "Backspace") {
+        e.preventDefault();
+        handleDeleteSequence(selectedId);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [
+    selectedId,
+    sequences,
+    handleCopySequence,
+    handleCutSequence,
+    handlePasteSequence,
+    handleDeleteSequence,
+  ]);
 
   const selectedSequence = useMemo(
     () => sequences.find((s) => s.id === selectedId) ?? null,
@@ -204,7 +484,11 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
           minHeight: 0,
         }}
       >
-        <ComponentPalette />
+        <ComponentPalette
+          onContextMenu={(e, sceneType) =>
+            handleContextMenu(e, { type: "palette-item", sceneType })
+          }
+        />
 
         <div
           style={{
@@ -224,6 +508,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
               padding: 20,
               minHeight: 0,
             }}
+            onContextMenu={(e) => handleContextMenu(e, { type: "preview" })}
           >
             <div
               style={{
@@ -261,6 +546,8 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
             onSelect={setSelectedId}
             onDrop={handleDrop}
             onChange={handleSequencesChange}
+            onReorder={handleReorder}
+            onContextMenu={handleContextMenu}
           />
         </div>
 
@@ -269,6 +556,15 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
           onChange={handleSequenceChange}
         />
       </div>
+
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          items={contextMenuItems}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
     </div>
   );
 }

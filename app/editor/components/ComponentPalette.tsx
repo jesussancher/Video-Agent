@@ -48,9 +48,10 @@ const ITEM_DRAGGING: React.CSSProperties = {
 export interface ComponentPaletteProps {
   onDragStart?: (type: SceneType) => void;
   onDragEnd?: () => void;
+  onContextMenu?: (e: React.MouseEvent, sceneType: SceneType) => void;
 }
 
-export function ComponentPalette({ onDragStart, onDragEnd }: ComponentPaletteProps) {
+export function ComponentPalette({ onDragStart, onDragEnd, onContextMenu }: ComponentPaletteProps) {
   const [dragging, setDragging] = React.useState<SceneType | null>(null);
 
   const handleDragStart = (e: React.DragEvent, item: PaletteItem) => {
@@ -85,6 +86,10 @@ export function ComponentPalette({ onDragStart, onDragEnd }: ComponentPalettePro
               draggable
               onDragStart={(e) => handleDragStart(e, item)}
               onDragEnd={handleDragEnd}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                onContextMenu?.(e, item.type);
+              }}
               style={dragging === item.type ? ITEM_DRAGGING : ITEM_STYLE}
             >
               {item.label}

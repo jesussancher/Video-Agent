@@ -55,3 +55,50 @@ Import traces:
     ./app/editor/page.tsx [Server Component]
 [00:08:04.981] Server  LOG     ✓ Compiled in 18ms
 [00:09:32.960] Browser WARN    {}
+[00:11:11.869] Server  LOG     ✓ Compiled in 27ms
+[00:11:14.614] Server  LOG     ✓ Compiled in 12ms
+[00:11:41.382] Server  LOG     ✓ Compiled in 25ms
+[00:12:04.674] Server  LOG     ✓ Compiled in 13ms
+[00:12:07.689] Server  LOG     ✓ Compiled in 22ms
+[00:12:18.136] Server  LOG     ✓ Compiled in 29ms
+[00:12:18.241] Browser ERROR   ./app/editor/components/EditorClient.tsx:149:9
+Ecmascript file had an error
+  147 |   }, [sequences]);
+  148 |
+> 149 |   const handleDeleteSequence = useCallback(
+      |         ^^^^^^^^^^^^^^^^^^^^
+  150 |     (id: string) => {
+  151 |       setSequences((prev) => {
+  152 |         const next = prev.filter((s) => s.id !== id).map((s, i) => ({ ...s, order: i }));
+
+the name `handleDeleteSequence` is defined multiple times
+
+Import trace:
+  Server Component:
+    ./app/editor/components/EditorClient.tsx
+    ./app/editor/page.tsx
+[00:12:46.023] Server  LOG     ✓ Compiled in 11ms
+[00:12:47.744] Server  LOG     ✓ Compiled in 11ms
+[00:12:50.707] Server  LOG     ✓ Compiled in 8ms
+[00:12:52.900] Server  LOG     ✓ Compiled in 77ms
+[00:12:56.500] Server  LOG     ✓ Compiled in 30ms
+[00:12:59.709] Server  LOG     ✓ Compiled in 9ms
+[00:13:01.401] Server  LOG     ✓ Compiled in 12ms
+[00:13:06.527] Server  LOG     ✓ Compiled in 19ms
+[00:13:08.868] Server  LOG     ✓ Compiled in 19ms
+[00:13:09.999] Server  LOG     ✓ Compiled in 11ms
+[00:13:11.016] Server  LOG     ✓ Compiled in 100ms
+[00:13:14.142] Server  LOG     ✓ Compiled in 11ms
+[00:13:15.228] Server  LOG     ✓ Compiled in 9ms
+[00:13:17.929] Server  LOG     ✓ Compiled in 7ms
+[00:13:34.182] Server  LOG     ✓ Compiled in 19ms
+[00:15:17.608] Browser WARN    {}
+[00:16:52.287] Browser WARN    {}
+[00:16:53.175] Browser WARN    {}
+[00:16:53.971] Browser WARN    {}
+[00:16:54.556] Browser WARN    {}
+[00:16:55.022] Browser WARN    {}
+[00:16:56.679] Browser WARN    {}
+[00:20:09.805] Server  ERROR   [POST /api/compositions] Error: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "description"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+[00:20:13.698] Server  ERROR   [POST /api/compositions] Error: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "description"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+[00:24:51.140] Server  ERROR   [POST /api/compositions] Error: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "description"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
