@@ -1,32 +1,69 @@
+import { useState, useEffect } from "react";
 import { Composition } from "remotion";
-import { MyComposition } from "./Composition";
+import { DynamicComposition } from "./Composition";
+import type { CompositionDTO } from "./types";
 
-// 6 scenes: 130 + 150 + 180 + 150 + 150 + 150 = 910
-// 5 transitions: 5 × 25 = 125
-// Total: 910 - 125 = 785 frames (~26.2 seconds)
-const TOTAL_DURATION = 785;
+const API_URL =
+  (typeof process !== "undefined" &&
+    process.env?.NEXT_PUBLIC_API_URL) ||
+  "http://localhost:3000";
 
 export const RemotionRoot: React.FC = () => {
-  return (
-    <>
-      {/* 16:9 Landscape */}
+  const [compositions, setCompositions] = useState<CompositionDTO[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/compositions`, { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        setCompositions(data.compositions ?? []);
+      })
+      .catch(() => setCompositions([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
       <Composition
-        id="LaitPresentation"
-        component={MyComposition}
-        durationInFrames={TOTAL_DURATION}
+        id="Loading"
+        component={DynamicComposition}
+        durationInFrames={1}
         fps={30}
         width={1920}
         height={1080}
+        defaultProps={{ sequences: [] }}
       />
-      {/* 9:16 Vertical (Reels / TikTok / Shorts) */}
-      {/* <Composition
-        id="LaitPresentation-Vertical"
-        component={MyComposition}
-        durationInFrames={TOTAL_DURATION}
+    );
+  }
+
+  if (compositions.length === 0) {
+    return (
+      <Composition
+        id="SinComposiciones"
+        component={DynamicComposition}
+        durationInFrames={1}
         fps={30}
-        width={1080}
-        height={1920}
-      /> */}
+        width={1920}
+        height={1080}
+        defaultProps={{ sequences: [] }}
+      />
+    );
+  }
+
+  return (
+    <>
+      {compositions.map((comp) => (
+        <Composition
+          key={comp.id}
+          id={comp.id}
+          component={DynamicComposition}
+          durationInFrames={comp.totalDurationInFrames}
+          fps={comp.fps}
+          width={comp.width}
+          height={comp.height}
+          defaultProps={{ sequences: comp.sequences }}
+        />
+      ))}
     </>
   );
 };

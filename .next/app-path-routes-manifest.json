@@ -1,5 +1,17 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/api/assets/[id]/route": "/api/assets/[id]",
+  "/api/assets/route": "/api/assets",
+  "/api/assets/upload-url/route": "/api/assets/upload-url",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/api/auth/session/route": "/api/auth/session",
+  "/api/compositions/[id]/route": "/api/compositions/[id]",
+  "/api/compositions/init/route": "/api/compositions/init",
+  "/api/compositions/route": "/api/compositions",
+  "/dashboard/page": "/dashboard",
+  "/editor/page": "/editor",
+  "/login/page": "/login",
   "/page": "/"
 }

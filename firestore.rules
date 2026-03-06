@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Helpers
+    // ─────────────────────────────────────────────────────────────────────
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isValidCompositionStatus() {
+      return request.resource.data.status in ['draft', 'published', 'archived'];
+    }
+
+    function isValidAssetType() {
+      return request.resource.data.type in ['image', 'video', 'audio', 'font'];
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // users/{uid}
+    //   Solo el propio usuario puede leer y escribir su perfil.
+    // ─────────────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasAll(['email', 'plan', 'compositionsCount', 'storageUsedBytes'])
+        && request.resource.data.plan in ['free', 'pro', 'enterprise'];
+      allow update: if isOwner(uid)
+        // No puede cambiar createdAt ni ownerId
+        && !('createdAt' in request.resource.data.diff(resource.data).affectedKeys());
+      allow delete: if false; // Borrado solo desde Admin SDK
+
+      // ───────────────────────────────────────────────────────────────────
+      // users/{uid}/compositions/{compositionId}
+      //   CRUD completo para el propietario. Lectura pública si status=published.
+      // ───────────────────────────────────────────────────────────────────
+      match /compositions/{compositionId} {
+        allow read: if isOwner(uid)
+          || (isAuthenticated() && resource.data.status == 'published');
+        allow create: if isOwner(uid)
+          && request.resource.data.ownerId == uid
+          && request.resource.data.keys().hasAll(['title', 'status', 'fps', 'width', 'height', 'sequences', 'totalDurationInFrames', 'ownerId'])
+          && isValidCompositionStatus();
+        allow update: if isOwner(uid)
+          && resource.data.ownerId == uid
+          && isValidCompositionStatus()
+          // No puede cambiar ownerId ni createdAt
+          && request.resource.data.ownerId == uid;
+        allow delete: if isOwner(uid) && resource.data.ownerId == uid;
+      }
+
+      // ───────────────────────────────────────────────────────────────────
+      // users/{uid}/assets/{assetId}
+      //   Solo el propietario puede gestionar sus assets.
+      // ───────────────────────────────────────────────────────────────────
+      match /assets/{assetId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.ownerId == uid
+          && request.resource.data.keys().hasAll(['name', 'type', 'mimeType', 'sizeBytes', 'storagePath', 'downloadUrl', 'ownerId'])
+          && isValidAssetType();
+        allow update: if isOwner(uid)
+          && resource.data.ownerId == uid
+          // Solo permite actualizar campos no críticos (p.ej. downloadUrl tras subida)
+          && request.resource.data.ownerId == uid
+          && request.resource.data.type == resource.data.type;
+        allow delete: if isOwner(uid) && resource.data.ownerId == uid;
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Bloquear cualquier otra ruta no declarada
+    // ─────────────────────────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

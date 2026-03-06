@@ -1,32 +1,68 @@
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
+import { getStorage } from "firebase-admin/storage";
+import path from "path";
+import fs from "fs";
 
-function getPrivateKey(): string {
-  const raw = process.env.FIREBASE_PRIVATE_KEY;
-  if (!raw) throw new Error("FIREBASE_PRIVATE_KEY no está definida en .env");
+const PROJECT_ID = process.env.FIREBASE_PROJECT_ID ?? "lait-video-editor";
+const STORAGE_BUCKET =
+  process.env.FIREBASE_STORAGE_BUCKET ??
+  "lait-video-editor.firebasestorage.app";
 
-  // El JSON del service account usa \n literales; los convertimos a saltos reales.
-  // Si ya contiene saltos reales (multilinea), trim() lo limpia sin romperlo.
-  const key = raw.replace(/\\n/g, "\n").trim();
+/** Mensaje de ayuda cuando las credenciales fallan (reloj o clave revocada) */
+export const FIREBASE_CREDENTIAL_HELP =
+  "Si ves 'Invalid JWT Signature' o 'UNAUTHENTICATED': (1) Sincroniza la hora del sistema. (2) Regenera la clave en Firebase Console → Configuración → Cuentas de servicio → Generar nueva clave privada.";
 
-  if (!key.includes("BEGIN PRIVATE KEY")) {
-    throw new Error(
-      "FIREBASE_PRIVATE_KEY tiene formato incorrecto. Pega el valor completo del campo 'private_key' del JSON del service account, incluyendo '-----BEGIN PRIVATE KEY-----' y '-----END PRIVATE KEY-----'."
-    );
+function getCredential() {
+  // 1. GOOGLE_APPLICATION_CREDENTIALS — estándar de Google Cloud
+  const adcPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  if (adcPath) {
+    return cert(path.resolve(process.cwd(), adcPath));
   }
 
-  return key;
+  // 2. Archivo de service account (FIREBASE_SERVICE_ACCOUNT_PATH o *-adminsdk-*.json)
+  const candidates = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
+    ? [process.env.FIREBASE_SERVICE_ACCOUNT_PATH]
+    : [
+        "lait-video-editor-firebase-adminsdk-fbsvc-423ef0596b.json",
+        "lait-video-editor-firebase-adminsdk-fbsvc-feeabf3dcd.json",
+      ];
+  for (const name of candidates) {
+    const p = path.join(process.cwd(), name);
+    if (fs.existsSync(p)) {
+      try {
+        return cert(p);
+      } catch {
+        continue;
+      }
+    }
+  }
+
+  // 3. Variables de entorno (FIREBASE_PRIVATE_KEY, etc.)
+  const raw = process.env.FIREBASE_PRIVATE_KEY;
+  if (!raw) {
+    throw new Error(
+      "Configura Firebase Admin: GOOGLE_APPLICATION_CREDENTIALS, el archivo JSON del service account, o FIREBASE_PRIVATE_KEY en .env"
+    );
+  }
+  const privateKey = raw.replace(/\\n/g, "\n").trim();
+  return cert({
+    projectId: process.env.FIREBASE_PROJECT_ID!,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+    privateKey,
+  });
 }
 
-const adminApp =
+export const adminApp =
   getApps().length === 0
     ? initializeApp({
-        credential: cert({
-          projectId: process.env.FIREBASE_PROJECT_ID!,
-          clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
-          privateKey: getPrivateKey(),
-        }),
+        credential: getCredential(),
+        projectId: PROJECT_ID,
+        storageBucket: STORAGE_BUCKET,
       })
     : getApps()[0];
 
 export const adminAuth = getAuth(adminApp);
+
+/** Bucket principal: gs://lait-video-editor.firebasestorage.app */
+export const adminStorage = getStorage(adminApp);

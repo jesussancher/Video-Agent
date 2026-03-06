@@ -85,7 +85,7 @@ function LoginPage() {
                 const data = await res.json();
                 throw new Error(data.error ?? "Error al iniciar sesión");
             }
-            router.push("/editor");
+            router.push("/dashboard");
             router.refresh();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Error desconocido");

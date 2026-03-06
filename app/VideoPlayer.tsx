@@ -1,14 +1,38 @@
 "use client";
 
 import { Player } from "@remotion/player";
-import { MyComposition } from "../src/Composition";
+import { DynamicComposition } from "../src/Composition";
+import type { CompositionDTO } from "../src/types";
 
-// 6 scenes: 130 + 150 + 180 + 150 + 150 + 150 = 910
-// 5 transitions: 5 × 25 = 125
-// Total: 910 - 125 = 785 frames (~26.2 seconds)
-const TOTAL_DURATION = 785;
+interface VideoPlayerProps {
+  /** Composición cargada desde Firestore. Solo se muestra si existe. */
+  composition?: CompositionDTO;
+}
 
-export default function VideoPlayer() {
+export default function VideoPlayer({ composition }: VideoPlayerProps) {
+  if (!composition) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 960,
+          padding: 48,
+          borderRadius: 12,
+          border: "1px dashed rgba(157,255,32,0.3)",
+          background: "rgba(157,255,32,0.04)",
+          textAlign: "center",
+          color: "rgba(255,255,255,0.5)",
+          fontSize: 14,
+        }}
+      >
+        Sin composiciones en la base de datos. Usa el botón flotante para
+        inicializar la colección.
+      </div>
+    );
+  }
+
+  const { fps, width, height, sequences, totalDurationInFrames } = composition;
+
   return (
     <div
       style={{
@@ -21,11 +45,12 @@ export default function VideoPlayer() {
       }}
     >
       <Player
-        component={MyComposition}
-        durationInFrames={TOTAL_DURATION}
-        fps={30}
-        compositionWidth={1920}
-        compositionHeight={1080}
+        component={DynamicComposition}
+        inputProps={{ sequences }}
+        durationInFrames={totalDurationInFrames}
+        fps={fps}
+        compositionWidth={width}
+        compositionHeight={height}
         style={{ width: "100%" }}
         controls
         loop
