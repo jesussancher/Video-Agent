@@ -8,9 +8,19 @@ export type SceneType =
   | "services"
   | "products"
   | "metrics"
-  | "contact";
+  | "contact"
+  | "image"
+  | "video"
+  | "audio"
+  | "gif"
+  | "animated-image"
+  | "lottie"
+  | "three-canvas"
+  | "text"
+  | "captions"
+  | "light-leak";
 
-export type TransitionType = "fade" | "slide" | "wipe" | "none";
+export type TransitionType = "fade" | "slide" | "wipe" | "flip" | "clock-wipe" | "none";
 
 export type TransitionDirection =
   | "from-left"
@@ -25,6 +35,64 @@ export interface SceneTransition {
   durationInFrames: number;
   direction?: TransitionDirection;
   timing: TransitionTiming;
+  /** Spring config when timing === "spring" */
+  springConfig?: { damping?: number; stiffness?: number };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Animation config (entrance/exit per component)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type EasingType =
+  | "linear"
+  | "quad"
+  | "cubic"
+  | "sin"
+  | "exp"
+  | "circle"
+  | "elastic"
+  | "bounce"
+  | "back"
+  | "bezier";
+
+export type EasingVariant = "in" | "out" | "inOut";
+
+export type EntranceExitType = "fade" | "slide" | "scale" | "spring";
+
+export interface EntranceExitConfig {
+  type: EntranceExitType;
+  durationInFrames: number;
+  delayInFrames?: number;
+  easing?: EasingType;
+  easingVariant?: EasingVariant;
+  springConfig?: { damping?: number; stiffness?: number; mass?: number };
+  /** For bezier: x1, y1, x2, y2 */
+  bezierParams?: [number, number, number, number];
+}
+
+export type LayoutAnchor =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "center-left"
+  | "center"
+  | "center-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
+export interface LayoutConfig {
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  anchor?: LayoutAnchor;
+}
+
+export interface AnimationConfig {
+  entrance?: EntranceExitConfig;
+  exit?: EntranceExitConfig;
+  layout?: LayoutConfig;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -96,13 +164,87 @@ export interface ContactData {
   ctaText?: string;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Media & component-specific data (new types)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ImageData {
+  src: string;
+  fit?: "fill" | "contain" | "cover";
+  objectPosition?: string;
+}
+
+export interface VideoData {
+  src: string;
+  volume?: number;
+  playbackRate?: number;
+  loop?: boolean;
+  trimBefore?: number;
+  trimAfter?: number;
+}
+
+export interface AudioData {
+  src: string;
+  volume?: number;
+  loop?: boolean;
+}
+
+export interface GifData {
+  src: string;
+  width?: number;
+  height?: number;
+}
+
+export interface AnimatedImageData {
+  src: string;
+  width?: number;
+  height?: number;
+  fit?: "fill" | "contain" | "cover";
+  playbackRate?: number;
+  loopBehavior?: "loop" | "pause-after-finish" | "clear-after-finish";
+}
+
+export interface LottieData {
+  src: string;
+  loop?: boolean;
+}
+
+export interface TextData {
+  text: string;
+  fontFamily?: string;
+  fontSize?: number;
+  color?: string;
+  align?: "left" | "center" | "right";
+  fontWeight?: string;
+}
+
+export interface CaptionsData {
+  src: string;
+  /** SRT or JSON captions URL */
+}
+
+export interface LightLeakData {
+  seed?: number;
+  hueShift?: number;
+  durationInFrames?: number;
+}
+
 export type SceneData =
   | LogoCurtainData
   | IntroData
   | ServicesData
   | ProductsData
   | MetricsData
-  | ContactData;
+  | ContactData
+  | ImageData
+  | VideoData
+  | AudioData
+  | GifData
+  | AnimatedImageData
+  | LottieData
+  | TextData
+  | CaptionsData
+  | LightLeakData;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sequence — una escena dentro de una composición
@@ -112,11 +254,15 @@ export interface Sequence {
   id: string;
   /** Posición en el timeline (0-based, sin gaps) */
   order: number;
+  /** Frame de inicio (para drag en timeline; si no existe, se calcula desde order) */
+  from?: number;
   sceneType: SceneType;
   durationInFrames: number;
   sceneData: SceneData;
   /** Transición aplicada DESPUÉS de esta secuencia (hacia la siguiente). */
   transition?: SceneTransition;
+  /** Animaciones de entrada/salida y layout (para media/texto) */
+  animationConfig?: AnimationConfig;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

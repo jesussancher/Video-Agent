@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { Composition } from "remotion";
 import { DynamicComposition } from "./Composition";
+import {
+  compositionInputPropsSchema,
+  type CompositionInputPropsSchema,
+} from "./schemas/compositionSchema";
 import type { CompositionDTO } from "./types";
 
 const API_URL =
-  (typeof process !== "undefined" &&
-    process.env?.NEXT_PUBLIC_API_URL) ||
+  (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_API_URL) ||
   "http://localhost:3000";
 
 export const RemotionRoot: React.FC = () => {
@@ -31,6 +34,7 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
+        schema={compositionInputPropsSchema}
         defaultProps={{ sequences: [] }}
       />
     );
@@ -45,6 +49,7 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
+        schema={compositionInputPropsSchema}
         defaultProps={{ sequences: [] }}
       />
     );
@@ -61,7 +66,10 @@ export const RemotionRoot: React.FC = () => {
           fps={comp.fps}
           width={comp.width}
           height={comp.height}
-          defaultProps={{ sequences: comp.sequences }}
+          schema={compositionInputPropsSchema}
+          defaultProps={
+            { sequences: comp.sequences } as CompositionInputPropsSchema
+          }
         />
       ))}
     </>

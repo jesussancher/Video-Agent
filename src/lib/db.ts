@@ -17,6 +17,7 @@ import type {
   AssetType,
   UserPlan,
 } from "@/types";
+import { calcTotalDuration } from "@/utils/duration";
 
 const db = getFirestore(adminApp);
 
@@ -87,19 +88,7 @@ export interface UserDoc {
 // Calculadora de duración total para TransitionSeries
 // ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * total = Σ(seq.durationInFrames) − Σ(seq.transition.durationInFrames)
- * La última secuencia no resta transición aunque la tenga definida.
- */
-export function calcTotalDuration(sequences: Sequence[]): number {
-  if (sequences.length === 0) return 0;
-  const sorted = [...sequences].sort((a, b) => a.order - b.order);
-  return sorted.reduce((total, seq, i) => {
-    const isLast = i === sorted.length - 1;
-    const overlap = !isLast && seq.transition ? seq.transition.durationInFrames : 0;
-    return total + seq.durationInFrames - overlap;
-  }, 0);
-}
+export { calcTotalDuration } from "@/utils/duration";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Serializadores: doc de Firestore → DTO

@@ -1,4 +1,4 @@
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import {
   TransitionSeries,
   linearTiming,
@@ -7,12 +7,15 @@ import {
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
+import { flip } from "@remotion/transitions/flip";
+import { clockWipe } from "@remotion/transitions/clock-wipe";
 import { LogoCurtain } from "./scenes/LogoCurtain";
 import { Intro } from "./scenes/Intro";
 import { Services } from "./scenes/Services";
 import { Products } from "./scenes/Products";
 import { Metrics } from "./scenes/Metrics";
 import { Contact } from "./scenes/Contact";
+import { MediaScene } from "./scenes/MediaScene";
 import type {
   CompositionInputProps,
   SceneTransition,
@@ -23,7 +26,11 @@ import type {
 // Presentation helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-function getPresentation(t: SceneTransition): ReturnType<typeof fade> {
+function getPresentation(
+  t: SceneTransition,
+  width: number,
+  height: number
+): ReturnType<typeof fade> {
   switch (t.type) {
     case "slide":
       return slide({
@@ -33,6 +40,12 @@ function getPresentation(t: SceneTransition): ReturnType<typeof fade> {
       return wipe({
         direction: t.direction ?? "from-left",
       }) as unknown as ReturnType<typeof fade>;
+    case "flip":
+      return flip() as unknown as ReturnType<typeof fade>;
+    case "clock-wipe":
+      return clockWipe({ width, height }) as unknown as ReturnType<typeof fade>;
+    case "none":
+      return fade(); // unused when type is none (transition skipped)
     case "fade":
     default:
       return fade();
@@ -42,7 +55,10 @@ function getPresentation(t: SceneTransition): ReturnType<typeof fade> {
 function getTiming(t: SceneTransition) {
   return t.timing === "spring"
     ? springTiming({
-        config: { damping: 200 },
+        config: {
+          damping: t.springConfig?.damping ?? 200,
+          stiffness: t.springConfig?.stiffness ?? 100,
+        },
         durationInFrames: t.durationInFrames,
       })
     : linearTiming({ durationInFrames: t.durationInFrames });
@@ -67,6 +83,19 @@ function SceneRenderer({ sequence }: { sequence: Sequence }) {
       return <Metrics />;
     case "contact":
       return <Contact />;
+    case "image":
+    case "video":
+    case "audio":
+    case "gif":
+    case "animated-image":
+    case "lottie":
+    case "text":
+      return <MediaScene sequence={sequence} />;
+    case "captions":
+    case "three-canvas":
+    case "light-leak":
+      // TODO: implement captions, three-canvas, light-leak
+      return null;
     default:
       return null;
   }
@@ -80,6 +109,7 @@ function SceneRenderer({ sequence }: { sequence: Sequence }) {
 export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
   sequences = [],
 }) => {
+  const { width, height } = useVideoConfig();
   const sorted = [...sequences].sort((a, b) => a.order - b.order);
 
   if (sorted.length === 0) {
@@ -110,13 +140,15 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
               <SceneRenderer sequence={seq} />
             </TransitionSeries.Sequence>
 
-            {seq.transition && index < sorted.length - 1 && (
-              <TransitionSeries.Transition
-                key={`t-${seq.id}`}
-                presentation={getPresentation(seq.transition)}
-                timing={getTiming(seq.transition)}
-              />
-            )}
+            {seq.transition &&
+              seq.transition.type !== "none" &&
+              index < sorted.length - 1 && (
+                <TransitionSeries.Transition
+                  key={`t-${seq.id}`}
+                  presentation={getPresentation(seq.transition, width, height)}
+                  timing={getTiming(seq.transition)}
+                />
+              )}
           </>
         ))}
       </TransitionSeries>

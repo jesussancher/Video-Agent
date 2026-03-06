@@ -1,6 +1,3 @@
 {
-  "/api/compositions/init/route": "app/api/compositions/init/route.js",
-  "/api/compositions/route": "app/api/compositions/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/editor/page": "app/editor/page.js"
+  "/api/compositions/route": "app/api/compositions/route.js"
 }
