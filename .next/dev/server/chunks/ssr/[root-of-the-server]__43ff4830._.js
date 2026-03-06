@@ -123,9 +123,13 @@ const STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET ?? "lait-video-editor
 const FIREBASE_CREDENTIAL_HELP = "Si ves 'Invalid JWT Signature' o 'UNAUTHENTICATED': (1) Sincroniza la hora del sistema. (2) Regenera la clave en Firebase Console → Configuración → Cuentas de servicio → Generar nueva clave privada.";
 function getCredential() {
     // 1. GOOGLE_APPLICATION_CREDENTIALS — estándar de Google Cloud
-    const adcPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    if (adcPath) {
-        return (0, __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$app__$5b$external$5d$__$28$firebase$2d$admin$2f$app$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["cert"])(__TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(process.cwd(), adcPath));
+    const adcPath = process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "lait-video-editor-firebase-adminsdk-fbsvc-423ef0596b.json";
+    const resolvedPath = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].isAbsolute(adcPath) ? adcPath : __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].resolve(process.cwd(), adcPath);
+    if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].existsSync(resolvedPath)) {
+        return (0, __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$app__$5b$external$5d$__$28$firebase$2d$admin$2f$app$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["cert"])(resolvedPath);
+    }
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        throw new Error(`GOOGLE_APPLICATION_CREDENTIALS apunta a un archivo inexistente: ${resolvedPath}`);
     }
     // 2. Archivo de service account (FIREBASE_SERVICE_ACCOUNT_PATH o *-adminsdk-*.json)
     const candidates = process.env.FIREBASE_SERVICE_ACCOUNT_PATH ? [

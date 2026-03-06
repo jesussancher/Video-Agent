@@ -15,9 +15,19 @@ export const FIREBASE_CREDENTIAL_HELP =
 
 function getCredential() {
   // 1. GOOGLE_APPLICATION_CREDENTIALS — estándar de Google Cloud
-  const adcPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  if (adcPath) {
-    return cert(path.resolve(process.cwd(), adcPath));
+  const adcPath =
+    process.env.GOOGLE_APPLICATION_CREDENTIALS ??
+    "lait-video-editor-firebase-adminsdk-fbsvc-423ef0596b.json";
+  const resolvedPath = path.isAbsolute(adcPath)
+    ? adcPath
+    : path.resolve(process.cwd(), adcPath);
+  if (fs.existsSync(resolvedPath)) {
+    return cert(resolvedPath);
+  }
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    throw new Error(
+      `GOOGLE_APPLICATION_CREDENTIALS apunta a un archivo inexistente: ${resolvedPath}`
+    );
   }
 
   // 2. Archivo de service account (FIREBASE_SERVICE_ACCOUNT_PATH o *-adminsdk-*.json)

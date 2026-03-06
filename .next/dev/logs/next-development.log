@@ -1,5 +1,1 @@
-[00:00:00.808] Server  LOG     ✓ Ready in 595ms
-[00:00:02.644] Server  ERROR   [dashboard] Error cargando composiciones: Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
-[00:00:34.460] Server  ERROR   [dashboard] Error cargando composiciones: Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
-[00:01:25.768] Server  ERROR   [dashboard] Error cargando composiciones: Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
-[00:01:26.214] Server  ERROR   [dashboard] Error cargando composiciones: Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[00:00:00.782] Server  LOG     ✓ Ready in 570ms
