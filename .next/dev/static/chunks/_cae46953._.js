@@ -4221,6 +4221,7 @@ __turbopack_context__.s([
     ()=>MyComposition
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/remotion/dist/esm/index.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@remotion/transitions/dist/esm/index.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$fade$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@remotion/transitions/dist/esm/fade.mjs [app-client] (ecmascript)");
@@ -4237,6 +4238,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Contact$2e$
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$MediaScene$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/scenes/MediaScene.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
+;
 ;
 ;
 ;
@@ -4298,37 +4300,37 @@ function SceneRenderer({ sequence }) {
         case "logo-curtain":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$LogoCurtain$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LogoCurtain"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 75,
+                lineNumber: 76,
                 columnNumber: 14
             }, this);
         case "intro":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Intro$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Intro"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 77,
+                lineNumber: 78,
                 columnNumber: 14
             }, this);
         case "services":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Services$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Services"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 79,
+                lineNumber: 80,
                 columnNumber: 14
             }, this);
         case "products":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Products$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Products"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 81,
+                lineNumber: 82,
                 columnNumber: 14
             }, this);
         case "metrics":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Metrics$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Metrics"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 83,
+                lineNumber: 84,
                 columnNumber: 14
             }, this);
         case "contact":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Contact$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contact"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 85,
+                lineNumber: 86,
                 columnNumber: 14
             }, this);
         case "image":
@@ -4342,7 +4344,7 @@ function SceneRenderer({ sequence }) {
                 sequence: sequence
             }, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 93,
+                lineNumber: 94,
                 columnNumber: 14
             }, this);
         case "captions":
@@ -4355,12 +4357,43 @@ function SceneRenderer({ sequence }) {
     }
 }
 _c = SceneRenderer;
+// ─────────────────────────────────────────────────────────────────────────────
+// DynamicComposition — renderiza sequences desde Firestore vía inputProps
+// Solo recibe datos de la DB (VideoPlayer) o vacío (Remotion Studio)
+// ─────────────────────────────────────────────────────────────────────────────
+/** Obtiene el frame de inicio de una secuencia (explícito o calculado desde order) */ function getSequenceFrom(seq, _sorted, computedFromMap) {
+    if (seq.from !== undefined) return seq.from;
+    return computedFromMap.get(seq.id) ?? 0;
+}
 const DynamicComposition = ({ sequences = [] })=>{
     _s();
     const { width, height } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useVideoConfig"])();
-    const sorted = [
-        ...sequences
-    ].sort((a, b)=>a.order - b.order);
+    const sorted = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "DynamicComposition.useMemo[sorted]": ()=>[
+                ...sequences
+            ].sort({
+                "DynamicComposition.useMemo[sorted]": (a, b)=>a.order - b.order
+            }["DynamicComposition.useMemo[sorted]"])
+    }["DynamicComposition.useMemo[sorted]"], [
+        sequences
+    ]);
+    const computedFromMap = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "DynamicComposition.useMemo[computedFromMap]": ()=>{
+            const map = new Map();
+            let acc = 0;
+            for(let i = 0; i < sorted.length; i++){
+                const seq = sorted[i];
+                const from = seq.from ?? acc;
+                map.set(seq.id, from);
+                const overlap = i < sorted.length - 1 && seq.transition ? seq.transition.durationInFrames : 0;
+                acc = from + seq.durationInFrames - overlap;
+            }
+            return map;
+        }
+    }["DynamicComposition.useMemo[computedFromMap]"], [
+        sorted
+    ]);
+    const hasExplicitFrom = sequences.some((s)=>s.from !== undefined);
     if (sorted.length === 0) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AbsoluteFill"], {
             style: {
@@ -4373,7 +4406,36 @@ const DynamicComposition = ({ sequences = [] })=>{
             children: "Sin secuencias — carga datos desde Firestore"
         }, void 0, false, {
             fileName: "[project]/src/Composition.tsx",
-            lineNumber: 117,
+            lineNumber: 149,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0));
+    }
+    if (hasExplicitFrom) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AbsoluteFill"], {
+            style: {
+                backgroundColor: "#050508"
+            },
+            children: sorted.map((seq)=>{
+                const fromFrame = getSequenceFrom(seq, sorted, computedFromMap);
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sequence"], {
+                    from: fromFrame,
+                    durationInFrames: seq.durationInFrames,
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneRenderer, {
+                        sequence: seq
+                    }, void 0, false, {
+                        fileName: "[project]/src/Composition.tsx",
+                        lineNumber: 174,
+                        columnNumber: 15
+                    }, ("TURBOPACK compile-time value", void 0))
+                }, seq.id, false, {
+                    fileName: "[project]/src/Composition.tsx",
+                    lineNumber: 169,
+                    columnNumber: 13
+                }, ("TURBOPACK compile-time value", void 0));
+            })
+        }, void 0, false, {
+            fileName: "[project]/src/Composition.tsx",
+            lineNumber: 165,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -4390,12 +4452,12 @@ const DynamicComposition = ({ sequences = [] })=>{
                                 sequence: seq
                             }, void 0, false, {
                                 fileName: "[project]/src/Composition.tsx",
-                                lineNumber: 140,
+                                lineNumber: 191,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, seq.id, false, {
                             fileName: "[project]/src/Composition.tsx",
-                            lineNumber: 136,
+                            lineNumber: 187,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         seq.transition && seq.transition.type !== "none" && index < sorted.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"].Transition, {
@@ -4403,23 +4465,23 @@ const DynamicComposition = ({ sequences = [] })=>{
                             timing: getTiming(seq.transition)
                         }, `t-${seq.id}`, false, {
                             fileName: "[project]/src/Composition.tsx",
-                            lineNumber: 146,
+                            lineNumber: 197,
                             columnNumber: 17
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true))
         }, void 0, false, {
             fileName: "[project]/src/Composition.tsx",
-            lineNumber: 133,
+            lineNumber: 184,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/Composition.tsx",
-        lineNumber: 132,
+        lineNumber: 183,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
-_s(DynamicComposition, "fU0QQ07PootFV8+juSnFEUgEDcw=", false, function() {
+_s(DynamicComposition, "P86ZDKMSutEXQFXiJXSs0c9USVE=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useVideoConfig"]
     ];
@@ -4429,7 +4491,7 @@ const MyComposition = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$p
         sequences: []
     }, void 0, false, {
         fileName: "[project]/src/Composition.tsx",
-        lineNumber: 163,
+        lineNumber: 214,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 _c2 = MyComposition;
@@ -4632,10 +4694,11 @@ function getDefaultSceneData(type) {
             return {};
     }
 }
-function createSequenceFromType(type, order, idGenerator) {
+function createSequenceFromType(type, order, idGenerator, startFrame) {
     return {
         id: idGenerator(),
         order,
+        from: startFrame,
         sceneType: type,
         durationInFrames: 90,
         sceneData: getDefaultSceneData(type),
@@ -4809,21 +4872,23 @@ function getSequenceLabel(seq) {
     const item = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["COMPONENT_PALETTE_ITEMS"].find((i)=>i.type === seq.sceneType);
     return item?.label ?? seq.sceneType;
 }
-/** Compute start frame for each sequence (for display) */ function computeFromFrames(sequences) {
+/** Compute start frame for each sequence (for display). Usa seq.from si existe. */ function computeFromFrames(sequences) {
     const sorted = [
         ...sequences
     ].sort((a, b)=>a.order - b.order);
     const map = new Map();
     let acc = 0;
     for(let i = 0; i < sorted.length; i++){
-        map.set(sorted[i].id, acc);
-        const overlap = i < sorted.length - 1 && sorted[i].transition ? sorted[i].transition.durationInFrames : 0;
-        acc += sorted[i].durationInFrames - overlap;
+        const seq = sorted[i];
+        const from = seq.from !== undefined ? seq.from : acc;
+        map.set(seq.id, from);
+        const overlap = i < sorted.length - 1 && seq.transition ? seq.transition.durationInFrames : 0;
+        acc = from + seq.durationInFrames - overlap;
     }
     return map;
 }
 const PADDING_LEFT = 8;
-function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek, selectedId, onSelect, onDrop, onChange, onContextMenu }) {
+function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek, selectedId, onSelect, onDrop, onChange, onReorder, onMoveInTime, onContextMenu }) {
     _s();
     const fromFrames = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "Timeline.useMemo[fromFrames]": ()=>computeFromFrames(sequences)
@@ -4833,6 +4898,9 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
     const width = totalDurationInFrames * PIXELS_PER_FRAME;
     const scrollRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const [isDragging, setIsDragging] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [dropIndicatorOrder, setDropIndicatorOrder] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const dragSourceIdRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [timeDrag, setTimeDrag] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const getFrameFromClientX = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Timeline.useCallback[getFrameFromClientX]": (clientX)=>{
             const el = scrollRef.current;
@@ -4913,22 +4981,104 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
     const handleDragOver = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Timeline.useCallback[handleDragOver]": (e)=>{
             e.preventDefault();
-            e.dataTransfer.dropEffect = "copy";
+            const isReorder = dragSourceIdRef.current !== null;
+            e.dataTransfer.dropEffect = isReorder ? "move" : "copy";
+            if (isReorder) {
+                const target = e.target;
+                const tracksContainer = target.closest("[data-tracks-container]");
+                if (!tracksContainer) {
+                    setDropIndicatorOrder(sequences.length);
+                }
+            } else {
+                setDropIndicatorOrder(null);
+            }
         }
-    }["Timeline.useCallback[handleDragOver]"], []);
-    const handleDrop = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "Timeline.useCallback[handleDrop]": (e)=>{
+    }["Timeline.useCallback[handleDragOver]"], [
+        sequences.length
+    ]);
+    const handleDropAny = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleDropAny]": (e, targetOrder)=>{
             e.preventDefault();
+            e.stopPropagation();
+            setDropIndicatorOrder(null);
+            dragSourceIdRef.current = null;
             try {
                 const data = JSON.parse(e.dataTransfer.getData("application/json"));
-                if (data?.type) onDrop(data.type);
+                if (data?.type === "timeline-clip" && data?.sequenceId && onReorder) {
+                    onReorder(data.sequenceId, targetOrder);
+                } else if (data?.type && typeof data.type === "string") {
+                    onDrop(data.type);
+                }
             } catch  {
             // ignore
             }
         }
-    }["Timeline.useCallback[handleDrop]"], [
-        onDrop
+    }["Timeline.useCallback[handleDropAny]"], [
+        onDrop,
+        onReorder
     ]);
+    const handleTrackDragStart = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleTrackDragStart]": (e, sequenceId)=>{
+            dragSourceIdRef.current = sequenceId;
+            e.dataTransfer.setData("application/json", JSON.stringify({
+                type: "timeline-clip",
+                sequenceId
+            }));
+            e.dataTransfer.effectAllowed = "move";
+            // Usar imagen de arrastre mínima para que el indicador de drop sea la referencia principal
+            const img = document.createElement("div");
+            img.style.cssText = "width:1px;height:1px;opacity:0;pointer-events:none;position:absolute;top:-9999px";
+            document.body.appendChild(img);
+            e.dataTransfer.setDragImage(img, 0, 0);
+            requestAnimationFrame({
+                "Timeline.useCallback[handleTrackDragStart]": ()=>document.body.removeChild(img)
+            }["Timeline.useCallback[handleTrackDragStart]"]);
+        }
+    }["Timeline.useCallback[handleTrackDragStart]"], []);
+    const handleTrackDragEnd = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleTrackDragEnd]": ()=>{
+            dragSourceIdRef.current = null;
+            setDropIndicatorOrder(null);
+        }
+    }["Timeline.useCallback[handleTrackDragEnd]"], []);
+    const handleDragOverTrack = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleDragOverTrack]": (e, idx)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            const isReorder = dragSourceIdRef.current !== null && onReorder;
+            if (isReorder) {
+                e.dataTransfer.dropEffect = "move";
+                const rect = e.currentTarget.getBoundingClientRect();
+                const relY = e.clientY - rect.top;
+                const targetOrder = relY < rect.height / 2 ? idx : idx + 1;
+                setDropIndicatorOrder(Math.min(targetOrder, sequences.length));
+            } else {
+                e.dataTransfer.dropEffect = "copy";
+                setDropIndicatorOrder(null);
+            }
+        }
+    }["Timeline.useCallback[handleDragOverTrack]"], [
+        onReorder,
+        sequences.length
+    ]);
+    const handleDragLeaveTrack = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleDragLeaveTrack]": (e)=>{
+            const related = e.relatedTarget;
+            const current = e.currentTarget;
+            if (!related || !current.contains(related)) {
+                setDropIndicatorOrder(null);
+            }
+        }
+    }["Timeline.useCallback[handleDragLeaveTrack]"], []);
+    const handleContainerDragLeave = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleContainerDragLeave]": (e)=>{
+            const related = e.relatedTarget;
+            const scrollEl = scrollRef.current;
+            if (scrollEl && (!related || !scrollEl.contains(related))) {
+                setDropIndicatorOrder(null);
+            }
+        }
+    }["Timeline.useCallback[handleContainerDragLeave]"], []);
     const handleTrackClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Timeline.useCallback[handleTrackClick]": (id)=>{
             onSelect(selectedId === id ? null : id);
@@ -4936,6 +5086,65 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
     }["Timeline.useCallback[handleTrackClick]"], [
         selectedId,
         onSelect
+    ]);
+    const handleClipBarMouseDown = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleClipBarMouseDown]": (e, seq)=>{
+            if (!onMoveInTime) return;
+            e.preventDefault();
+            e.stopPropagation();
+            setTimeDrag({
+                sequenceId: seq.id,
+                startFrom: fromFrames.get(seq.id) ?? 0,
+                startClientX: e.clientX,
+                durationInFrames: seq.durationInFrames
+            });
+        }
+    }["Timeline.useCallback[handleClipBarMouseDown]"], [
+        onMoveInTime,
+        fromFrames
+    ]);
+    const handleTimeDragMouseMove = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleTimeDragMouseMove]": (e)=>{
+            if (!timeDrag || !onMoveInTime) return;
+            const deltaX = e.clientX - timeDrag.startClientX;
+            const deltaFrames = Math.round(deltaX / PIXELS_PER_FRAME);
+            const rawFrom = timeDrag.startFrom + deltaFrames;
+            const minFrom = 0;
+            const maxFrom = Math.max(0, totalDurationInFrames - timeDrag.durationInFrames);
+            const newFrom = Math.max(minFrom, Math.min(rawFrom, maxFrom));
+            onMoveInTime(timeDrag.sequenceId, newFrom);
+        }
+    }["Timeline.useCallback[handleTimeDragMouseMove]"], [
+        timeDrag,
+        onMoveInTime,
+        totalDurationInFrames
+    ]);
+    const handleTimeDragMouseUp = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "Timeline.useCallback[handleTimeDragMouseUp]": ()=>{
+            setTimeDrag(null);
+        }
+    }["Timeline.useCallback[handleTimeDragMouseUp]"], []);
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useEffect({
+        "Timeline.useEffect": ()=>{
+            if (!timeDrag) return;
+            const prevSelect = document.body.style.userSelect;
+            document.body.style.userSelect = "none";
+            document.body.style.cursor = "ew-resize";
+            window.addEventListener("mousemove", handleTimeDragMouseMove);
+            window.addEventListener("mouseup", handleTimeDragMouseUp);
+            return ({
+                "Timeline.useEffect": ()=>{
+                    document.body.style.userSelect = prevSelect;
+                    document.body.style.cursor = "";
+                    window.removeEventListener("mousemove", handleTimeDragMouseMove);
+                    window.removeEventListener("mouseup", handleTimeDragMouseUp);
+                }
+            })["Timeline.useEffect"];
+        }
+    }["Timeline.useEffect"], [
+        timeDrag,
+        handleTimeDragMouseMove,
+        handleTimeDragMouseUp
     ]);
     const handleTrackDurationChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Timeline.useCallback[handleTrackDurationChange]": (id, delta)=>{
@@ -5037,7 +5246,8 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
                 position: "relative"
             },
             onDragOver: handleDragOver,
-            onDrop: handleDrop,
+            onDragLeave: handleContainerDragLeave,
+            onDrop: (e)=>handleDropAny(e, dropIndicatorOrder ?? sequences.length),
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     minWidth: width + PADDING_LEFT * 2,
@@ -5071,14 +5281,14 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
                                     }
                                 }, i, false, {
                                     fileName: "[project]/app/editor/components/Timeline.tsx",
-                                    lineNumber: 265,
+                                    lineNumber: 403,
                                     columnNumber: 17
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "0s"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/Timeline.tsx",
-                                lineNumber: 277,
+                                lineNumber: 415,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5092,13 +5302,13 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/editor/components/Timeline.tsx",
-                                lineNumber: 278,
+                                lineNumber: 416,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/Timeline.tsx",
-                        lineNumber: 249,
+                        lineNumber: 387,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5130,17 +5340,18 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
                             }
                         }, void 0, false, {
                             fileName: "[project]/app/editor/components/Timeline.tsx",
-                            lineNumber: 306,
+                            lineNumber: 444,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/Timeline.tsx",
-                        lineNumber: 289,
+                        lineNumber: 427,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            marginTop: 8
+                            marginTop: 8,
+                            position: "relative"
                         },
                         children: sorted.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             onContextMenu: handleEmptyAreaContextMenu,
@@ -5157,112 +5368,146 @@ function Timeline({ sequences, fps, totalDurationInFrames, currentFrame, onSeek,
                             children: "Arrastra componentes aquí"
                         }, void 0, false, {
                             fileName: "[project]/app/editor/components/Timeline.tsx",
-                            lineNumber: 323,
+                            lineNumber: 461,
                             columnNumber: 11
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            "data-tracks-container": true,
                             style: {
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 6
+                                gap: 6,
+                                position: "relative"
                             },
-                            children: sorted.map((seq)=>{
-                                const from = fromFrames.get(seq.id) ?? 0;
-                                const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
-                                const isSelected = selectedId === seq.id;
-                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                dropIndicatorOrder !== null && onReorder && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     style: {
-                                        display: "flex",
-                                        alignItems: "center",
-                                        height: TRACK_HEIGHT
-                                    },
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                width: 120,
-                                                fontSize: 12,
-                                                color: "rgba(255,255,255,0.7)",
-                                                flexShrink: 0
-                                            },
-                                            children: getSequenceLabel(seq)
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/editor/components/Timeline.tsx",
-                                            lineNumber: 354,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                position: "relative",
-                                                width: `${width}px`,
-                                                minWidth: width,
-                                                height: TRACK_HEIGHT - 4
-                                            },
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                onClick: ()=>handleTrackClick(seq.id),
-                                                onContextMenu: (e)=>handleTrackContextMenu(e, seq.id),
-                                                style: {
-                                                    position: "absolute",
-                                                    left: from * PIXELS_PER_FRAME,
-                                                    width: trackWidth,
-                                                    height: "100%",
-                                                    backgroundColor: isSelected ? "rgba(157,255,32,0.25)" : "rgba(157,255,32,0.12)",
-                                                    border: `1px solid ${isSelected ? "#9DFF20" : "rgba(157,255,32,0.3)"}`,
-                                                    borderRadius: 6,
-                                                    cursor: "pointer",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    paddingLeft: 8,
-                                                    fontSize: 11,
-                                                    color: `${seq.durationInFrames / fps}s`
-                                                },
-                                                children: [
-                                                    (seq.durationInFrames / fps).toFixed(1),
-                                                    "s"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/editor/components/Timeline.tsx",
-                                                lineNumber: 372,
-                                                columnNumber: 21
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/editor/components/Timeline.tsx",
-                                            lineNumber: 364,
-                                            columnNumber: 19
-                                        }, this)
-                                    ]
-                                }, seq.id, true, {
+                                        position: "absolute",
+                                        left: 0,
+                                        right: 0,
+                                        top: dropIndicatorOrder * (TRACK_HEIGHT + 6) - 2,
+                                        height: 4,
+                                        borderTop: "2px solid #9DFF20",
+                                        boxShadow: "0 0 8px rgba(157,255,32,0.6)",
+                                        pointerEvents: "none",
+                                        zIndex: 20
+                                    }
+                                }, void 0, false, {
                                     fileName: "[project]/app/editor/components/Timeline.tsx",
-                                    lineNumber: 346,
-                                    columnNumber: 17
-                                }, this);
-                            })
-                        }, void 0, false, {
+                                    lineNumber: 483,
+                                    columnNumber: 15
+                                }, this),
+                                sorted.map((seq, idx)=>{
+                                    const from = fromFrames.get(seq.id) ?? 0;
+                                    const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
+                                    const isSelected = selectedId === seq.id;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        onDragOver: (e)=>handleDragOverTrack(e, idx),
+                                        onDragLeave: handleDragLeaveTrack,
+                                        onDrop: (e)=>{
+                                            const rect = e.currentTarget.getBoundingClientRect();
+                                            const relY = e.clientY - rect.top;
+                                            const targetOrder = relY < rect.height / 2 ? idx : idx + 1;
+                                            handleDropAny(e, Math.min(targetOrder, sorted.length));
+                                        },
+                                        style: {
+                                            display: "flex",
+                                            alignItems: "center",
+                                            height: TRACK_HEIGHT
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                draggable: !!onReorder,
+                                                onDragStart: (e)=>onReorder && handleTrackDragStart(e, seq.id),
+                                                onDragEnd: handleTrackDragEnd,
+                                                style: {
+                                                    width: 120,
+                                                    fontSize: 12,
+                                                    color: "rgba(255,255,255,0.7)",
+                                                    flexShrink: 0,
+                                                    cursor: onReorder ? "grab" : undefined
+                                                },
+                                                children: getSequenceLabel(seq)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/editor/components/Timeline.tsx",
+                                                lineNumber: 519,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    position: "relative",
+                                                    width: `${width}px`,
+                                                    minWidth: width,
+                                                    height: TRACK_HEIGHT - 4
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    onClick: ()=>handleTrackClick(seq.id),
+                                                    onMouseDown: (e)=>handleClipBarMouseDown(e, seq),
+                                                    onContextMenu: (e)=>handleTrackContextMenu(e, seq.id),
+                                                    style: {
+                                                        position: "absolute",
+                                                        left: from * PIXELS_PER_FRAME,
+                                                        width: trackWidth,
+                                                        height: "100%",
+                                                        backgroundColor: isSelected ? "rgba(157,255,32,0.25)" : "rgba(157,255,32,0.12)",
+                                                        border: `1px solid ${isSelected ? "#9DFF20" : "rgba(157,255,32,0.3)"}`,
+                                                        borderRadius: 6,
+                                                        cursor: onMoveInTime ? "ew-resize" : "pointer",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        paddingLeft: 8,
+                                                        fontSize: 11,
+                                                        color: `${seq.durationInFrames / fps}s`
+                                                    },
+                                                    children: [
+                                                        (seq.durationInFrames / fps).toFixed(1),
+                                                        "s"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/app/editor/components/Timeline.tsx",
+                                                    lineNumber: 541,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/editor/components/Timeline.tsx",
+                                                lineNumber: 533,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, seq.id, true, {
+                                        fileName: "[project]/app/editor/components/Timeline.tsx",
+                                        lineNumber: 503,
+                                        columnNumber: 17
+                                    }, this);
+                                })
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/app/editor/components/Timeline.tsx",
-                            lineNumber: 339,
+                            lineNumber: 477,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/Timeline.tsx",
-                        lineNumber: 321,
+                        lineNumber: 459,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/Timeline.tsx",
-                lineNumber: 241,
+                lineNumber: 379,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/editor/components/Timeline.tsx",
-            lineNumber: 230,
+            lineNumber: 367,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/editor/components/Timeline.tsx",
-        lineNumber: 219,
+        lineNumber: 356,
         columnNumber: 5
     }, this);
 }
-_s(Timeline, "bqG+LlmsNQ7Ya6dbhOQuJ3eFcmo=");
+_s(Timeline, "4OQB3EhmkgiYHIcWG1bP5TQCG5M=");
 _c = Timeline;
 var _c;
 __turbopack_context__.k.register(_c, "Timeline");
@@ -7161,6 +7406,10 @@ __turbopack_context__.s([
 ]);
 function calcTotalDuration(sequences) {
     if (sequences.length === 0) return 0;
+    const hasExplicitFrom = sequences.some((s)=>s.from !== undefined);
+    if (hasExplicitFrom) {
+        return Math.max(0, ...sequences.map((s)=>(s.from ?? 0) + s.durationInFrames));
+    }
     const sorted = [
         ...sequences
     ].sort((a, b)=>a.order - b.order);
@@ -7232,7 +7481,8 @@ function EditorClient({ composition: initialComposition }) {
     ]);
     const handleDrop = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleDrop]": (type)=>{
-            const newSeq = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSequenceFromType"])(type, sequences.length, generateId);
+            const startFrame = totalDurationInFrames;
+            const newSeq = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSequenceFromType"])(type, sequences.length, generateId, startFrame);
             const next = [
                 ...sequences,
                 newSeq
@@ -7246,7 +7496,8 @@ function EditorClient({ composition: initialComposition }) {
             setSelectedId(newSeq.id);
         }
     }["EditorClient.useCallback[handleDrop]"], [
-        sequences
+        sequences,
+        totalDurationInFrames
     ]);
     const handleSequencesChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleSequencesChange]": (next)=>{
@@ -7259,6 +7510,39 @@ function EditorClient({ composition: initialComposition }) {
             setSequences(reordered);
         }
     }["EditorClient.useCallback[handleSequencesChange]"], []);
+    const handleReorder = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleReorder]": (draggedId, targetOrder)=>{
+            const idx = sequences.findIndex({
+                "EditorClient.useCallback[handleReorder].idx": (s)=>s.id === draggedId
+            }["EditorClient.useCallback[handleReorder].idx"]);
+            if (idx < 0 || idx === targetOrder) return;
+            const next = [
+                ...sequences
+            ];
+            const [moved] = next.splice(idx, 1);
+            next.splice(targetOrder, 0, moved);
+            setSequences(next.map({
+                "EditorClient.useCallback[handleReorder]": (s, i)=>({
+                        ...s,
+                        order: i
+                    })
+            }["EditorClient.useCallback[handleReorder]"]));
+        }
+    }["EditorClient.useCallback[handleReorder]"], [
+        sequences
+    ]);
+    const handleMoveInTime = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EditorClient.useCallback[handleMoveInTime]": (sequenceId, newFromFrame)=>{
+            setSequences({
+                "EditorClient.useCallback[handleMoveInTime]": (prev)=>prev.map({
+                        "EditorClient.useCallback[handleMoveInTime]": (s)=>s.id === sequenceId ? {
+                                ...s,
+                                from: Math.max(0, newFromFrame)
+                            } : s
+                    }["EditorClient.useCallback[handleMoveInTime]"])
+            }["EditorClient.useCallback[handleMoveInTime]"]);
+        }
+    }["EditorClient.useCallback[handleMoveInTime]"], []);
     const handleSequenceChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleSequenceChange]": (updated)=>{
             setSequences({
@@ -7324,7 +7608,8 @@ function EditorClient({ composition: initialComposition }) {
             const seq = sequences[idx];
             const newSeq = {
                 ...JSON.parse(JSON.stringify(seq)),
-                id: generateId()
+                id: generateId(),
+                from: totalDurationInFrames
             };
             const next = [
                 ...sequences.slice(0, idx + 1),
@@ -7340,7 +7625,8 @@ function EditorClient({ composition: initialComposition }) {
             setSelectedId(newSeq.id);
         }
     }["EditorClient.useCallback[handleDuplicateSequence]"], [
-        sequences
+        sequences,
+        totalDurationInFrames
     ]);
     const handleDeleteSequence = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleDeleteSequence]": (id)=>{
@@ -7401,7 +7687,8 @@ function EditorClient({ composition: initialComposition }) {
             const newSeq = {
                 ...JSON.parse(JSON.stringify(clipboard.sequence)),
                 id: generateId(),
-                order: insertOrder
+                order: insertOrder,
+                from: totalDurationInFrames
             };
             const next = sequences.map({
                 "EditorClient.useCallback[handlePasteSequence].next": (s)=>s.order >= insertOrder ? {
@@ -7422,7 +7709,8 @@ function EditorClient({ composition: initialComposition }) {
         }
     }["EditorClient.useCallback[handlePasteSequence]"], [
         clipboard,
-        sequences
+        sequences,
+        totalDurationInFrames
     ]);
     const handleMoveSequenceUp = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleMoveSequenceUp]": (id)=>{
@@ -7472,7 +7760,8 @@ function EditorClient({ composition: initialComposition }) {
     ]);
     const handleAddFromPalette = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditorClient.useCallback[handleAddFromPalette]": (sceneType)=>{
-            const newSeq = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSequenceFromType"])(sceneType, sequences.length, generateId);
+            const startFrame = totalDurationInFrames;
+            const newSeq = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$componentPalette$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSequenceFromType"])(sceneType, sequences.length, generateId, startFrame);
             const next = [
                 ...sequences,
                 newSeq
@@ -7486,7 +7775,8 @@ function EditorClient({ composition: initialComposition }) {
             setSelectedId(newSeq.id);
         }
     }["EditorClient.useCallback[handleAddFromPalette]"], [
-        sequences
+        sequences,
+        totalDurationInFrames
     ]);
     const contextMenuItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "EditorClient.useMemo[contextMenuItems]": ()=>{
@@ -7746,7 +8036,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: composition?.title ?? "Editor"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 399,
+                                lineNumber: 436,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -7758,13 +8048,13 @@ function EditorClient({ composition: initialComposition }) {
                                 children: !composition ? "Sin composición — crea una desde el dashboard para guardar" : `${sequences.length} secuencias · ${(totalDurationInFrames / fps).toFixed(1)}s`
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 411,
+                                lineNumber: 448,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 398,
+                        lineNumber: 435,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7784,7 +8074,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Dashboard"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 424,
+                                lineNumber: 461,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7803,7 +8093,7 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Guardar"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 434,
+                                lineNumber: 471,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -7818,19 +8108,19 @@ function EditorClient({ composition: initialComposition }) {
                                 children: "Remotion Studio →"
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 452,
+                                lineNumber: 489,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 423,
+                        lineNumber: 460,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 388,
+                lineNumber: 425,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7847,7 +8137,7 @@ function EditorClient({ composition: initialComposition }) {
                             })
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 475,
+                        lineNumber: 512,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7895,17 +8185,17 @@ function EditorClient({ composition: initialComposition }) {
                                         acknowledgeRemotionLicense: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                        lineNumber: 510,
+                                        lineNumber: 547,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                    lineNumber: 501,
+                                    lineNumber: 538,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 490,
+                                lineNumber: 527,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$Timeline$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Timeline"], {
@@ -7918,16 +8208,18 @@ function EditorClient({ composition: initialComposition }) {
                                 onSelect: setSelectedId,
                                 onDrop: handleDrop,
                                 onChange: handleSequencesChange,
+                                onReorder: handleReorder,
+                                onMoveInTime: handleMoveInTime,
                                 onContextMenu: handleContextMenu
                             }, void 0, false, {
                                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                                lineNumber: 527,
+                                lineNumber: 564,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 481,
+                        lineNumber: 518,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$PropertiesPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PropertiesPanel"], {
@@ -7935,13 +8227,13 @@ function EditorClient({ composition: initialComposition }) {
                         onChange: handleSequenceChange
                     }, void 0, false, {
                         fileName: "[project]/app/editor/components/EditorClient.tsx",
-                        lineNumber: 541,
+                        lineNumber: 580,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 468,
+                lineNumber: 505,
                 columnNumber: 7
             }, this),
             contextMenu && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$editor$2f$components$2f$ContextMenu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ContextMenu"], {
@@ -7951,17 +8243,17 @@ function EditorClient({ composition: initialComposition }) {
                 onClose: ()=>setContextMenu(null)
             }, void 0, false, {
                 fileName: "[project]/app/editor/components/EditorClient.tsx",
-                lineNumber: 548,
+                lineNumber: 587,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/editor/components/EditorClient.tsx",
-        lineNumber: 379,
+        lineNumber: 416,
         columnNumber: 5
     }, this);
 }
-_s(EditorClient, "qFx2sU/Ser3+kmAT+oaCNl6xgZ8=");
+_s(EditorClient, "sFwtf44oIysqGI3Ecj80ElrSfFs=");
 _c = EditorClient;
 var _c;
 __turbopack_context__.k.register(_c, "EditorClient");

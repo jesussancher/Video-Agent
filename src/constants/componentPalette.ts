@@ -78,11 +78,13 @@ function getDefaultSceneData(type: SceneType): SceneData {
 export function createSequenceFromType(
   type: SceneType,
   order: number,
-  idGenerator: () => string
+  idGenerator: () => string,
+  startFrame?: number
 ): Sequence {
   return {
     id: idGenerator(),
     order,
+    from: startFrame,
     sceneType: type,
     durationInFrames: 90,
     sceneData: getDefaultSceneData(type),

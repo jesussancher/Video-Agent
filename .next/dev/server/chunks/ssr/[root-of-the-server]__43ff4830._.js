@@ -178,6 +178,10 @@ __turbopack_context__.s([
 ]);
 function calcTotalDuration(sequences) {
     if (sequences.length === 0) return 0;
+    const hasExplicitFrom = sequences.some((s)=>s.from !== undefined);
+    if (hasExplicitFrom) {
+        return Math.max(0, ...sequences.map((s)=>(s.from ?? 0) + s.durationInFrames));
+    }
     const sorted = [
         ...sequences
     ].sort((a, b)=>a.order - b.order);

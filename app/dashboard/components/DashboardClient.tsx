@@ -3,12 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import VideoPlayer from "../../VideoPlayer";
-import { DEFAULT_SEQUENCES } from "../../../src/constants/defaultSequences";
+import { CompositionChat } from "./CompositionChat";
 import type { CompositionDTO } from "../../../src/types";
-
-const API_URL =
-  (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_API_URL) ||
-  "";
 
 export interface DashboardClientProps {
   compositions: CompositionDTO[];
@@ -24,6 +20,7 @@ export function DashboardClient({
   const [selectedId, setSelectedId] = useState<string | null>(
     initialCompositions[0]?.id ?? null
   );
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     setCompositions(initialCompositions);
@@ -32,40 +29,13 @@ export function DashboardClient({
       return exists ? prev : initialCompositions[0]?.id ?? null;
     });
   }, [initialCompositions]);
-  const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
+
+  const handleCompositionCreated = (compositionId: string) => {
+    router.refresh();
+    setSelectedId(compositionId);
+  };
 
   const selected = compositions.find((c) => c.id === selectedId) ?? compositions[0];
-
-  const handleCreateComposition = async () => {
-    setCreating(true);
-    setCreateError(null);
-    try {
-      const res = await fetch(`${API_URL || ""}/api/compositions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          title: `Composición ${compositions.length + 1}`,
-          sequences: DEFAULT_SEQUENCES,
-          fps: 30,
-          width: 1920,
-          height: 1080,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error ?? "Error al crear composición");
-      }
-      setCompositions((prev) => [data.composition, ...prev]);
-      setSelectedId(data.composition.id);
-      router.refresh();
-    } catch (err) {
-      setCreateError(err instanceof Error ? err.message : "Error desconocido");
-    } finally {
-      setCreating(false);
-    }
-  };
 
   return (
     <>
@@ -111,8 +81,7 @@ export function DashboardClient({
           }}
         >
           <button
-            onClick={handleCreateComposition}
-            disabled={creating}
+            onClick={() => setChatOpen(true)}
             style={{
               padding: "10px 20px",
               borderRadius: 8,
@@ -122,24 +91,15 @@ export function DashboardClient({
               fontSize: 13,
               fontWeight: 600,
               letterSpacing: 1,
-              cursor: creating ? "not-allowed" : "pointer",
+              cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: 8,
             }}
           >
-            {creating ? (
-              "Creando…"
-            ) : (
-              <>
-                <span style={{ fontSize: 18 }}>+</span>
-                Nueva composición
-              </>
-            )}
+            <span style={{ fontSize: 18 }}>+</span>
+            Nueva composición
           </button>
-          {createError && (
-            <span style={{ fontSize: 12, color: "#ff6b6b" }}>{createError}</span>
-          )}
           {compositions.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {compositions.map((c) => (
@@ -210,7 +170,7 @@ export function DashboardClient({
           </div>
         )}
 
-        {compositions.length === 0 && !creating && (
+        {compositions.length === 0 && (
           <p
             style={{
               color: "rgba(255,255,255,0.4)",
@@ -218,10 +178,16 @@ export function DashboardClient({
               textAlign: "center",
             }}
           >
-            No hay composiciones. Haz clic en &quot;Nueva composición&quot; para crear una.
+            No hay composiciones. Haz clic en &quot;Nueva composición&quot; y describe tu video en el chat.
           </p>
         )}
       </div>
+
+      <CompositionChat
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        onCreated={handleCompositionCreated}
+      />
     </>
   );
 }

@@ -59,12 +59,18 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
 
   const handleDrop = useCallback(
     (type: Parameters<typeof createSequenceFromType>[0]) => {
-      const newSeq = createSequenceFromType(type, sequences.length, generateId);
+      const startFrame = totalDurationInFrames;
+      const newSeq = createSequenceFromType(
+        type,
+        sequences.length,
+        generateId,
+        startFrame
+      );
       const next = [...sequences, newSeq].map((s, i) => ({ ...s, order: i }));
       setSequences(next);
       setSelectedId(newSeq.id);
     },
-    [sequences]
+    [sequences, totalDurationInFrames]
   );
 
   const handleSequencesChange = useCallback((next: Sequence[]) => {
@@ -82,6 +88,17 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       setSequences(next.map((s, i) => ({ ...s, order: i })));
     },
     [sequences]
+  );
+
+  const handleMoveInTime = useCallback(
+    (sequenceId: string, newFromFrame: number) => {
+      setSequences((prev) =>
+        prev.map((s) =>
+          s.id === sequenceId ? { ...s, from: Math.max(0, newFromFrame) } : s
+        )
+      );
+    },
+    []
   );
 
   const handleSequenceChange = useCallback((updated: Sequence) => {
@@ -129,6 +146,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       const newSeq: Sequence = {
         ...JSON.parse(JSON.stringify(seq)),
         id: generateId(),
+        from: totalDurationInFrames,
       };
       const next = [
         ...sequences.slice(0, idx + 1),
@@ -138,7 +156,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       setSequences(next);
       setSelectedId(newSeq.id);
     },
-    [sequences]
+    [sequences, totalDurationInFrames]
   );
 
   const handleDeleteSequence = useCallback(
@@ -176,6 +194,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
         ...JSON.parse(JSON.stringify(clipboard.sequence)),
         id: generateId(),
         order: insertOrder,
+        from: totalDurationInFrames,
       };
       const next = sequences
         .map((s) => (s.order >= insertOrder ? { ...s, order: s.order + 1 } : s))
@@ -186,7 +205,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
       setSelectedId(newSeq.id);
       if (clipboard.cut) setClipboard(null);
     },
-    [clipboard, sequences]
+    [clipboard, sequences, totalDurationInFrames]
   );
 
   const handleMoveSequenceUp = useCallback(
@@ -213,12 +232,18 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
 
   const handleAddFromPalette = useCallback(
     (sceneType: import("../../../src/types").SceneType) => {
-      const newSeq = createSequenceFromType(sceneType, sequences.length, generateId);
+      const startFrame = totalDurationInFrames;
+      const newSeq = createSequenceFromType(
+        sceneType,
+        sequences.length,
+        generateId,
+        startFrame
+      );
       const next = [...sequences, newSeq].map((s, i) => ({ ...s, order: i }));
       setSequences(next);
       setSelectedId(newSeq.id);
     },
-    [sequences]
+    [sequences, totalDurationInFrames]
   );
 
   const contextMenuItems: ContextMenuItem[] = useMemo(() => {
@@ -547,6 +572,7 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
             onDrop={handleDrop}
             onChange={handleSequencesChange}
             onReorder={handleReorder}
+            onMoveInTime={handleMoveInTime}
             onContextMenu={handleContextMenu}
           />
         </div>

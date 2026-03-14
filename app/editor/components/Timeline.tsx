@@ -15,18 +15,20 @@ function getSequenceLabel(seq: Sequence): string {
   return item?.label ?? seq.sceneType;
 }
 
-/** Compute start frame for each sequence (for display) */
+/** Compute start frame for each sequence (for display). Usa seq.from si existe. */
 function computeFromFrames(sequences: Sequence[]): Map<string, number> {
   const sorted = [...sequences].sort((a, b) => a.order - b.order);
   const map = new Map<string, number>();
   let acc = 0;
   for (let i = 0; i < sorted.length; i++) {
-    map.set(sorted[i].id, acc);
+    const seq = sorted[i];
+    const from = seq.from !== undefined ? seq.from : acc;
+    map.set(seq.id, from);
     const overlap =
-      i < sorted.length - 1 && sorted[i].transition
-        ? sorted[i].transition!.durationInFrames
+      i < sorted.length - 1 && seq.transition
+        ? seq.transition!.durationInFrames
         : 0;
-    acc += sorted[i].durationInFrames - overlap;
+    acc = from + seq.durationInFrames - overlap;
   }
   return map;
 }
@@ -42,6 +44,7 @@ export interface TimelineProps {
   onDrop: (type: SceneType) => void;
   onChange: (sequences: Sequence[]) => void;
   onReorder?: (draggedId: string, targetOrder: number) => void;
+  onMoveInTime?: (sequenceId: string, newFromFrame: number) => void;
   onContextMenu?: (e: React.MouseEvent, target: ContextMenuTarget) => void;
 }
 
@@ -58,12 +61,21 @@ export function Timeline({
   onDrop,
   onChange,
   onReorder,
+  onMoveInTime,
   onContextMenu,
 }: TimelineProps) {
   const fromFrames = useMemo(() => computeFromFrames(sequences), [sequences]);
   const width = totalDurationInFrames * PIXELS_PER_FRAME;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dropIndicatorOrder, setDropIndicatorOrder] = useState<number | null>(null);
+  const dragSourceIdRef = useRef<string | null>(null);
+  const [timeDrag, setTimeDrag] = useState<{
+    sequenceId: string;
+    startFrom: number;
+    startClientX: number;
+    durationInFrames: number;
+  } | null>(null);
 
   const getFrameFromClientX = useCallback(
     (clientX: number) => {
@@ -131,13 +143,25 @@ export function Timeline({
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
-  }, []);
+    const isReorder = dragSourceIdRef.current !== null;
+    e.dataTransfer.dropEffect = isReorder ? "move" : "copy";
+    if (isReorder) {
+      const target = e.target as HTMLElement;
+      const tracksContainer = target.closest("[data-tracks-container]");
+      if (!tracksContainer) {
+        setDropIndicatorOrder(sequences.length);
+      }
+    } else {
+      setDropIndicatorOrder(null);
+    }
+  }, [sequences.length]);
 
   const handleDropAny = useCallback(
     (e: React.DragEvent, targetOrder: number) => {
       e.preventDefault();
       e.stopPropagation();
+      setDropIndicatorOrder(null);
+      dragSourceIdRef.current = null;
       try {
         const data = JSON.parse(e.dataTransfer.getData("application/json"));
         if (data?.type === "timeline-clip" && data?.sequenceId && onReorder) {
@@ -154,14 +178,61 @@ export function Timeline({
 
   const handleTrackDragStart = useCallback(
     (e: React.DragEvent, sequenceId: string) => {
+      dragSourceIdRef.current = sequenceId;
       e.dataTransfer.setData(
         "application/json",
         JSON.stringify({ type: "timeline-clip", sequenceId })
       );
       e.dataTransfer.effectAllowed = "move";
+      // Usar imagen de arrastre mínima para que el indicador de drop sea la referencia principal
+      const img = document.createElement("div");
+      img.style.cssText = "width:1px;height:1px;opacity:0;pointer-events:none;position:absolute;top:-9999px";
+      document.body.appendChild(img);
+      e.dataTransfer.setDragImage(img, 0, 0);
+      requestAnimationFrame(() => document.body.removeChild(img));
     },
     []
   );
+
+  const handleTrackDragEnd = useCallback(() => {
+    dragSourceIdRef.current = null;
+    setDropIndicatorOrder(null);
+  }, []);
+
+  const handleDragOverTrack = useCallback(
+    (e: React.DragEvent, idx: number) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isReorder = dragSourceIdRef.current !== null && onReorder;
+      if (isReorder) {
+        e.dataTransfer.dropEffect = "move";
+        const rect = e.currentTarget.getBoundingClientRect();
+        const relY = e.clientY - rect.top;
+        const targetOrder = relY < rect.height / 2 ? idx : idx + 1;
+        setDropIndicatorOrder(Math.min(targetOrder, sequences.length));
+      } else {
+        e.dataTransfer.dropEffect = "copy";
+        setDropIndicatorOrder(null);
+      }
+    },
+    [onReorder, sequences.length]
+  );
+
+  const handleDragLeaveTrack = useCallback((e: React.DragEvent) => {
+    const related = e.relatedTarget as Node | null;
+    const current = e.currentTarget as HTMLElement;
+    if (!related || !current.contains(related)) {
+      setDropIndicatorOrder(null);
+    }
+  }, []);
+
+  const handleContainerDragLeave = useCallback((e: React.DragEvent) => {
+    const related = e.relatedTarget as Node | null;
+    const scrollEl = scrollRef.current;
+    if (scrollEl && (!related || !scrollEl.contains(related))) {
+      setDropIndicatorOrder(null);
+    }
+  }, []);
 
   const handleTrackClick = useCallback(
     (id: string) => {
@@ -169,6 +240,54 @@ export function Timeline({
     },
     [selectedId, onSelect]
   );
+
+  const handleClipBarMouseDown = useCallback(
+    (e: React.MouseEvent, seq: Sequence) => {
+      if (!onMoveInTime) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setTimeDrag({
+        sequenceId: seq.id,
+        startFrom: fromFrames.get(seq.id) ?? 0,
+        startClientX: e.clientX,
+        durationInFrames: seq.durationInFrames,
+      });
+    },
+    [onMoveInTime, fromFrames]
+  );
+
+  const handleTimeDragMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!timeDrag || !onMoveInTime) return;
+      const deltaX = e.clientX - timeDrag.startClientX;
+      const deltaFrames = Math.round(deltaX / PIXELS_PER_FRAME);
+      const rawFrom = timeDrag.startFrom + deltaFrames;
+      const minFrom = 0;
+      const maxFrom = Math.max(0, totalDurationInFrames - timeDrag.durationInFrames);
+      const newFrom = Math.max(minFrom, Math.min(rawFrom, maxFrom));
+      onMoveInTime(timeDrag.sequenceId, newFrom);
+    },
+    [timeDrag, onMoveInTime, totalDurationInFrames]
+  );
+
+  const handleTimeDragMouseUp = useCallback(() => {
+    setTimeDrag(null);
+  }, []);
+
+  React.useEffect(() => {
+    if (!timeDrag) return;
+    const prevSelect = document.body.style.userSelect;
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "ew-resize";
+    window.addEventListener("mousemove", handleTimeDragMouseMove);
+    window.addEventListener("mouseup", handleTimeDragMouseUp);
+    return () => {
+      document.body.style.userSelect = prevSelect;
+      document.body.style.cursor = "";
+      window.removeEventListener("mousemove", handleTimeDragMouseMove);
+      window.removeEventListener("mouseup", handleTimeDragMouseUp);
+    };
+  }, [timeDrag, handleTimeDragMouseMove, handleTimeDragMouseUp]);
 
   const handleTrackDurationChange = useCallback(
     (id: string, delta: number) => {
@@ -254,7 +373,8 @@ export function Timeline({
           position: "relative",
         }}
         onDragOver={handleDragOver}
-        onDrop={(e) => handleDropAny(e, sequences.length)}
+        onDragLeave={handleContainerDragLeave}
+        onDrop={(e) => handleDropAny(e, dropIndicatorOrder ?? sequences.length)}
       >
         <div
           style={{
@@ -336,7 +456,7 @@ export function Timeline({
           </div>
 
           {/* Tracks */}
-          <div style={{ marginTop: 8 }}>
+          <div style={{ marginTop: 8, position: "relative" }}>
         {sorted.length === 0 ? (
           <div
             onContextMenu={handleEmptyAreaContextMenu}
@@ -354,7 +474,26 @@ export function Timeline({
             Arrastra componentes aquí
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div
+            data-tracks-container
+            style={{ display: "flex", flexDirection: "column", gap: 6, position: "relative" }}
+          >
+            {/* Línea indicadora de drop (solo vertical, ancho completo) */}
+            {dropIndicatorOrder !== null && onReorder && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  top: dropIndicatorOrder * (TRACK_HEIGHT + 6) - 2,
+                  height: 4,
+                  borderTop: "2px solid #9DFF20",
+                  boxShadow: "0 0 8px rgba(157,255,32,0.6)",
+                  pointerEvents: "none",
+                  zIndex: 20,
+                }}
+              />
+            )}
             {sorted.map((seq, idx) => {
               const from = fromFrames.get(seq.id) ?? 0;
               const trackWidth = seq.durationInFrames * PIXELS_PER_FRAME;
@@ -363,27 +502,30 @@ export function Timeline({
               return (
                 <div
                   key={seq.id}
-                  draggable={!!onReorder}
-                  onDragStart={(e) => onReorder && handleTrackDragStart(e, seq.id)}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.dataTransfer.dropEffect = "move";
+                  onDragOver={(e) => handleDragOverTrack(e, idx)}
+                  onDragLeave={handleDragLeaveTrack}
+                  onDrop={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const relY = e.clientY - rect.top;
+                    const targetOrder = relY < rect.height / 2 ? idx : idx + 1;
+                    handleDropAny(e, Math.min(targetOrder, sorted.length));
                   }}
-                  onDrop={(e) => handleDropAny(e, idx)}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     height: TRACK_HEIGHT,
-                    cursor: onReorder ? "grab" : undefined,
                   }}
                 >
                   <div
+                    draggable={!!onReorder}
+                    onDragStart={(e) => onReorder && handleTrackDragStart(e, seq.id)}
+                    onDragEnd={handleTrackDragEnd}
                     style={{
                       width: 120,
                       fontSize: 12,
                       color: "rgba(255,255,255,0.7)",
                       flexShrink: 0,
+                      cursor: onReorder ? "grab" : undefined,
                     }}
                   >
                     {getSequenceLabel(seq)}
@@ -398,6 +540,7 @@ export function Timeline({
                   >
                     <div
                       onClick={() => handleTrackClick(seq.id)}
+                      onMouseDown={(e) => handleClipBarMouseDown(e, seq)}
                       onContextMenu={(e) => handleTrackContextMenu(e, seq.id)}
                       style={{
                         position: "absolute",
@@ -409,7 +552,7 @@ export function Timeline({
                           : "rgba(157,255,32,0.12)",
                         border: `1px solid ${isSelected ? "#9DFF20" : "rgba(157,255,32,0.3)"}`,
                         borderRadius: 6,
-                        cursor: "pointer",
+                        cursor: onMoveInTime ? "ew-resize" : "pointer",
                         display: "flex",
                         alignItems: "center",
                         paddingLeft: 8,

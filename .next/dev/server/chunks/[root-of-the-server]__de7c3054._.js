@@ -184,6 +184,10 @@ __turbopack_context__.s([
 ]);
 function calcTotalDuration(sequences) {
     if (sequences.length === 0) return 0;
+    const hasExplicitFrom = sequences.some((s)=>s.from !== undefined);
+    if (hasExplicitFrom) {
+        return Math.max(0, ...sequences.map((s)=>(s.from ?? 0) + s.durationInFrames));
+    }
     const sorted = [
         ...sequences
     ].sort((a, b)=>a.order - b.order);
@@ -462,17 +466,18 @@ async function POST(request) {
         });
     }
     try {
-        const composition = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createComposition"])(auth.uid, {
+        const data = {
             title: title.trim(),
-            description: body.description,
             status: body.status ?? "draft",
-            thumbnailUrl: body.thumbnailUrl,
             fps,
             width,
             height,
             sequences,
             totalDurationInFrames: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$duration$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["calcTotalDuration"])(sequences)
-        });
+        };
+        if (body.description != null) data.description = body.description;
+        if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
+        const composition = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createComposition"])(auth.uid, data);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             composition
         }, {

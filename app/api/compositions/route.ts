@@ -75,17 +75,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const composition = await createComposition(auth.uid, {
+    const data: Parameters<typeof createComposition>[1] = {
       title: title.trim(),
-      description: body.description,
       status: body.status ?? "draft",
-      thumbnailUrl: body.thumbnailUrl,
       fps,
       width,
       height,
       sequences,
       totalDurationInFrames: calcTotalDuration(sequences),
-    });
+    };
+    if (body.description != null) data.description = body.description;
+    if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
+
+    const composition = await createComposition(auth.uid, data);
 
     return NextResponse.json({ composition }, { status: 201 });
   } catch (err) {

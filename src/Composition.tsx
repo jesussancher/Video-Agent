@@ -1,4 +1,5 @@
-import { AbsoluteFill, useVideoConfig } from "remotion";
+import React, { useMemo } from "react";
+import { AbsoluteFill, Sequence as RemotionSequence, useVideoConfig } from "remotion";
 import {
   TransitionSeries,
   linearTiming,
@@ -19,7 +20,7 @@ import { MediaScene } from "./scenes/MediaScene";
 import type {
   CompositionInputProps,
   SceneTransition,
-  Sequence,
+  Sequence as SequenceType,
 } from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -69,7 +70,7 @@ function getTiming(t: SceneTransition) {
 // TODO: pasar sceneData como props cuando cada escena sea parametrizable
 // ─────────────────────────────────────────────────────────────────────────────
 
-function SceneRenderer({ sequence }: { sequence: Sequence }) {
+function SceneRenderer({ sequence }: { sequence: SequenceType }) {
   switch (sequence.sceneType) {
     case "logo-curtain":
       return <LogoCurtain />;
@@ -106,11 +107,42 @@ function SceneRenderer({ sequence }: { sequence: Sequence }) {
 // Solo recibe datos de la DB (VideoPlayer) o vacío (Remotion Studio)
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Obtiene el frame de inicio de una secuencia (explícito o calculado desde order) */
+function getSequenceFrom(
+  seq: SequenceType,
+  _sorted: SequenceType[],
+  computedFromMap: Map<string, number>
+): number {
+  if (seq.from !== undefined) return seq.from;
+  return computedFromMap.get(seq.id) ?? 0;
+}
+
 export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
   sequences = [],
 }) => {
   const { width, height } = useVideoConfig();
-  const sorted = [...sequences].sort((a, b) => a.order - b.order);
+  const sorted = useMemo(
+    () => [...sequences].sort((a, b) => a.order - b.order),
+    [sequences]
+  );
+
+  const computedFromMap = useMemo(() => {
+    const map = new Map<string, number>();
+    let acc = 0;
+    for (let i = 0; i < sorted.length; i++) {
+      const seq = sorted[i];
+      const from = seq.from ?? acc;
+      map.set(seq.id, from);
+      const overlap =
+        i < sorted.length - 1 && seq.transition
+          ? seq.transition!.durationInFrames
+          : 0;
+      acc = from + seq.durationInFrames - overlap;
+    }
+    return map;
+  }, [sorted]);
+
+  const hasExplicitFrom = sequences.some((s) => s.from !== undefined);
 
   if (sorted.length === 0) {
     return (
@@ -124,6 +156,25 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
         }}
       >
         Sin secuencias — carga datos desde Firestore
+      </AbsoluteFill>
+    );
+  }
+
+  if (hasExplicitFrom) {
+    return (
+      <AbsoluteFill style={{ backgroundColor: "#050508" }}>
+        {sorted.map((seq) => {
+          const fromFrame = getSequenceFrom(seq, sorted, computedFromMap);
+          return (
+            <RemotionSequence
+              key={seq.id}
+              from={fromFrame}
+              durationInFrames={seq.durationInFrames}
+            >
+              <SceneRenderer sequence={seq} />
+            </RemotionSequence>
+          );
+        })}
       </AbsoluteFill>
     );
   }
