@@ -4253,9 +4253,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// ─────────────────────────────────────────────────────────────────────────────
-// Presentation helpers
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Transition helpers ───────────────────────────────────────────────────────
 function getPresentation(t, width, height) {
     switch(t.type){
         case "slide":
@@ -4274,7 +4272,6 @@ function getPresentation(t, width, height) {
                 height
             });
         case "none":
-            return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$fade$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fade"])(); // unused when type is none (transition skipped)
         case "fade":
         default:
             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$fade$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fade"])();
@@ -4291,51 +4288,47 @@ function getTiming(t) {
         durationInFrames: t.durationInFrames
     });
 }
-// ─────────────────────────────────────────────────────────────────────────────
-// Scene registry
-// TODO: pasar sceneData como props cuando cada escena sea parametrizable
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Scene registry ───────────────────────────────────────────────────────────
 function SceneRenderer({ sequence }) {
     switch(sequence.sceneType){
         case "logo-curtain":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$LogoCurtain$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LogoCurtain"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 76,
+                lineNumber: 66,
                 columnNumber: 14
             }, this);
         case "intro":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Intro$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Intro"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 78,
+                lineNumber: 68,
                 columnNumber: 14
             }, this);
         case "services":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Services$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Services"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 80,
+                lineNumber: 70,
                 columnNumber: 14
             }, this);
         case "products":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Products$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Products"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 82,
+                lineNumber: 72,
                 columnNumber: 14
             }, this);
         case "metrics":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Metrics$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Metrics"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 84,
+                lineNumber: 74,
                 columnNumber: 14
             }, this);
         case "contact":
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$Contact$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contact"], {}, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 86,
+                lineNumber: 76,
                 columnNumber: 14
             }, this);
         case "image":
         case "video":
-        case "audio":
         case "gif":
         case "animated-image":
         case "lottie":
@@ -4344,27 +4337,19 @@ function SceneRenderer({ sequence }) {
                 sequence: sequence
             }, void 0, false, {
                 fileName: "[project]/src/Composition.tsx",
-                lineNumber: 94,
+                lineNumber: 83,
                 columnNumber: 14
             }, this);
+        case "light-leak":
         case "captions":
         case "three-canvas":
-        case "light-leak":
-            // TODO: implement captions, three-canvas, light-leak
+        case "audio":
             return null;
         default:
             return null;
     }
 }
 _c = SceneRenderer;
-// ─────────────────────────────────────────────────────────────────────────────
-// DynamicComposition — renderiza sequences desde Firestore vía inputProps
-// Solo recibe datos de la DB (VideoPlayer) o vacío (Remotion Studio)
-// ─────────────────────────────────────────────────────────────────────────────
-/** Obtiene el frame de inicio de una secuencia (explícito o calculado desde order) */ function getSequenceFrom(seq, _sorted, computedFromMap) {
-    if (seq.from !== undefined) return seq.from;
-    return computedFromMap.get(seq.id) ?? 0;
-}
 const DynamicComposition = ({ sequences = [] })=>{
     _s();
     const { width, height } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useVideoConfig"])();
@@ -4377,23 +4362,53 @@ const DynamicComposition = ({ sequences = [] })=>{
     }["DynamicComposition.useMemo[sorted]"], [
         sequences
     ]);
-    const computedFromMap = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
-        "DynamicComposition.useMemo[computedFromMap]": ()=>{
+    // Split into visual and audio layers
+    const { visualSeqs, audioSeqs } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "DynamicComposition.useMemo": ()=>({
+                visualSeqs: sorted.filter({
+                    "DynamicComposition.useMemo": (s)=>s.sceneType !== "audio"
+                }["DynamicComposition.useMemo"]),
+                audioSeqs: sorted.filter({
+                    "DynamicComposition.useMemo": (s)=>s.sceneType === "audio"
+                }["DynamicComposition.useMemo"])
+            })
+    }["DynamicComposition.useMemo"], [
+        sorted
+    ]);
+    // Build the visual-only sequential timeline (frame positions)
+    const visualFromMap = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "DynamicComposition.useMemo[visualFromMap]": ()=>{
             const map = new Map();
             let acc = 0;
-            for(let i = 0; i < sorted.length; i++){
-                const seq = sorted[i];
-                const from = seq.from ?? acc;
-                map.set(seq.id, from);
-                const overlap = i < sorted.length - 1 && seq.transition ? seq.transition.durationInFrames : 0;
-                acc = from + seq.durationInFrames - overlap;
+            for(let i = 0; i < visualSeqs.length; i++){
+                const seq = visualSeqs[i];
+                map.set(seq.id, acc);
+                const overlap = i < visualSeqs.length - 1 && seq.transition ? seq.transition.durationInFrames : 0;
+                acc += seq.durationInFrames - overlap;
             }
             return map;
         }
-    }["DynamicComposition.useMemo[computedFromMap]"], [
-        sorted
+    }["DynamicComposition.useMemo[visualFromMap]"], [
+        visualSeqs
     ]);
-    const hasExplicitFrom = sequences.some((s)=>s.from !== undefined);
+    // Map each audio sequence to a visual start frame
+    const audioFromMap = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "DynamicComposition.useMemo[audioFromMap]": ()=>{
+            const map = new Map();
+            for (const audio of audioSeqs){
+                // Find the first visual seq whose order >= audio.order
+                const anchor = visualSeqs.find({
+                    "DynamicComposition.useMemo[audioFromMap].anchor": (v)=>v.order >= audio.order
+                }["DynamicComposition.useMemo[audioFromMap].anchor"]);
+                map.set(audio.id, anchor ? visualFromMap.get(anchor.id) ?? 0 : 0);
+            }
+            return map;
+        }
+    }["DynamicComposition.useMemo[audioFromMap]"], [
+        audioSeqs,
+        visualSeqs,
+        visualFromMap
+    ]);
     if (sorted.length === 0) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AbsoluteFill"], {
             style: {
@@ -4406,36 +4421,7 @@ const DynamicComposition = ({ sequences = [] })=>{
             children: "Sin secuencias — carga datos desde Firestore"
         }, void 0, false, {
             fileName: "[project]/src/Composition.tsx",
-            lineNumber: 149,
-            columnNumber: 7
-        }, ("TURBOPACK compile-time value", void 0));
-    }
-    if (hasExplicitFrom) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AbsoluteFill"], {
-            style: {
-                backgroundColor: "#050508"
-            },
-            children: sorted.map((seq)=>{
-                const fromFrame = getSequenceFrom(seq, sorted, computedFromMap);
-                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sequence"], {
-                    from: fromFrame,
-                    durationInFrames: seq.durationInFrames,
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneRenderer, {
-                        sequence: seq
-                    }, void 0, false, {
-                        fileName: "[project]/src/Composition.tsx",
-                        lineNumber: 174,
-                        columnNumber: 15
-                    }, ("TURBOPACK compile-time value", void 0))
-                }, seq.id, false, {
-                    fileName: "[project]/src/Composition.tsx",
-                    lineNumber: 169,
-                    columnNumber: 13
-                }, ("TURBOPACK compile-time value", void 0));
-            })
-        }, void 0, false, {
-            fileName: "[project]/src/Composition.tsx",
-            lineNumber: 165,
+            lineNumber: 148,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -4443,45 +4429,67 @@ const DynamicComposition = ({ sequences = [] })=>{
         style: {
             backgroundColor: "#050508"
         },
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"], {
-            children: sorted.map((seq, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"].Sequence, {
-                            durationInFrames: seq.durationInFrames,
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneRenderer, {
-                                sequence: seq
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"], {
+                children: visualSeqs.map((seq, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].Fragment, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"].Sequence, {
+                                durationInFrames: seq.durationInFrames,
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneRenderer, {
+                                    sequence: seq
+                                }, void 0, false, {
+                                    fileName: "[project]/src/Composition.tsx",
+                                    lineNumber: 169,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/Composition.tsx",
-                                lineNumber: 191,
-                                columnNumber: 15
+                                lineNumber: 168,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            seq.transition && seq.transition.type !== "none" && index < visualSeqs.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"].Transition, {
+                                presentation: getPresentation(seq.transition, width, height),
+                                timing: getTiming(seq.transition)
+                            }, void 0, false, {
+                                fileName: "[project]/src/Composition.tsx",
+                                lineNumber: 175,
+                                columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0))
-                        }, seq.id, false, {
-                            fileName: "[project]/src/Composition.tsx",
-                            lineNumber: 187,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        seq.transition && seq.transition.type !== "none" && index < sorted.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$remotion$2f$transitions$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TransitionSeries"].Transition, {
-                            presentation: getPresentation(seq.transition, width, height),
-                            timing: getTiming(seq.transition)
-                        }, `t-${seq.id}`, false, {
-                            fileName: "[project]/src/Composition.tsx",
-                            lineNumber: 197,
-                            columnNumber: 17
-                        }, ("TURBOPACK compile-time value", void 0))
-                    ]
-                }, void 0, true))
-        }, void 0, false, {
-            fileName: "[project]/src/Composition.tsx",
-            lineNumber: 184,
-            columnNumber: 7
-        }, ("TURBOPACK compile-time value", void 0))
-    }, void 0, false, {
+                        ]
+                    }, seq.id, true, {
+                        fileName: "[project]/src/Composition.tsx",
+                        lineNumber: 167,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0)))
+            }, void 0, false, {
+                fileName: "[project]/src/Composition.tsx",
+                lineNumber: 165,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            audioSeqs.map((seq)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sequence"], {
+                    from: audioFromMap.get(seq.id) ?? 0,
+                    durationInFrames: seq.durationInFrames,
+                    layout: "none",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$scenes$2f$MediaScene$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MediaScene"], {
+                        sequence: seq
+                    }, void 0, false, {
+                        fileName: "[project]/src/Composition.tsx",
+                        lineNumber: 192,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0))
+                }, seq.id, false, {
+                    fileName: "[project]/src/Composition.tsx",
+                    lineNumber: 186,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)))
+        ]
+    }, void 0, true, {
         fileName: "[project]/src/Composition.tsx",
-        lineNumber: 183,
+        lineNumber: 163,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
-_s(DynamicComposition, "P86ZDKMSutEXQFXiJXSs0c9USVE=", false, function() {
+_s(DynamicComposition, "reJ1q2G6UNh4QDVGeLo7CMDtQeA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$remotion$2f$dist$2f$esm$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useVideoConfig"]
     ];
@@ -4491,7 +4499,7 @@ const MyComposition = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$p
         sequences: []
     }, void 0, false, {
         fileName: "[project]/src/Composition.tsx",
-        lineNumber: 214,
+        lineNumber: 203,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 _c2 = MyComposition;

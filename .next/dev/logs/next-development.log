@@ -1,10 +1,336 @@
-[00:00:00.809] Server  LOG     ✓ Ready in 592ms
-[00:01:43.116] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
-[00:01:43.116] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
-[00:01:43.116] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
-[00:01:58.373] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
-[00:01:58.373] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-d769bd5b-8e17-42f8-8c8d-89946eaca455.mp3?alt=media&token=df168939-45cd-4c4a-8867-07774f98720f {}
-[00:01:58.373] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-d769bd5b-8e17-42f8-8c8d-89946eaca455.mp3?alt=media&token=df168939-45cd-4c4a-8867-07774f98720f, falling back to <Html5Audio>
-[00:01:59.196] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
-[00:01:59.197] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-d769bd5b-8e17-42f8-8c8d-89946eaca455.mp3?alt=media&token=df168939-45cd-4c4a-8867-07774f98720f {}
-[00:01:59.197] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-d769bd5b-8e17-42f8-8c8d-89946eaca455.mp3?alt=media&token=df168939-45cd-4c4a-8867-07774f98720f, falling back to <Html5Audio>
+[00:00:01.107] Server  LOG     ✓ Ready in 887ms
+[00:00:01.112] Browser ERROR   uncaughtError: TypeError: network error
+[00:00:01.133] Browser ERROR   uncaughtError: TypeError: network error
+[00:00:04.584] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:00:04.585] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:00:04.585] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:00:06.991] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:00:06.991] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:00:06.991] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:00:08.505] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:00:08.505] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:00:08.505] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:01:43.134] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:01:43.134] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-62607128-a11c-4728-a9a3-b3ef09d62d35.mp3?alt=media&token=e8fe1898-ecb7-4a75-aa56-4f7de20f0c3f {}
+[00:01:43.134] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-62607128-a11c-4728-a9a3-b3ef09d62d35.mp3?alt=media&token=e8fe1898-ecb7-4a75-aa56-4f7de20f0c3f, falling back to <Html5Audio>
+[00:01:56.928] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:01:56.928] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-cecd6983-b563-4015-b602-cccd81308bac.mp3?alt=media&token=9805b6d1-0754-45b7-a167-0be44357f7e7 {}
+[00:01:56.928] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-cecd6983-b563-4015-b602-cccd81308bac.mp3?alt=media&token=9805b6d1-0754-45b7-a167-0be44357f7e7, falling back to <Html5Audio>
+[00:01:57.629] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:01:57.629] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-cecd6983-b563-4015-b602-cccd81308bac.mp3?alt=media&token=9805b6d1-0754-45b7-a167-0be44357f7e7 {}
+[00:01:57.629] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-cecd6983-b563-4015-b602-cccd81308bac.mp3?alt=media&token=9805b6d1-0754-45b7-a167-0be44357f7e7, falling back to <Html5Audio>
+[00:02:00.412] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:00.412] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-093a410e-8b2a-4a6b-894a-e89eb06fda6f.mp3?alt=media&token=ca99b7c0-8c56-455f-a7b1-5d0a927393f7 {}
+[00:02:00.412] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-093a410e-8b2a-4a6b-894a-e89eb06fda6f.mp3?alt=media&token=ca99b7c0-8c56-455f-a7b1-5d0a927393f7, falling back to <Html5Audio>
+[00:02:00.938] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:00.938] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-093a410e-8b2a-4a6b-894a-e89eb06fda6f.mp3?alt=media&token=ca99b7c0-8c56-455f-a7b1-5d0a927393f7 {}
+[00:02:00.938] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-093a410e-8b2a-4a6b-894a-e89eb06fda6f.mp3?alt=media&token=ca99b7c0-8c56-455f-a7b1-5d0a927393f7, falling back to <Html5Audio>
+[00:02:05.904] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:05.904] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:02:05.904] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:02:06.442] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:06.442] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:02:06.442] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:02:07.045] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:07.045] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6 {}
+[00:02:07.045] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6, falling back to <Html5Audio>
+[00:02:08.392] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:08.392] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6 {}
+[00:02:08.392] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6, falling back to <Html5Audio>
+[00:02:09.324] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:09.324] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6 {}
+[00:02:09.324] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6, falling back to <Html5Audio>
+[00:02:09.876] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:09.876] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6 {}
+[00:02:09.876] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-3ccdbe6e-2a7b-4721-8271-67399a865311.mp3?alt=media&token=74ac12ba-f442-4912-9dbf-adf5242e5cb6, falling back to <Html5Audio>
+[00:02:10.330] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:10.330] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:02:10.330] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:02:11.021] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:02:11.021] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:02:11.021] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:06:02.912] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:06:02.913] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:06:02.913] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:06:03.446] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:06:03.446] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8 {}
+[00:06:03.446] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-09bc55f1-e1be-43c9-b736-070384806414.mp3?alt=media&token=231e0ad1-715a-4fe1-a10b-807b695a6ee8, falling back to <Html5Audio>
+[00:06:18.509] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:06:18.509] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-62607128-a11c-4728-a9a3-b3ef09d62d35.mp3?alt=media&token=e8fe1898-ecb7-4a75-aa56-4f7de20f0c3f {}
+[00:06:18.509] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-62607128-a11c-4728-a9a3-b3ef09d62d35.mp3?alt=media&token=e8fe1898-ecb7-4a75-aa56-4f7de20f0c3f, falling back to <Html5Audio>
+[00:06:41.192] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:06:41.192] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:06:41.192] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:06:41.690] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:06:41.690] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:06:41.690] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:07:07.247] Server  ERROR   [POST /api/assets/upload-url] Error: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "description"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+[00:08:37.317] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:08:37.317] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7 {}
+[00:08:37.317] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7, falling back to <Html5Audio>
+[00:10:39.205] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:10:39.205] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e {}
+[00:10:39.205] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e, falling back to <Html5Audio>
+[00:10:39.730] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:10:39.730] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e {}
+[00:10:39.730] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e, falling back to <Html5Audio>
+[00:10:44.897] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:10:44.897] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7 {}
+[00:10:44.897] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7, falling back to <Html5Audio>
+[00:10:45.523] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:10:45.523] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7 {}
+[00:10:45.523] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7, falling back to <Html5Audio>
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:18.545] Browser WARN    {}
+[00:11:20.143] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:11:20.143] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e {}
+[00:11:20.143] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e, falling back to <Html5Audio>
+[00:11:20.842] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:11:20.842] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e {}
+[00:11:20.842] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-ae9f866a-d815-4f80-9487-af983239fa67.mp3?alt=media&token=4a906588-32a2-46ba-b8d3-dc025fc20b1e, falling back to <Html5Audio>
+[00:13:47.337] Server  LOG     ✓ Compiled in 601ms
+[00:14:09.718] Server  LOG     ✓ Compiled in 58ms
+[00:16:22.716] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentStateProvider>
+      <RenderFromTemplateContext>
+        <ScrollAndFocusHandler segmentPath={[...]}>
+          <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+            <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+              <LoadingBoundary name="dashboard/" loading={null}>
+                <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                  <RedirectBoundary>
+                    <RedirectErrorBoundary router={{...}}>
+                      <InnerLayoutRouter url="/dashboard" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                        <SegmentViewNode type="page" pagePath="dashboard/...">
+                          <SegmentTrieNode>
+                          <DashboardPage>
++                           <main
++                             style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center", ...}}
++                           >
+-                           <header
+-                             style={{width:"100%",max-width:"960px",display:"flex",align-items:"center",justify-content:"space-between"}}
+-                           >
+                        ...
+                      ...
+            ...
+      ...
+
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    {}
+[00:16:22.716] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:16:22.716] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7 {}
+[00:16:22.716] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7, falling back to <Html5Audio>
+[00:16:22.716] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:16:22.716] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7 {}
+[00:16:22.716] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-f97af89c-c243-4508-a69e-f4ba91082eb1.mp3?alt=media&token=610cf649-0ca0-4608-8d2e-ddeaab8afbe7, falling back to <Html5Audio>
+[00:16:26.906] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:16:26.906] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:16:26.906] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:16:27.396] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:16:27.396] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:16:27.396] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:18:07.829] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <div ref={null} style={{position:"...", ...}}>
+      <TransitionSeries>
+        <SequenceRefForwardingFunction name={"<Transit..."} layout="absolute-fill">
+          <RegularSequenceRefForwardingFunction name={"<Transit..."} layout="absolute-fill" ref={null}>
+            <AbsoluteFillRefForwarding ref={null} style={{...}} className={undefined}>
+              <div ref={null} style={{position:"...", ...}} className={undefined}>
+                <TransitionSeriesChildren>
+                  <SequenceRefForwardingFunction from={0} durationInFrames={120} name={"<TS.Sequ..."}>
+                    <RegularSequenceRefForwardingFunction from={0} durationInFrames={120} name={"<TS.Sequ..."} ref={null}>
+                      <AbsoluteFillRefForwarding ref={null} style={{...}} className={undefined}>
+                        <div ref={null} style={{position:"...", ...}} className={undefined}>
+                          <SlidePresentation passedProps={{...}} presentationDirection="exiting" presentationProgress={0} ...>
+                            <AbsoluteFillRefForwarding style={{width:"100%", ...}}>
+                              <div
+                                ref={null}
+                                style={{
++                                 position: "absolute"
+-                                 position: "absolute"
++                                 top: 0
+-                                 top: "0px"
++                                 left: 0
+-                                 left: "0px"
++                                 right: 0
+-                                 right: "0px"
++                                 bottom: 0
+-                                 bottom: "0px"
++                                 width: "100%"
+-                                 width: "100%"
++                                 height: "100%"
+-                                 height: "100%"
++                                 display: "flex"
+-                                 display: "flex"
++                                 flexDirection: "column"
++                                 justifyContent: "center"
++                                 alignItems: "center"
++                                 transform: "translateX(0%)"
+-                                 flex-direction: "column"
+-                                 opacity: "1"
+                                }}
+                              >
+                                ...
+                                  <SceneRenderer sequence={{id:"seq-lo...", ...}}>
+                                    <LogoCurtain>
+                                      <AbsoluteFillRefForwarding style={{...}}>
++                                       <div
++                                         ref={null}
++                                         style={{position:"absolute",top:0,left:0,right:0,bottom:0,width:"100%",height:"100%",display:"flex", ...}}
++                                       >
+                  ...
+      ...
+
+[00:18:08.876] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:08.876] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b {}
+[00:18:08.876] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-8e889220-6830-42a0-9707-6cc138634b2d.mp3?alt=media&token=ec62adcf-1456-440a-a961-041168555f0b, falling back to <Html5Audio>
+[00:18:11.851] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:11.851] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0 {}
+[00:18:11.851] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0, falling back to <Html5Audio>
+[00:18:12.278] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:12.279] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-fb2e2638-31d3-4d74-9f7c-ee7c591cf0ca.mp3?alt=media&token=2af6424c-2816-4096-9952-4663afc6f8c0 {}
+[00:18:12.279] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-fb2e2638-31d3-4d74-9f7c-ee7c591cf0ca.mp3?alt=media&token=2af6424c-2816-4096-9952-4663afc6f8c0, falling back to <Html5Audio>
+[00:18:22.807] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:22.807] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-62f92ed7-8dda-4bb9-853a-a01f91443ea8.mp3?alt=media&token=d969649d-d880-414e-b208-615699af6114 {}
+[00:18:22.807] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-62f92ed7-8dda-4bb9-853a-a01f91443ea8.mp3?alt=media&token=d969649d-d880-414e-b208-615699af6114, falling back to <Html5Audio>
+[00:18:23.352] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:23.352] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-62f92ed7-8dda-4bb9-853a-a01f91443ea8.mp3?alt=media&token=d969649d-d880-414e-b208-615699af6114 {}
+[00:18:23.352] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-62f92ed7-8dda-4bb9-853a-a01f91443ea8.mp3?alt=media&token=d969649d-d880-414e-b208-615699af6114, falling back to <Html5Audio>
+[00:18:33.654] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:33.654] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-6cb42ff8-ead5-4302-b371-ba95acba3f4f.mp3?alt=media&token=03346780-cf38-4c07-af4a-0d9837a1c763 {}
+[00:18:33.654] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-6cb42ff8-ead5-4302-b371-ba95acba3f4f.mp3?alt=media&token=03346780-cf38-4c07-af4a-0d9837a1c763, falling back to <Html5Audio>
+[00:18:34.084] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:34.084] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-ef8bea12-a00b-4918-b04f-16314f7ae3c6.mp3?alt=media&token=b1c23caf-7b48-4e3a-894e-ad8ee61a2860 {}
+[00:18:34.084] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-ef8bea12-a00b-4918-b04f-16314f7ae3c6.mp3?alt=media&token=b1c23caf-7b48-4e3a-894e-ad8ee61a2860, falling back to <Html5Audio>
+[00:18:34.397] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:34.397] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-6cb42ff8-ead5-4302-b371-ba95acba3f4f.mp3?alt=media&token=03346780-cf38-4c07-af4a-0d9837a1c763 {}
+[00:18:34.397] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fvoice-6cb42ff8-ead5-4302-b371-ba95acba3f4f.mp3?alt=media&token=03346780-cf38-4c07-af4a-0d9837a1c763, falling back to <Html5Audio>
+[00:18:34.639] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:34.640] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-ef8bea12-a00b-4918-b04f-16314f7ae3c6.mp3?alt=media&token=b1c23caf-7b48-4e3a-894e-ad8ee61a2860 {}
+[00:18:34.640] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fsfx-ef8bea12-a00b-4918-b04f-16314f7ae3c6.mp3?alt=media&token=b1c23caf-7b48-4e3a-894e-ad8ee61a2860, falling back to <Html5Audio>
+[00:18:40.861] Browser WARN    {}
+[00:18:40.861] Browser WARN    {}
+[00:18:41.376] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:41.376] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0 {}
+[00:18:41.376] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0, falling back to <Html5Audio>
+[00:18:41.921] Browser WARN    Request will not be retried because a CORS error was suspected due to different origins. You can modify this behavior by providing your own function for the 'getRetryDelay' option.
+[00:18:41.921] Browser ERROR   [MediaPlayer] Network/CORS error for https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0 {}
+[00:18:41.921] Browser WARN    Network error fetching https://firebasestorage.googleapis.com/v0/b/lait-video-editor.firebasestorage.app/o/users%2FxDHvG4BJ6kg5izjLTlfQHUA6UFA3%2Fassets%2Faudio%2Fmusic-0468bdcb-311a-4c8b-ba52-65889d6e0c17.mp3?alt=media&token=9182a044-35c7-4ba0-994d-eb1bff3236c0, falling back to <Html5Audio>

@@ -23,9 +23,7 @@ import type {
   Sequence as SequenceType,
 } from "./types";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Presentation helpers
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Transition helpers ───────────────────────────────────────────────────────
 
 function getPresentation(
   t: SceneTransition,
@@ -34,19 +32,14 @@ function getPresentation(
 ): ReturnType<typeof fade> {
   switch (t.type) {
     case "slide":
-      return slide({
-        direction: t.direction ?? "from-right",
-      }) as unknown as ReturnType<typeof fade>;
+      return slide({ direction: t.direction ?? "from-right" }) as unknown as ReturnType<typeof fade>;
     case "wipe":
-      return wipe({
-        direction: t.direction ?? "from-left",
-      }) as unknown as ReturnType<typeof fade>;
+      return wipe({ direction: t.direction ?? "from-left" }) as unknown as ReturnType<typeof fade>;
     case "flip":
       return flip() as unknown as ReturnType<typeof fade>;
     case "clock-wipe":
       return clockWipe({ width, height }) as unknown as ReturnType<typeof fade>;
     case "none":
-      return fade(); // unused when type is none (transition skipped)
     case "fade":
     default:
       return fade();
@@ -65,10 +58,7 @@ function getTiming(t: SceneTransition) {
     : linearTiming({ durationInFrames: t.durationInFrames });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Scene registry
-// TODO: pasar sceneData como props cuando cada escena sea parametrizable
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Scene registry ───────────────────────────────────────────────────────────
 
 function SceneRenderer({ sequence }: { sequence: SequenceType }) {
   switch (sequence.sceneType) {
@@ -86,63 +76,72 @@ function SceneRenderer({ sequence }: { sequence: SequenceType }) {
       return <Contact />;
     case "image":
     case "video":
-    case "audio":
     case "gif":
     case "animated-image":
     case "lottie":
     case "text":
       return <MediaScene sequence={sequence} />;
+    case "light-leak":
     case "captions":
     case "three-canvas":
-    case "light-leak":
-      // TODO: implement captions, three-canvas, light-leak
+    case "audio":
       return null;
     default:
       return null;
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DynamicComposition — renderiza sequences desde Firestore vía inputProps
-// Solo recibe datos de la DB (VideoPlayer) o vacío (Remotion Studio)
-// ─────────────────────────────────────────────────────────────────────────────
-
-/** Obtiene el frame de inicio de una secuencia (explícito o calculado desde order) */
-function getSequenceFrom(
-  seq: SequenceType,
-  _sorted: SequenceType[],
-  computedFromMap: Map<string, number>
-): number {
-  if (seq.from !== undefined) return seq.from;
-  return computedFromMap.get(seq.id) ?? 0;
-}
+// ─── DynamicComposition ───────────────────────────────────────────────────────
+//
+// Audio sequences are rendered as absolute RemotionSequence overlays so they
+// don't affect the TransitionSeries visual timeline. Their `from` frame is
+// computed by finding the first visual sequence whose order >= audio.order
+// (i.e. the scene the audio should accompany). Background music (order=0) maps
+// to frame 0 of the visual timeline.
+//
 
 export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
   sequences = [],
 }) => {
   const { width, height } = useVideoConfig();
+
   const sorted = useMemo(
     () => [...sequences].sort((a, b) => a.order - b.order),
     [sequences]
   );
 
-  const computedFromMap = useMemo(() => {
+  // Split into visual and audio layers
+  const { visualSeqs, audioSeqs } = useMemo(() => ({
+    visualSeqs: sorted.filter((s) => s.sceneType !== "audio"),
+    audioSeqs: sorted.filter((s) => s.sceneType === "audio"),
+  }), [sorted]);
+
+  // Build the visual-only sequential timeline (frame positions)
+  const visualFromMap = useMemo(() => {
     const map = new Map<string, number>();
     let acc = 0;
-    for (let i = 0; i < sorted.length; i++) {
-      const seq = sorted[i];
-      const from = seq.from ?? acc;
-      map.set(seq.id, from);
+    for (let i = 0; i < visualSeqs.length; i++) {
+      const seq = visualSeqs[i];
+      map.set(seq.id, acc);
       const overlap =
-        i < sorted.length - 1 && seq.transition
-          ? seq.transition!.durationInFrames
+        i < visualSeqs.length - 1 && seq.transition
+          ? seq.transition.durationInFrames
           : 0;
-      acc = from + seq.durationInFrames - overlap;
+      acc += seq.durationInFrames - overlap;
     }
     return map;
-  }, [sorted]);
+  }, [visualSeqs]);
 
-  const hasExplicitFrom = sequences.some((s) => s.from !== undefined);
+  // Map each audio sequence to a visual start frame
+  const audioFromMap = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const audio of audioSeqs) {
+      // Find the first visual seq whose order >= audio.order
+      const anchor = visualSeqs.find((v) => v.order >= audio.order);
+      map.set(audio.id, anchor ? (visualFromMap.get(anchor.id) ?? 0) : 0);
+    }
+    return map;
+  }, [audioSeqs, visualSeqs, visualFromMap]);
 
   if (sorted.length === 0) {
     return (
@@ -160,49 +159,39 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
     );
   }
 
-  if (hasExplicitFrom) {
-    return (
-      <AbsoluteFill style={{ backgroundColor: "#050508" }}>
-        {sorted.map((seq) => {
-          const fromFrame = getSequenceFrom(seq, sorted, computedFromMap);
-          return (
-            <RemotionSequence
-              key={seq.id}
-              from={fromFrame}
-              durationInFrames={seq.durationInFrames}
-            >
-              <SceneRenderer sequence={seq} />
-            </RemotionSequence>
-          );
-        })}
-      </AbsoluteFill>
-    );
-  }
-
   return (
     <AbsoluteFill style={{ backgroundColor: "#050508" }}>
+      {/* ── Visual layer (sequential with transitions) ── */}
       <TransitionSeries>
-        {sorted.map((seq, index) => (
-          <>
-            <TransitionSeries.Sequence
-              key={seq.id}
-              durationInFrames={seq.durationInFrames}
-            >
+        {visualSeqs.map((seq, index) => (
+          <React.Fragment key={seq.id}>
+            <TransitionSeries.Sequence durationInFrames={seq.durationInFrames}>
               <SceneRenderer sequence={seq} />
             </TransitionSeries.Sequence>
 
             {seq.transition &&
               seq.transition.type !== "none" &&
-              index < sorted.length - 1 && (
+              index < visualSeqs.length - 1 && (
                 <TransitionSeries.Transition
-                  key={`t-${seq.id}`}
                   presentation={getPresentation(seq.transition, width, height)}
                   timing={getTiming(seq.transition)}
                 />
               )}
-          </>
+          </React.Fragment>
         ))}
       </TransitionSeries>
+
+      {/* ── Audio layer (absolute overlays, don't affect visual timeline) ── */}
+      {audioSeqs.map((seq) => (
+        <RemotionSequence
+          key={seq.id}
+          from={audioFromMap.get(seq.id) ?? 0}
+          durationInFrames={seq.durationInFrames}
+          layout="none"
+        >
+          <MediaScene sequence={seq} />
+        </RemotionSequence>
+      ))}
     </AbsoluteFill>
   );
 };
