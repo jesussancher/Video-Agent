@@ -35,6 +35,13 @@ export const STORAGE_PATHS = {
   userAsset: (uid: string, type: "image" | "video" | "audio" | "font", filename: string) =>
     `users/${uid}/assets/${type}s/${filename}`,
 
+  /**
+   * Asset asociado a una sesión de composición (pre-creación).
+   * Estructura: users/{uid}/compositions/sessions/{sessionId}/{type}/{filename}
+   */
+  sessionAsset: (uid: string, sessionId: string, type: "image" | "video" | "audio" | "font", filename: string) =>
+    `users/${uid}/compositions/sessions/${sessionId}/${type}s/${filename}`,
+
   // ── Exports / renders finales ─────────────────────────────────────────────
   compositionExport: (uid: string, compositionId: string) =>
     `users/${uid}/exports/${compositionId}.mp4`,

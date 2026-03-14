@@ -307,6 +307,15 @@ export interface AssetDTO {
   /** Ruta dentro del bucket: users/{uid}/assets/{type}/{filename} */
   storagePath: string;
   downloadUrl: string;
+  /** Descripción de para qué y cómo debe usarse este asset en esta composición */
+  description?: string;
+  /**
+   * ID de sesión temporal (generado al abrir "Nueva composición").
+   * Agrupa assets antes de que exista la composición.
+   */
+  sessionId?: string;
+  /** ID de la composición a la que pertenece este asset (se asigna al crear la composición) */
+  compositionId?: string;
   width?: number;
   height?: number;
   durationSeconds?: number;

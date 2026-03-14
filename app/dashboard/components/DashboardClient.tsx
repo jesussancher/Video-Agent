@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import VideoPlayer from "../../VideoPlayer";
 import { CompositionChat } from "./CompositionChat";
+import { ConfirmModal } from "./ConfirmModal";
 import type { CompositionDTO } from "../../../src/types";
 
 export interface DashboardClientProps {
@@ -21,6 +22,9 @@ export function DashboardClient({
     initialCompositions[0]?.id ?? null
   );
   const [chatOpen, setChatOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; title: string } | null>(null);
+  const [alertModal, setAlertModal] = useState<{ title: string; message: string } | null>(null);
 
   useEffect(() => {
     setCompositions(initialCompositions);
@@ -33,6 +37,33 @@ export function DashboardClient({
   const handleCompositionCreated = (compositionId: string) => {
     router.refresh();
     setSelectedId(compositionId);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, compositionId: string, title: string) => {
+    e.stopPropagation();
+    setConfirmDelete({ id: compositionId, title });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDelete) return;
+    setDeletingId(confirmDelete.id);
+    try {
+      const res = await fetch(`/api/compositions/${confirmDelete.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setConfirmDelete(null);
+        setAlertModal({ title: "Error al eliminar", message: data.error ?? "No se pudo eliminar la composición." });
+        return;
+      }
+      setCompositions((prev) => prev.filter((c) => c.id !== confirmDelete.id));
+      setSelectedId((prev) =>
+        prev === confirmDelete.id ? compositions.find((c) => c.id !== confirmDelete.id)?.id ?? null : prev
+      );
+      setConfirmDelete(null);
+      router.refresh();
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   const selected = compositions.find((c) => c.id === selectedId) ?? compositions[0];
@@ -71,60 +102,93 @@ export function DashboardClient({
           gap: 24,
         }}
       >
-        {/* Lista de composiciones + botón Nueva */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          <button
-            onClick={() => setChatOpen(true)}
-            style={{
-              padding: "10px 20px",
-              borderRadius: 8,
-              border: "1px solid rgba(157,255,32,0.5)",
-              background: "rgba(157,255,32,0.15)",
-              color: "#9DFF20",
-              fontSize: 13,
-              fontWeight: 600,
-              letterSpacing: 1,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <span style={{ fontSize: 18 }}>+</span>
-            Nueva composición
-          </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <button
+              onClick={() => setChatOpen(true)}
+              style={{
+                padding: "10px 20px",
+                borderRadius: 8,
+                border: "1px solid rgba(157,255,32,0.5)",
+                background: "rgba(157,255,32,0.15)",
+                color: "#9DFF20",
+                fontSize: 13,
+                fontWeight: 600,
+                letterSpacing: 1,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <span style={{ fontSize: 18 }}>+</span>
+              Nueva composición
+            </button>
+          </div>
+
           {compositions.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {compositions.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setSelectedId(c.id)}
-                  style={{
-                    padding: "8px 14px",
-                    borderRadius: 8,
-                    border:
-                      selectedId === c.id
-                        ? "1px solid #9DFF20"
-                        : "1px solid rgba(255,255,255,0.2)",
-                    background:
-                      selectedId === c.id
-                        ? "rgba(157,255,32,0.15)"
-                        : "rgba(255,255,255,0.05)",
-                    color: selectedId === c.id ? "#9DFF20" : "rgba(255,255,255,0.8)",
-                    fontSize: 12,
-                    cursor: "pointer",
-                  }}
-                >
-                  {c.title}
-                </button>
-              ))}
+            <div
+              style={{
+                borderRadius: 8,
+                border: "1px solid rgba(255,255,255,0.15)",
+                overflow: "hidden",
+                background: "rgba(255,255,255,0.03)",
+              }}
+            >
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
+                    {["Título", "Escenas", "Duración", "Resolución", "FPS", "Estado"].map((h) => (
+                      <th key={h} style={{ textAlign: "left", padding: "12px 16px", color: "rgba(255,255,255,0.5)", fontWeight: 600, letterSpacing: 1 }}>
+                        {h}
+                      </th>
+                    ))}
+                    <th style={{ textAlign: "right", padding: "12px 16px", color: "rgba(255,255,255,0.5)", fontWeight: 600, letterSpacing: 1 }}>
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {compositions.map((c) => (
+                    <tr
+                      key={c.id}
+                      onClick={() => setSelectedId(c.id)}
+                      style={{
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        cursor: "pointer",
+                        background: selectedId === c.id ? "rgba(157,255,32,0.08)" : "transparent",
+                      }}
+                    >
+                      <td style={{ padding: "12px 16px", color: selectedId === c.id ? "#9DFF20" : "#fff", fontWeight: selectedId === c.id ? 600 : 400 }}>
+                        {c.title}
+                      </td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{c.sequences.length}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{(c.totalDurationInFrames / c.fps).toFixed(1)}s</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{c.width}×{c.height}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{c.fps}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.7)", textTransform: "capitalize" }}>{c.status}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "right" }} onClick={(e) => e.stopPropagation()}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                          <a
+                            href={`/editor?id=${c.id}`}
+                            style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid rgba(157,255,32,0.3)", background: "rgba(157,255,32,0.08)", color: "#9DFF20", fontSize: 12, textDecoration: "none", letterSpacing: 0.5 }}
+                          >
+                            Editar
+                          </a>
+                          <button
+                            type="button"
+                            onClick={(e) => handleDeleteClick(e, c.id, c.title)}
+                            disabled={deletingId === c.id}
+                            style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid rgba(255,120,120,0.4)", background: "rgba(255,120,120,0.08)", color: "#ff7878", fontSize: 12, cursor: deletingId === c.id ? "wait" : "pointer", letterSpacing: 0.5, opacity: deletingId === c.id ? 0.7 : 1 }}
+                          >
+                            {deletingId === c.id ? "…" : "Borrar"}
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
@@ -132,37 +196,14 @@ export function DashboardClient({
         <VideoPlayer composition={selected} />
 
         {selected && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-              flexWrap: "wrap",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <a
               href={`/editor?id=${selected.id}`}
-              style={{
-                padding: "8px 16px",
-                borderRadius: 8,
-                border: "1px solid rgba(157,255,32,0.3)",
-                background: "rgba(157,255,32,0.08)",
-                color: "#9DFF20",
-                fontSize: 13,
-                textDecoration: "none",
-                letterSpacing: 1,
-              }}
+              style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid rgba(157,255,32,0.3)", background: "rgba(157,255,32,0.08)", color: "#9DFF20", fontSize: 13, textDecoration: "none", letterSpacing: 1 }}
             >
               Editar en Remotion Studio
             </a>
-            <p
-              style={{
-                color: "rgba(255,255,255,0.2)",
-                fontSize: 11,
-                letterSpacing: 1,
-                margin: 0,
-              }}
-            >
+            <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, letterSpacing: 1, margin: 0 }}>
               {selected.sequences.length} escenas ·{" "}
               {(selected.totalDurationInFrames / selected.fps).toFixed(1)}s ·{" "}
               {selected.width}×{selected.height} · {selected.fps}fps
@@ -171,13 +212,7 @@ export function DashboardClient({
         )}
 
         {compositions.length === 0 && (
-          <p
-            style={{
-              color: "rgba(255,255,255,0.4)",
-              fontSize: 13,
-              textAlign: "center",
-            }}
-          >
+          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, textAlign: "center" }}>
             No hay composiciones. Haz clic en &quot;Nueva composición&quot; y describe tu video en el chat.
           </p>
         )}
@@ -187,6 +222,26 @@ export function DashboardClient({
         open={chatOpen}
         onClose={() => setChatOpen(false)}
         onCreated={handleCompositionCreated}
+      />
+
+      <ConfirmModal
+        open={!!confirmDelete}
+        onClose={() => setConfirmDelete(null)}
+        title="Eliminar composición"
+        message={confirmDelete ? `¿Eliminar la composición "${confirmDelete.title}"? Esta acción no se puede deshacer.` : ""}
+        variant="confirm"
+        confirmLabel="Eliminar"
+        destructive
+        onConfirm={confirmDelete ? handleConfirmDelete : undefined}
+        confirmLoading={deletingId === confirmDelete?.id}
+      />
+
+      <ConfirmModal
+        open={!!alertModal}
+        onClose={() => setAlertModal(null)}
+        title={alertModal?.title ?? ""}
+        message={alertModal?.message ?? ""}
+        variant="alert"
       />
     </>
   );

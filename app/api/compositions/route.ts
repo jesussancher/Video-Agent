@@ -4,6 +4,7 @@ import {
   listCompositions,
   createComposition,
   calcTotalDuration,
+  linkAssetsToComposition,
 } from "@/lib/db";
 import type { Sequence, CompositionStatus } from "@/types";
 
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
     sequences?: Sequence[];
     status?: CompositionStatus;
     thumbnailUrl?: string;
+    sessionId?: string;
   };
 
   try {
@@ -88,6 +90,13 @@ export async function POST(request: NextRequest) {
     if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
 
     const composition = await createComposition(auth.uid, data);
+
+    // Vincular assets de sesión a la composición recién creada
+    if (body.sessionId) {
+      await linkAssetsToComposition(auth.uid, body.sessionId, composition.id).catch((err) => {
+        console.warn("[POST /api/compositions] Error vinculando assets:", err);
+      });
+    }
 
     return NextResponse.json({ composition }, { status: 201 });
   } catch (err) {

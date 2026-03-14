@@ -228,10 +228,16 @@ __turbopack_context__.s([
     ()=>deleteComposition,
     "getComposition",
     ()=>getComposition,
+    "linkAssetsToComposition",
+    ()=>linkAssetsToComposition,
     "listAssets",
     ()=>listAssets,
+    "listAssetsBySession",
+    ()=>listAssetsBySession,
     "listCompositions",
     ()=>listCompositions,
+    "updateAsset",
+    ()=>updateAsset,
     "updateComposition",
     ()=>updateComposition,
     "upsertUserProfile",
@@ -297,6 +303,9 @@ function assetToDTO(id, doc) {
         sizeBytes: doc.sizeBytes,
         storagePath: doc.storagePath,
         downloadUrl: doc.downloadUrl,
+        description: doc.description,
+        sessionId: doc.sessionId,
+        compositionId: doc.compositionId,
         width: doc.width,
         height: doc.height,
         durationSeconds: doc.durationSeconds,
@@ -350,6 +359,22 @@ async function listAssets(uid) {
     const snap = await assetsRef(uid).orderBy("createdAt", "desc").get();
     return snap.docs.map((doc)=>assetToDTO(doc.id, doc.data()));
 }
+async function listAssetsBySession(uid, sessionId) {
+    const snap = await assetsRef(uid).where("sessionId", "==", sessionId).orderBy("createdAt", "asc").get();
+    return snap.docs.map((doc)=>assetToDTO(doc.id, doc.data()));
+}
+async function linkAssetsToComposition(uid, sessionId, compositionId) {
+    const snap = await assetsRef(uid).where("sessionId", "==", sessionId).get();
+    if (snap.empty) return;
+    const batch = db.batch();
+    for (const doc of snap.docs){
+        batch.update(doc.ref, {
+            compositionId,
+            updatedAt: __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$firestore__$5b$external$5d$__$28$firebase$2d$admin$2f$firestore$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["FieldValue"].serverTimestamp()
+        });
+    }
+    await batch.commit();
+}
 async function createAsset(uid, input) {
     const now = __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$firestore__$5b$external$5d$__$28$firebase$2d$admin$2f$firestore$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["FieldValue"].serverTimestamp();
     const docData = {
@@ -361,6 +386,16 @@ async function createAsset(uid, input) {
     const ref = await assetsRef(uid).add(docData);
     const snap = await ref.get();
     return assetToDTO(snap.id, snap.data());
+}
+async function updateAsset(uid, assetId, patch) {
+    const ref = assetRef(uid, assetId);
+    if (!(await ref.get()).exists) return null;
+    await ref.update({
+        ...patch,
+        updatedAt: __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$firestore__$5b$external$5d$__$28$firebase$2d$admin$2f$firestore$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["FieldValue"].serverTimestamp()
+    });
+    const updated = await ref.get();
+    return assetToDTO(updated.id, updated.data());
 }
 async function deleteAsset(uid, assetId) {
     const ref = assetRef(uid, assetId);
@@ -478,6 +513,12 @@ async function POST(request) {
         if (body.description != null) data.description = body.description;
         if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
         const composition = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createComposition"])(auth.uid, data);
+        // Vincular assets de sesión a la composición recién creada
+        if (body.sessionId) {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["linkAssetsToComposition"])(auth.uid, body.sessionId, composition.id).catch((err)=>{
+                console.warn("[POST /api/compositions] Error vinculando assets:", err);
+            });
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             composition
         }, {

@@ -66,6 +66,9 @@ export interface AssetDoc {
   sizeBytes: number;
   storagePath: string;
   downloadUrl: string;
+  description?: string;
+  sessionId?: string;
+  compositionId?: string;
   width?: number;
   height?: number;
   durationSeconds?: number;
@@ -122,6 +125,9 @@ export function assetToDTO(id: string, doc: AssetDoc): AssetDTO {
     sizeBytes: doc.sizeBytes,
     storagePath: doc.storagePath,
     downloadUrl: doc.downloadUrl,
+    description: doc.description,
+    sessionId: doc.sessionId,
+    compositionId: doc.compositionId,
     width: doc.width,
     height: doc.height,
     durationSeconds: doc.durationSeconds,
@@ -214,6 +220,29 @@ export async function listAssets(uid: string): Promise<AssetDTO[]> {
   return snap.docs.map((doc) => assetToDTO(doc.id, doc.data() as AssetDoc));
 }
 
+export async function listAssetsBySession(uid: string, sessionId: string): Promise<AssetDTO[]> {
+  const snap = await assetsRef(uid)
+    .where("sessionId", "==", sessionId)
+    .orderBy("createdAt", "asc")
+    .get();
+  return snap.docs.map((doc) => assetToDTO(doc.id, doc.data() as AssetDoc));
+}
+
+/** Vincula todos los assets de una sesión a una composición recién creada */
+export async function linkAssetsToComposition(
+  uid: string,
+  sessionId: string,
+  compositionId: string
+): Promise<void> {
+  const snap = await assetsRef(uid).where("sessionId", "==", sessionId).get();
+  if (snap.empty) return;
+  const batch = db.batch();
+  for (const doc of snap.docs) {
+    batch.update(doc.ref, { compositionId, updatedAt: FieldValue.serverTimestamp() });
+  }
+  await batch.commit();
+}
+
 export async function createAsset(
   uid: string,
   input: Omit<AssetDoc, "ownerId" | "createdAt" | "updatedAt">
@@ -223,6 +252,18 @@ export async function createAsset(
   const ref = await assetsRef(uid).add(docData);
   const snap = await ref.get();
   return assetToDTO(snap.id, snap.data() as AssetDoc);
+}
+
+export async function updateAsset(
+  uid: string,
+  assetId: string,
+  patch: Partial<Pick<AssetDoc, "name" | "description">>
+): Promise<AssetDTO | null> {
+  const ref = assetRef(uid, assetId);
+  if (!(await ref.get()).exists) return null;
+  await ref.update({ ...patch, updatedAt: FieldValue.serverTimestamp() });
+  const updated = await ref.get();
+  return assetToDTO(updated.id, updated.data() as AssetDoc);
 }
 
 export async function deleteAsset(uid: string, assetId: string): Promise<boolean> {
