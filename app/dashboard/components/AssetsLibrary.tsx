@@ -415,7 +415,7 @@ export function AssetsLibrary() {
         const xhr = new XMLHttpRequest();
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {
-            const pct = 20 + Math.round((e.loaded / e.total) * 75);
+            const pct = 20 + Math.round((e.loaded / e.total) * 70);
             update({ progress: pct });
           }
         };
@@ -429,8 +429,19 @@ export function AssetsLibrary() {
         xhr.send(file);
       });
 
+      update({ progress: 92 });
+      const finRes = await fetch(`${API_URL}/api/assets/${asset.id}/finalize-upload`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const finJson = await finRes.json().catch(() => ({})) as { error?: string; asset?: AssetDTO };
+      if (!finRes.ok) {
+        throw new Error(finJson.error ?? `Error al finalizar subida (${finRes.status})`);
+      }
+      const finalAsset = finJson.asset ?? asset;
+
       update({ progress: 100, done: true });
-      setAssets((prev) => [asset, ...prev]);
+      setAssets((prev) => [finalAsset, ...prev]);
 
       // Remove upload item after 2s
       setTimeout(() => {

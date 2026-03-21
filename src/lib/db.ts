@@ -72,6 +72,11 @@ export interface AssetDoc {
   width?: number;
   height?: number;
   durationSeconds?: number;
+  /**
+   * Tras la subida PUT, /api/assets/[id]/finalize-upload fija este token en metadata GCS.
+   * No se expone en AssetDTO.
+   */
+  pendingDownloadToken?: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

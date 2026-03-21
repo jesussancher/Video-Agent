@@ -3,9 +3,27 @@ import { requireAuth, isAuthError } from "../../_lib/session";
 import Anthropic from "@anthropic-ai/sdk";
 import { SYSTEM_PROMPT } from "./systemPrompt.generated";
 import { getRemotionBestPracticesForSystemPrompt } from "./remotionSkillContext";
+import { COMPOSITION_API_JSON_CONTRACT } from "./compositionApiContract";
+import { extractCompositionJson } from "./compositionParse";
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_COMPOSITION_MODEL ?? "claude-sonnet-4-6";
+
+/** Si es "false", no se envía la herramienta web_search (ahorra uso de búsqueda en Anthropic). */
+const COMPOSITION_WEB_SEARCH =
+  String(process.env.ANTHROPIC_COMPOSITION_WEB_SEARCH ?? "true").toLowerCase() !== "false";
+
+function assistantMessageText(
+  content: Anthropic.Messages.ContentBlockParam[] | Anthropic.Messages.ContentBlock[]
+): string {
+  const parts: string[] = [];
+  for (const block of content) {
+    if (block.type === "text" && "text" in block && typeof block.text === "string") {
+      parts.push(block.text);
+    }
+  }
+  return parts.join("\n").trim();
+}
 
 // ─── Valid scene types ─────────────────────────────────────────────────────────
 const VALID_SCENE_TYPES = [
@@ -81,18 +99,29 @@ export async function POST(request: NextRequest) {
     const systemWithRemotionSkill = [
       SYSTEM_PROMPT,
       getRemotionBestPracticesForSystemPrompt(),
+      COMPOSITION_API_JSON_CONTRACT,
     ].join("\n\n");
 
     const response = await client.messages.create({
       model: ANTHROPIC_MODEL,
-      max_tokens: 4096,
+      max_tokens: 8192,
       temperature: 1,
       system: systemWithRemotionSkill,
       messages,
+      ...(COMPOSITION_WEB_SEARCH
+        ? {
+            tools: [
+              {
+                type: "web_search_20250305" as const,
+                name: "web_search",
+                max_uses: 10,
+              },
+            ],
+          }
+        : {}),
     });
 
-    const textBlock = response.content.find((b) => b.type === "text");
-    const content = textBlock?.type === "text" ? textBlock.text.trim() : "";
+    const content = assistantMessageText(response.content);
 
     if (!content) {
       return NextResponse.json(
@@ -101,10 +130,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Extraer JSON si viene envuelto en ```json ... ```
-    let raw = content;
-    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) raw = jsonMatch[1].trim();
+    const raw = extractCompositionJson(content);
+    if (!raw) {
+      return NextResponse.json(
+        {
+          error:
+            "La respuesta del modelo no contiene un JSON de composición válido (se esperaba { title, fps, width, height, sequences }).",
+          hint: "El system prompt exige solo JSON; si ves código TSX en message, el modelo ignoró el contrato.",
+          message: content,
+        },
+        { status: 422 }
+      );
+    }
 
     const parsed = JSON.parse(raw) as {
       title?: string;
@@ -131,10 +168,20 @@ export async function POST(request: NextRequest) {
         s.sceneData && typeof s.sceneData === "object" && !Array.isArray(s.sceneData)
           ? (s.sceneData as Record<string, unknown>)
           : {};
-      const transition =
+      const rawTransition =
         s.transition && typeof s.transition === "object" && !Array.isArray(s.transition)
           ? (s.transition as Record<string, unknown>)
           : { type: "fade", durationInFrames: 20, timing: "linear" as const };
+
+      const transition =
+        sceneType === "audio"
+          ? { type: "none", durationInFrames: 0, timing: "linear" as const }
+          : {
+              type: String(rawTransition.type ?? "fade"),
+              durationInFrames: Number(rawTransition.durationInFrames ?? 20),
+              timing: String(rawTransition.timing ?? "linear"),
+              direction: rawTransition.direction ? String(rawTransition.direction) : undefined,
+            };
 
       return {
         id: String(s.id ?? `seq-${i}`),
@@ -142,12 +189,7 @@ export async function POST(request: NextRequest) {
         sceneType,
         durationInFrames,
         sceneData,
-        transition: {
-          type: String(transition.type ?? "fade"),
-          durationInFrames: Number(transition.durationInFrames ?? 20),
-          timing: String(transition.timing ?? "linear"),
-          direction: transition.direction ? String(transition.direction) : undefined,
-        },
+        transition,
       };
     });
 

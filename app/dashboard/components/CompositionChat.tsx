@@ -661,30 +661,37 @@ export function CompositionChat({ open, onClose, onCreated }: CompositionChatPro
         body: JSON.stringify({ filename: file.name, mimeType: file.type || "application/octet-stream", sizeBytes: file.size, sessionId }),
       });
       if (!urlRes.ok) throw new Error((await urlRes.json() as { error?: string }).error ?? "Error");
-      const { uploadUrl, asset, downloadToken } = await urlRes.json() as {
+      const { uploadUrl, asset } = await urlRes.json() as {
         uploadUrl: string;
         asset: AssetDTO;
-        downloadToken: string;
       };
       update({ progress: 20 });
 
       await new Promise<void>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) update({ progress: 20 + Math.round((e.loaded / e.total) * 75) });
+          if (e.lengthComputable) update({ progress: 20 + Math.round((e.loaded / e.total) * 70) });
         };
         xhr.onload = () => xhr.status < 300 ? resolve() : reject(new Error(`HTTP ${xhr.status}`));
         xhr.onerror = () => reject(new Error("Error de red"));
         xhr.open("PUT", uploadUrl);
         xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
-        // Requerido por la URL firmada: guarda el token en metadata de GCS
-        // para que la URL permanente de Firebase Storage funcione
-        xhr.setRequestHeader("x-goog-meta-firebasestoragedownloadtokens", downloadToken);
         xhr.send(file);
       });
 
+      update({ progress: 92 });
+      const finRes = await fetch(`${API_URL}/api/assets/${asset.id}/finalize-upload`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const finJson = await finRes.json().catch(() => ({})) as { error?: string; asset?: AssetDTO };
+      if (!finRes.ok) {
+        throw new Error(finJson.error ?? `Error al finalizar subida (${finRes.status})`);
+      }
+
+      const finalAsset = finJson.asset ?? asset;
       update({ progress: 100, done: true });
-      setAssets((prev) => [...prev, asset]);
+      setAssets((prev) => [...prev, finalAsset]);
       setTimeout(() => setUploads((prev) => prev.filter((u) => u.id !== uid)), 2000);
     } catch (err) {
       update({ error: err instanceof Error ? err.message : "Error", done: true });

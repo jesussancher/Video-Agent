@@ -21,10 +21,9 @@ function firebaseStorageUrl(bucket: string, storagePath: string, token: string):
  * Body: { filename, mimeType, sizeBytes, sessionId?, description? }
  *
  * Flujo:
- *   1. Se genera una URL firmada de GCS (15 min) para que el cliente haga PUT
- *   2. El cliente debe incluir el header `x-goog-meta-firebasestoragedownloadtokens: {token}`
- *      en el PUT para que GCS guarde el token como metadata del archivo
- *   3. El downloadUrl del asset es permanente (Firebase Storage token URL)
+ *   1. URL firmada v4 de solo escritura (sin headers de extensión; evita fallos de firma con Firebase).
+ *   2. Cliente hace PUT con Content-Type únicamente.
+ *   3. Cliente llama POST /api/assets/{id}/finalize-upload para fijar firebaseStorageDownloadTokens con Admin SDK.
  */
 export async function POST(request: NextRequest) {
   const auth = await requireAuth();
@@ -76,16 +75,11 @@ export async function POST(request: NextRequest) {
     const bucket = adminStorage.bucket(STORAGE_BUCKET);
     const file = bucket.file(storagePath);
 
-    // URL firmada de subida (15 min). La extensionHeader fuerza al cliente a enviar
-    // el token como metadata custom, haciéndolo accesible vía la URL de Firebase.
     const [uploadUrl] = await file.getSignedUrl({
       version: "v4",
       action: "write",
       expires: Date.now() + 15 * 60 * 1000,
       contentType: mimeType,
-      extensionHeaders: {
-        "x-goog-meta-firebasestoragedownloadtokens": downloadToken,
-      },
     });
 
     const asset = await createAsset(auth.uid, {
@@ -97,18 +91,21 @@ export async function POST(request: NextRequest) {
       downloadUrl,
       description: description?.trim() || undefined,
       sessionId: sessionId || undefined,
+      pendingDownloadToken: downloadToken,
     });
 
-    // El cliente DEBE enviar el header "x-goog-meta-firebasestoragedownloadtokens"
-    // en el PUT para que la URL permanente funcione
     return NextResponse.json(
       { uploadUrl, storagePath, asset, downloadToken },
       { status: 201 }
     );
   } catch (err) {
     console.error("[POST /api/assets/upload-url]", err);
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { error: "Error al generar URL de subida" },
+      {
+        error: "Error al generar URL de subida",
+        ...(process.env.NODE_ENV !== "production" && { details: message.slice(0, 500) }),
+      },
       { status: 500 }
     );
   }
