@@ -3,7 +3,7 @@ import type { SceneType, Sequence, SceneData } from "../types";
 export interface PaletteItem {
   type: SceneType;
   label: string;
-  category: "media" | "text" | "3d" | "effects" | "scenes";
+  category: "media" | "text" | "3d" | "effects" | "scenes" | "reels";
   icon?: string;
 }
 
@@ -24,6 +24,9 @@ export const COMPONENT_PALETTE_ITEMS: PaletteItem[] = [
   { type: "products", label: "Productos", category: "scenes" },
   { type: "metrics", label: "Métricas", category: "scenes" },
   { type: "contact", label: "Contacto", category: "scenes" },
+  { type: "reel-hook", label: "Reel – Gancho", category: "reels" },
+  { type: "reel-text-card", label: "Reel – Tarjeta de texto", category: "reels" },
+  { type: "reel-cta", label: "Reel – CTA / Cierre", category: "reels" },
 ];
 
 const CATEGORY_LABELS: Record<PaletteItem["category"], string> = {
@@ -32,6 +35,7 @@ const CATEGORY_LABELS: Record<PaletteItem["category"], string> = {
   "3d": "3D",
   effects: "Efectos",
   scenes: "Escenas",
+  reels: "Reels",
 };
 
 export function getCategoryLabel(cat: PaletteItem["category"]) {
@@ -70,6 +74,12 @@ function getDefaultSceneData(type: SceneType): SceneData {
       return { title: "Métricas", accentColor: "#9DFF20" };
     case "contact":
       return { companyName: "Contacto", ctaText: "Contáctanos", accentColor: "#9DFF20" };
+    case "reel-hook":
+      return { hookText: "Tu gancho aquí", subtitle: "Subtítulo", accentColor: "#9DFF20" };
+    case "reel-text-card":
+      return { text: "Cita o dato impactante", style: "quote", accentColor: "#9DFF20" };
+    case "reel-cta":
+      return { ctaText: "Síguenos para más", handle: "@marca", accentColor: "#9DFF20" };
     default:
       return {};
   }

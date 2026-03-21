@@ -18,7 +18,10 @@ export type SceneType =
   | "three-canvas"
   | "text"
   | "captions"
-  | "light-leak";
+  | "light-leak"
+  | "reel-hook"
+  | "reel-text-card"
+  | "reel-cta";
 
 export type TransitionType = "fade" | "slide" | "wipe" | "flip" | "clock-wipe" | "none";
 
@@ -165,6 +168,43 @@ export interface ContactData {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Reels (vertical short-form: Instagram Reels, TikTok, etc.)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ReelHookData {
+  /** Frase gancho que capta atención (corta, impactante) */
+  hookText: string;
+  /** Subtítulo o refuerzo opcional */
+  subtitle?: string;
+  backgroundColor?: string;
+  accentColor?: string;
+}
+
+export interface ReelTextCardData {
+  /** Texto principal (cita, tip, dato) */
+  text: string;
+  /** Texto secundario o atribución */
+  subtext?: string;
+  /** Estilo visual: "quote" | "fact" | "tip" */
+  style?: "quote" | "fact" | "tip";
+  backgroundColor?: string;
+  accentColor?: string;
+}
+
+export interface ReelCtaData {
+  /** Título de cierre (ej. "Síguenos", "Descarga la app") */
+  title?: string;
+  /** Texto del CTA (ej. "Síguenos para más") */
+  ctaText: string;
+  /** Handle o usuario (ej. @marca) */
+  handle?: string;
+  /** URL de perfil o enlace */
+  link?: string;
+  backgroundColor?: string;
+  accentColor?: string;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Media & component-specific data (new types)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -236,6 +276,9 @@ export type SceneData =
   | ProductsData
   | MetricsData
   | ContactData
+  | ReelHookData
+  | ReelTextCardData
+  | ReelCtaData
   | ImageData
   | VideoData
   | AudioData

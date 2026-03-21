@@ -10,12 +10,15 @@ import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
 import { flip } from "@remotion/transitions/flip";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
-import { LogoCurtain } from "./scenes/LogoCurtain";
-import { Intro } from "./scenes/Intro";
-import { Services } from "./scenes/Services";
-import { Products } from "./scenes/Products";
-import { Metrics } from "./scenes/Metrics";
-import { Contact } from "./scenes/Contact";
+import {
+  CurtainScene,
+  ListCardsScene,
+  MetricsScene,
+  ContactScene,
+  ReelHookScene,
+  ReelTextCardScene,
+  ReelCtaScene,
+} from "./scenes/DataDrivenScenes";
 import { MediaScene } from "./scenes/MediaScene";
 import type {
   CompositionInputProps,
@@ -63,17 +66,21 @@ function getTiming(t: SceneTransition) {
 function SceneRenderer({ sequence }: { sequence: SequenceType }) {
   switch (sequence.sceneType) {
     case "logo-curtain":
-      return <LogoCurtain />;
     case "intro":
-      return <Intro />;
+      return <CurtainScene sequence={sequence} />;
     case "services":
-      return <Services />;
     case "products":
-      return <Products />;
+      return <ListCardsScene sequence={sequence} />;
     case "metrics":
-      return <Metrics />;
+      return <MetricsScene sequence={sequence} />;
     case "contact":
-      return <Contact />;
+      return <ContactScene sequence={sequence} />;
+    case "reel-hook":
+      return <ReelHookScene sequence={sequence} />;
+    case "reel-text-card":
+      return <ReelTextCardScene sequence={sequence} />;
+    case "reel-cta":
+      return <ReelCtaScene sequence={sequence} />;
     case "image":
     case "video":
     case "gif":
