@@ -6,7 +6,7 @@ import fs from "fs";
 
 const PROJECT_ID = process.env.FIREBASE_PROJECT_ID ?? "lait-video-editor";
 const STORAGE_BUCKET =
-  process.env.FIREBASE_STORAGE_BUCKET ??
+  process.env.FIREBASE_STORAGE_BUCKET?.trim() ||
   "lait-video-editor.firebasestorage.app";
 
 /** Mensaje de ayuda cuando las credenciales fallan (reloj o clave revocada) */

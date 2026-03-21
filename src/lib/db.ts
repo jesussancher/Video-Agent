@@ -7,7 +7,12 @@
  *   users/{uid}/assets/{assetId}             → assets multimedia
  */
 import "server-only";
-import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
+import {
+  getFirestore,
+  FieldValue,
+  Timestamp,
+  type DocumentData,
+} from "firebase-admin/firestore";
 import { adminApp } from "@/firebase-admin";
 import type {
   CompositionDTO,
@@ -248,12 +253,24 @@ export async function linkAssetsToComposition(
   await batch.commit();
 }
 
+/** Firestore no acepta valores `undefined` en .add() / .set() sin ignoreUndefinedProperties. */
+function dropUndefined<T extends Record<string, unknown>>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== undefined)
+  ) as T;
+}
+
 export async function createAsset(
   uid: string,
   input: Omit<AssetDoc, "ownerId" | "createdAt" | "updatedAt">
 ): Promise<AssetDTO> {
   const now = FieldValue.serverTimestamp();
-  const docData = { ...input, ownerId: uid, createdAt: now, updatedAt: now };
+  const docData = dropUndefined({
+    ...input,
+    ownerId: uid,
+    createdAt: now,
+    updatedAt: now,
+  } as Record<string, unknown>) as DocumentData;
   const ref = await assetsRef(uid).add(docData);
   const snap = await ref.get();
   return assetToDTO(snap.id, snap.data() as AssetDoc);

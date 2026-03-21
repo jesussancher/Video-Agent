@@ -660,7 +660,15 @@ export function CompositionChat({ open, onClose, onCreated }: CompositionChatPro
         credentials: "include",
         body: JSON.stringify({ filename: file.name, mimeType: file.type || "application/octet-stream", sizeBytes: file.size, sessionId }),
       });
-      if (!urlRes.ok) throw new Error((await urlRes.json() as { error?: string }).error ?? "Error");
+      if (!urlRes.ok) {
+        const errBody = await urlRes.json().catch(() => ({})) as {
+          error?: string;
+          details?: string;
+          step?: string;
+        };
+        const hint = [errBody.error, errBody.step && `(${errBody.step})`, errBody.details].filter(Boolean).join(" ");
+        throw new Error(hint || "Error al obtener URL de subida");
+      }
       const { uploadUrl, asset } = await urlRes.json() as {
         uploadUrl: string;
         asset: AssetDTO;

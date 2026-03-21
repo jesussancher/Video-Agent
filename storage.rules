@@ -87,6 +87,42 @@ service firebase.storage {
     }
 
     // ─────────────────────────────────────────────────────────────────────
+    // users/{uid}/compositions/sessions/{sessionId}/…
+    //   Mismos límites que assets (flujo subida del chat antes de crear composición).
+    // ─────────────────────────────────────────────────────────────────────
+    match /users/{uid}/compositions/sessions/{sessionId}/images/{filename} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+        && isValidImageType()
+        && fileSizeUnder(20);
+      allow delete: if isOwner(uid);
+    }
+
+    match /users/{uid}/compositions/sessions/{sessionId}/videos/{filename} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+        && isValidVideoType()
+        && fileSizeUnder(500);
+      allow delete: if isOwner(uid);
+    }
+
+    match /users/{uid}/compositions/sessions/{sessionId}/audio/{filename} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+        && isValidAudioType()
+        && fileSizeUnder(50);
+      allow delete: if isOwner(uid);
+    }
+
+    match /users/{uid}/compositions/sessions/{sessionId}/fonts/{filename} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+        && isValidFontType()
+        && fileSizeUnder(5);
+      allow delete: if isOwner(uid);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
     // users/{uid}/exports/{filename}
     //   Escritura solo desde Admin SDK (renders del servidor).
     //   El propietario puede leer y eliminar sus exports.

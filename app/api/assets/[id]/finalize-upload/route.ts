@@ -40,7 +40,19 @@ export async function POST(_req: Request, { params }: Params) {
     const bucket = adminStorage.bucket(STORAGE_BUCKET);
     const file = bucket.file(doc.storagePath);
 
-    const [exists] = await file.exists();
+    // Tras el PUT a la URL firmada, GCS puede tardar un instante en exponer el objeto
+    // (mismo criterio que subida atómica con Admin en /api/ai/audio).
+    const maxAttempts = 25;
+    const delayMs = 200;
+    let exists = false;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const [ok] = await file.exists();
+      if (ok) {
+        exists = true;
+        break;
+      }
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
     if (!exists) {
       return NextResponse.json(
         { error: "El archivo aún no está en Storage. Completa el PUT primero." },

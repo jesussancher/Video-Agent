@@ -2,13 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, isAuthError } from "../../_lib/session";
 import { adminStorage } from "@/firebase-admin";
 import { createAsset } from "@/lib/db";
-import { STORAGE_BUCKET, STORAGE_PATHS } from "@/lib/storage-paths";
+import { STORAGE_BUCKET, STORAGE_PATHS, firebaseStorageUrl } from "@/lib/storage-paths";
 import { randomUUID } from "crypto";
-
-function firebaseStorageUrl(bucket: string, storagePath: string, token: string): string {
-  const encodedPath = storagePath.split("/").map(encodeURIComponent).join("%2F");
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodedPath}?alt=media&token=${token}`;
-}
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const DEFAULT_VOICE_ID =

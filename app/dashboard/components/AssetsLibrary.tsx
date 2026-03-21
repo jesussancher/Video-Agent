@@ -403,8 +403,13 @@ export function AssetsLibrary() {
       });
 
       if (!urlRes.ok) {
-        const err = await urlRes.json() as { error?: string };
-        throw new Error(err.error ?? "Error obteniendo URL de subida");
+        const err = await urlRes.json().catch(() => ({})) as {
+          error?: string;
+          details?: string;
+          step?: string;
+        };
+        const hint = [err.error, err.step && `(${err.step})`, err.details].filter(Boolean).join(" ");
+        throw new Error(hint || "Error obteniendo URL de subida");
       }
 
       const { uploadUrl, asset } = await urlRes.json() as { uploadUrl: string; asset: AssetDTO };
