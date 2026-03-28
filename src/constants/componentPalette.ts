@@ -3,39 +3,33 @@ import type { SceneType, Sequence, SceneData } from "../types";
 export interface PaletteItem {
   type: SceneType;
   label: string;
-  category: "media" | "text" | "3d" | "effects" | "scenes" | "reels";
+  category: "analytics" | "media";
   icon?: string;
 }
 
 export const COMPONENT_PALETTE_ITEMS: PaletteItem[] = [
-  { type: "image", label: "Imagen", category: "media" },
-  { type: "video", label: "Video", category: "media" },
-  { type: "audio", label: "Audio", category: "media" },
-  { type: "gif", label: "GIF", category: "media" },
-  { type: "animated-image", label: "Imagen animada", category: "media" },
-  { type: "lottie", label: "Lottie", category: "media" },
-  { type: "text", label: "Texto", category: "text" },
-  { type: "captions", label: "Subtítulos", category: "text" },
-  { type: "three-canvas", label: "Three.js 3D", category: "3d" },
-  { type: "light-leak", label: "Light Leak", category: "effects" },
-  { type: "logo-curtain", label: "Logo / Cortinilla", category: "scenes" },
-  { type: "intro", label: "Intro", category: "scenes" },
-  { type: "services", label: "Servicios", category: "scenes" },
-  { type: "products", label: "Productos", category: "scenes" },
-  { type: "metrics", label: "Métricas", category: "scenes" },
-  { type: "contact", label: "Contacto", category: "scenes" },
-  { type: "reel-hook", label: "Reel – Gancho", category: "reels" },
-  { type: "reel-text-card", label: "Reel – Tarjeta de texto", category: "reels" },
-  { type: "reel-cta", label: "Reel – CTA / Cierre", category: "reels" },
+  // Analytics scenes
+  { type: "sc-intro",    label: "Intro SC",          category: "analytics" },
+  { type: "stat-hero",   label: "KPI grande",        category: "analytics" },
+  { type: "stat-grid",   label: "Grid de métricas",  category: "analytics" },
+  { type: "bar-chart",   label: "Gráfica de barras", category: "analytics" },
+  { type: "line-chart",  label: "Gráfica de línea",  category: "analytics" },
+  { type: "donut-chart", label: "Gráfica de dona",   category: "analytics" },
+  { type: "comparison",  label: "Comparación",       category: "analytics" },
+  { type: "leaderboard", label: "Leaderboard",       category: "analytics" },
+  { type: "insight",     label: "Insight",           category: "analytics" },
+  { type: "sc-outro",    label: "Outro SC",          category: "analytics" },
+  // Media
+  { type: "image",    label: "Imagen",     category: "media" },
+  { type: "video",    label: "Video",      category: "media" },
+  { type: "audio",    label: "Audio",      category: "media" },
+  { type: "lottie",   label: "Lottie",     category: "media" },
+  { type: "captions", label: "Subtítulos", category: "media" },
 ];
 
 const CATEGORY_LABELS: Record<PaletteItem["category"], string> = {
+  analytics: "Analytics",
   media: "Media",
-  text: "Texto",
-  "3d": "3D",
-  effects: "Efectos",
-  scenes: "Escenas",
-  reels: "Reels",
 };
 
 export function getCategoryLabel(cat: PaletteItem["category"]) {
@@ -44,44 +38,90 @@ export function getCategoryLabel(cat: PaletteItem["category"]) {
 
 function getDefaultSceneData(type: SceneType): SceneData {
   switch (type) {
+    case "sc-intro":
+      return { title: "Resultados de Campaña", period: "Q1 2025" };
+    case "stat-hero":
+      return { value: "0", label: "Métrica", icon: "sc:bar-chart" };
+    case "stat-grid":
+      return {
+        title: "Métricas clave",
+        items: [
+          { icon: "sc:eye",     value: "0", label: "Impresiones" },
+          { icon: "sc:heart",   value: "0", label: "Me gusta" },
+          { icon: "sc:users",   value: "0", label: "Seguidores" },
+          { icon: "sc:percent", value: "0%", label: "Engagement" },
+        ],
+      };
+    case "bar-chart":
+      return {
+        title: "Comparativa",
+        bars: [
+          { label: "A", value: 100 },
+          { label: "B", value: 75 },
+          { label: "C", value: 50 },
+        ],
+      };
+    case "line-chart":
+      return {
+        title: "Tendencia",
+        points: [
+          { label: "Ene", value: 10 },
+          { label: "Feb", value: 15 },
+          { label: "Mar", value: 12 },
+          { label: "Abr", value: 20 },
+        ],
+      };
+    case "donut-chart":
+      return {
+        title: "Distribución",
+        segments: [
+          { label: "A", value: 50 },
+          { label: "B", value: 30 },
+          { label: "C", value: 20 },
+        ],
+      };
+    case "comparison":
+      return {
+        title: "Este mes vs anterior",
+        labelA: "Este mes",
+        labelB: "Mes anterior",
+        metrics: [
+          { label: "Impresiones", valueA: "0", valueB: "0" },
+        ],
+      };
+    case "leaderboard":
+      return {
+        title: "Top contenidos",
+        items: [
+          { label: "Contenido 1", value: 1000 },
+          { label: "Contenido 2", value: 800 },
+          { label: "Contenido 3", value: 600 },
+        ],
+      };
+    case "insight":
+      return {
+        insight: "Escribe aquí el insight clave.",
+        icon: "sc:zap",
+      };
+    case "sc-outro":
+      return {
+        tagline: "Inteligencia que convierte",
+        website: "socialcognitive.com",
+        handle: "@socialcognitive",
+        ctaText: "Agenda tu consulta gratis",
+      };
     case "image":
       return { src: "" };
     case "video":
       return { src: "", volume: 1, loop: false };
     case "audio":
       return { src: "", volume: 1, loop: false };
-    case "gif":
-      return { src: "", width: 400, height: 400 };
-    case "animated-image":
-      return { src: "", width: 400, height: 400, fit: "contain" };
     case "lottie":
       return { src: "", loop: true };
-    case "text":
-      return { text: "Nuevo texto", fontSize: 48, color: "#ffffff", align: "center" };
     case "captions":
       return { src: "" };
-    case "light-leak":
-      return { seed: 5, hueShift: 240 };
-    case "logo-curtain":
-      return { companyName: "Mi Empresa", accentColor: "#9DFF20" };
-    case "intro":
-      return { companyName: "Mi Empresa", tagline: "Innovación", accentColor: "#9DFF20" };
-    case "services":
-      return { title: "Servicios", accentColor: "#9DFF20" };
-    case "products":
-      return { title: "Productos", accentColor: "#9DFF20" };
-    case "metrics":
-      return { title: "Métricas", accentColor: "#9DFF20" };
-    case "contact":
-      return { companyName: "Contacto", ctaText: "Contáctanos", accentColor: "#9DFF20" };
-    case "reel-hook":
-      return { hookText: "Tu gancho aquí", subtitle: "Subtítulo", accentColor: "#9DFF20" };
-    case "reel-text-card":
-      return { text: "Cita o dato impactante", style: "quote", accentColor: "#9DFF20" };
-    case "reel-cta":
-      return { ctaText: "Síguenos para más", handle: "@marca", accentColor: "#9DFF20" };
     default:
-      return {};
+      return {} as SceneData;
   }
 }
 
@@ -96,8 +136,8 @@ export function createSequenceFromType(
     order,
     from: startFrame,
     sceneType: type,
-    durationInFrames: 90,
+    durationInFrames: 120,
     sceneData: getDefaultSceneData(type),
-    transition: { type: "fade", durationInFrames: 15, timing: "linear" },
+    transition: { type: "fade", durationInFrames: 20, timing: "spring" },
   };
 }

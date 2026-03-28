@@ -1,27 +1,25 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Scene & Transition types
+// Scene & Transition types — SocialCognitive Analytics Reels
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type SceneType =
-  | "logo-curtain"
-  | "intro"
-  | "services"
-  | "products"
-  | "metrics"
-  | "contact"
+  // ── SocialCognitive branded scenes ──────────────────────────────────────
+  | "sc-intro"       // Branded intro: logo, title, period label
+  | "stat-hero"      // One giant animated metric
+  | "stat-grid"      // 2–4 metrics in a card grid
+  | "bar-chart"      // Animated vertical bar chart
+  | "line-chart"     // Animated SVG line chart
+  | "donut-chart"    // Donut / pie breakdown
+  | "comparison"     // Side-by-side A vs B
+  | "leaderboard"    // Ranked list with animated bars
+  | "insight"        // Bold text insight / analysis
+  | "sc-outro"       // Branded CTA closing scene
+  // ── Media / infrastructure (keep) ───────────────────────────────────────
   | "image"
   | "video"
   | "audio"
-  | "gif"
-  | "animated-image"
   | "lottie"
-  | "three-canvas"
-  | "text"
-  | "captions"
-  | "light-leak"
-  | "reel-hook"
-  | "reel-text-card"
-  | "reel-cta";
+  | "captions";
 
 export type TransitionType = "fade" | "slide" | "wipe" | "flip" | "clock-wipe" | "none";
 
@@ -38,7 +36,6 @@ export interface SceneTransition {
   durationInFrames: number;
   direction?: TransitionDirection;
   timing: TransitionTiming;
-  /** Spring config when timing === "spring" */
   springConfig?: { damping?: number; stiffness?: number };
 }
 
@@ -47,19 +44,10 @@ export interface SceneTransition {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type EasingType =
-  | "linear"
-  | "quad"
-  | "cubic"
-  | "sin"
-  | "exp"
-  | "circle"
-  | "elastic"
-  | "bounce"
-  | "back"
-  | "bezier";
+  | "linear" | "quad" | "cubic" | "sin" | "exp"
+  | "circle" | "elastic" | "bounce" | "back" | "bezier";
 
 export type EasingVariant = "in" | "out" | "inOut";
-
 export type EntranceExitType = "fade" | "slide" | "scale" | "spring";
 
 export interface EntranceExitConfig {
@@ -69,20 +57,13 @@ export interface EntranceExitConfig {
   easing?: EasingType;
   easingVariant?: EasingVariant;
   springConfig?: { damping?: number; stiffness?: number; mass?: number };
-  /** For bezier: x1, y1, x2, y2 */
   bezierParams?: [number, number, number, number];
 }
 
 export type LayoutAnchor =
-  | "top-left"
-  | "top-center"
-  | "top-right"
-  | "center-left"
-  | "center"
-  | "center-right"
-  | "bottom-left"
-  | "bottom-center"
-  | "bottom-right";
+  | "top-left" | "top-center" | "top-right"
+  | "center-left" | "center" | "center-right"
+  | "bottom-left" | "bottom-center" | "bottom-right";
 
 export interface LayoutConfig {
   x: number;
@@ -99,113 +80,198 @@ export interface AnimationConfig {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Scene-specific data interfaces
+// Scene data interfaces — SocialCognitive Analytics
 // ─────────────────────────────────────────────────────────────────────────────
 
-export interface LogoCurtainData {
-  logoUrl?: string;
-  companyName?: string;
-  tagline?: string;
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface IntroData {
-  companyName?: string;
-  tagline?: string;
-  logoUrl?: string;
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface ServicesData {
-  title?: string;
+/** sc-intro — Branded opening scene */
+export interface ScIntroData {
+  /** Main title e.g. "Resultados de Campaña" */
+  title: string;
+  /** Subtitle or client name */
   subtitle?: string;
-  items?: Array<{
+  /** Time period label e.g. "Q1 2025 | Meta Ads" */
+  period?: string;
+  /** Override purple accent. Default: #5c59ca */
+  accentColor?: string;
+}
+
+/** stat-hero — One large animated KPI */
+export interface StatHeroData {
+  /** Display value e.g. "3.2M", "92%", "$48,000" */
+  value: string;
+  /** What the stat means e.g. "Impresiones totales" */
+  label: string;
+  /** Icon name from sc: collection e.g. "sc:eye" */
+  icon?: string;
+  /** Change text e.g. "+24%" or "-5%" */
+  change?: string;
+  /** true = positive (green), false = negative (red). Default true */
+  changePositive?: boolean;
+  /** Brief context below the label e.g. "vs Q4 2024" */
+  context?: string;
+  /** Accent color override. Default: #5c59ca */
+  accentColor?: string;
+}
+
+/** stat-grid — Grid of 2–4 KPI cards */
+export interface StatGridData {
+  /** Section title */
+  title?: string;
+  /** Period label e.g. "Enero – Marzo 2025" */
+  period?: string;
+  items: Array<{
+    /** Icon name e.g. "sc:eye" */
     icon?: string;
-    title: string;
-    description: string;
-  }>;
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface ProductsData {
-  title?: string;
-  items?: Array<{
-    imageUrl?: string;
-    name: string;
-    description: string;
-    price?: string;
-    badge?: string;
-  }>;
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface MetricsData {
-  title?: string;
-  items?: Array<{
+    /** Display value e.g. "3.2M" */
     value: string;
+    /** Metric name e.g. "Impresiones" */
     label: string;
-    icon?: string;
+    /** Change text e.g. "+12%" */
+    change?: string;
+    /** true = positive (shows green), false = negative (shows red) */
+    changePositive?: boolean;
+    /** Card accent color. Defaults to purple or fuschia alternating */
     color?: string;
   }>;
-  backgroundColor?: string;
-  accentColor?: string;
 }
 
-export interface ContactData {
-  companyName?: string;
-  email?: string;
-  phone?: string;
-  website?: string;
-  address?: string;
-  logoUrl?: string;
-  backgroundColor?: string;
-  accentColor?: string;
-  ctaText?: string;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Reels (vertical short-form: Instagram Reels, TikTok, etc.)
-// ─────────────────────────────────────────────────────────────────────────────
-
-export interface ReelHookData {
-  /** Frase gancho que capta atención (corta, impactante) */
-  hookText: string;
-  /** Subtítulo o refuerzo opcional */
-  subtitle?: string;
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface ReelTextCardData {
-  /** Texto principal (cita, tip, dato) */
-  text: string;
-  /** Texto secundario o atribución */
-  subtext?: string;
-  /** Estilo visual: "quote" | "fact" | "tip" */
-  style?: "quote" | "fact" | "tip";
-  backgroundColor?: string;
-  accentColor?: string;
-}
-
-export interface ReelCtaData {
-  /** Título de cierre (ej. "Síguenos", "Descarga la app") */
+/** bar-chart — Animated vertical bar chart */
+export interface BarChartData {
+  /** Chart title */
   title?: string;
-  /** Texto del CTA (ej. "Síguenos para más") */
-  ctaText: string;
-  /** Handle o usuario (ej. @marca) */
+  /** Subtitle or source */
+  subtitle?: string;
+  bars: Array<{
+    /** X-axis label */
+    label: string;
+    /** Numeric value */
+    value: number;
+    /** Bar color. Default: purple */
+    color?: string;
+  }>;
+  /** Value unit e.g. "K", "%", "$" (appended to value labels) */
+  unit?: string;
+  /** Override max value for scaling. Default: max of bars */
+  maxValue?: number;
+}
+
+/** line-chart — Animated SVG line chart */
+export interface LineChartData {
+  /** Chart title */
+  title?: string;
+  /** Subtitle or x-axis context */
+  subtitle?: string;
+  points: Array<{
+    /** X-axis label */
+    label: string;
+    /** Numeric value */
+    value: number;
+  }>;
+  /** Value unit e.g. "K", "%" */
+  unit?: string;
+  /** Line + area color. Default: #5c59ca */
+  color?: string;
+}
+
+/** donut-chart — Animated donut/pie breakdown */
+export interface DonutChartData {
+  /** Chart title */
+  title?: string;
+  segments: Array<{
+    /** Segment label */
+    label: string;
+    /** Numeric value (percentages or raw — will be normalized) */
+    value: number;
+    /** Segment color */
+    color?: string;
+  }>;
+  /** Label shown in donut center e.g. "Total" */
+  centerLabel?: string;
+  /** Value shown in donut center e.g. "100%" or "3.2M" */
+  centerValue?: string;
+}
+
+/** comparison — Side-by-side A vs B */
+export interface ComparisonData {
+  /** Section title */
+  title?: string;
+  /** Period or context label */
+  period?: string;
+  /** Left column label e.g. "Este mes" */
+  labelA: string;
+  /** Right column label e.g. "Mes anterior" */
+  labelB: string;
+  metrics: Array<{
+    /** Metric name */
+    label: string;
+    /** Value for A */
+    valueA: string | number;
+    /** Value for B */
+    valueB: string | number;
+    /** Unit suffix e.g. "%" */
+    unit?: string;
+    /**
+     * Is A the winner? true = A highlighted (purple),
+     * false = B highlighted (fuschia). Default: compare numerically.
+     */
+    aWins?: boolean;
+  }>;
+}
+
+/** leaderboard — Ranked list with animated bars */
+export interface LeaderboardData {
+  /** Section title */
+  title?: string;
+  /** Subtitle e.g. "Por impresiones" */
+  subtitle?: string;
+  items: Array<{
+    /** Display name/label */
+    label: string;
+    /** Numeric or display value */
+    value: string | number;
+    /** Small sublabel e.g. platform name */
+    sublabel?: string;
+    /** Icon name e.g. "sc:instagram" */
+    icon?: string;
+    /** Item color. Defaults to position-based (purple/fuschia/white) */
+    color?: string;
+  }>;
+  /** Unit appended to values e.g. "K", "%" */
+  unit?: string;
+}
+
+/** insight — Bold analytics insight or takeaway */
+export interface InsightData {
+  /** Main insight text (1–2 sentences, bold) */
+  insight: string;
+  /** Supporting statistic e.g. "3.2M impresiones" */
+  stat?: string;
+  /** Stat description label */
+  statLabel?: string;
+  /** Icon name e.g. "sc:flame" */
+  icon?: string;
+  /** Source attribution e.g. "Meta Ads Manager · Q1 2025" */
+  source?: string;
+  /** Accent color override */
+  accentColor?: string;
+}
+
+/** sc-outro — Branded closing CTA */
+export interface ScOutroData {
+  /** Tagline e.g. "Inteligencia que convierte" */
+  tagline?: string;
+  /** Website URL e.g. "socialcognitive.com" */
+  website?: string;
+  /** Social handle e.g. "@socialcognitive" */
   handle?: string;
-  /** URL de perfil o enlace */
-  link?: string;
-  backgroundColor?: string;
+  /** Call-to-action text e.g. "Agenda tu consulta gratis" */
+  ctaText?: string;
+  /** Accent color override. Default: #5c59ca */
   accentColor?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Media & component-specific data (new types)
+// Media / infrastructure data interfaces
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface ImageData {
@@ -227,21 +293,14 @@ export interface AudioData {
   src: string;
   volume?: number;
   loop?: boolean;
-}
-
-export interface GifData {
-  src: string;
-  width?: number;
-  height?: number;
-}
-
-export interface AnimatedImageData {
-  src: string;
-  width?: number;
-  height?: number;
-  fit?: "fill" | "contain" | "cover";
-  playbackRate?: number;
-  loopBehavior?: "loop" | "pause-after-finish" | "clear-after-finish";
+  /** ElevenLabs generation marker — stripped after audio is generated */
+  _elevenlabs?: {
+    type: "music" | "voice" | "sfx";
+    prompt?: string;
+    text?: string;
+    durationMs?: number;
+    durationSeconds?: number;
+  };
 }
 
 export interface LottieData {
@@ -249,67 +308,44 @@ export interface LottieData {
   loop?: boolean;
 }
 
-export interface TextData {
-  text: string;
-  fontFamily?: string;
-  fontSize?: number;
-  color?: string;
-  align?: "left" | "center" | "right";
-  fontWeight?: string;
-}
-
 export interface CaptionsData {
   src: string;
-  /** SRT or JSON captions URL */
-}
-
-export interface LightLeakData {
-  seed?: number;
-  hueShift?: number;
-  durationInFrames?: number;
 }
 
 export type SceneData =
-  | LogoCurtainData
-  | IntroData
-  | ServicesData
-  | ProductsData
-  | MetricsData
-  | ContactData
-  | ReelHookData
-  | ReelTextCardData
-  | ReelCtaData
+  | ScIntroData
+  | StatHeroData
+  | StatGridData
+  | BarChartData
+  | LineChartData
+  | DonutChartData
+  | ComparisonData
+  | LeaderboardData
+  | InsightData
+  | ScOutroData
   | ImageData
   | VideoData
   | AudioData
-  | GifData
-  | AnimatedImageData
   | LottieData
-  | TextData
-  | CaptionsData
-  | LightLeakData;
+  | CaptionsData;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Sequence — una escena dentro de una composición
+// Sequence — one scene in a composition
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface Sequence {
   id: string;
-  /** Posición en el timeline (0-based, sin gaps) */
   order: number;
-  /** Frame de inicio (para drag en timeline; si no existe, se calcula desde order) */
   from?: number;
   sceneType: SceneType;
   durationInFrames: number;
   sceneData: SceneData;
-  /** Transición aplicada DESPUÉS de esta secuencia (hacia la siguiente). */
   transition?: SceneTransition;
-  /** Animaciones de entrada/salida y layout (para media/texto) */
   animationConfig?: AnimationConfig;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Composition DTO — serializable para HTTP responses y props de cliente
+// Composition DTO
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CompositionStatus = "draft" | "published" | "archived";
@@ -325,13 +361,9 @@ export interface CompositionDTO {
   width: number;
   height: number;
   sequences: Sequence[];
-  /**
-   * Duración total calculada:
-   * sum(seq.durationInFrames) − sum(seq.transition.durationInFrames para c/u excepto la última)
-   */
   totalDurationInFrames: number;
-  createdAt: string; // ISO 8601
-  updatedAt: string; // ISO 8601
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -347,17 +379,10 @@ export interface AssetDTO {
   type: AssetType;
   mimeType: string;
   sizeBytes: number;
-  /** Ruta dentro del bucket: users/{uid}/assets/{type}/{filename} */
   storagePath: string;
   downloadUrl: string;
-  /** Descripción de para qué y cómo debe usarse este asset en esta composición */
   description?: string;
-  /**
-   * ID de sesión temporal (generado al abrir "Nueva composición").
-   * Agrupa assets antes de que exista la composición.
-   */
   sessionId?: string;
-  /** ID de la composición a la que pertenece este asset (se asigna al crear la composición) */
   compositionId?: string;
   width?: number;
   height?: number;
@@ -385,7 +410,7 @@ export interface UserProfileDTO {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Remotion Player input props — lo que recibe DynamicComposition
+// Remotion Player input props
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface CompositionInputProps {

@@ -188,11 +188,11 @@ function calcTotalDuration(sequences) {
     if (hasExplicitFrom) {
         return Math.max(0, ...sequences.map((s)=>(s.from ?? 0) + s.durationInFrames));
     }
-    const sorted = [
-        ...sequences
-    ].sort((a, b)=>a.order - b.order);
-    return sorted.reduce((total, seq, i)=>{
-        const isLast = i === sorted.length - 1;
+    // Only visual sequences determine the composition length.
+    const visualSeqs = sequences.filter((s)=>s.sceneType !== "audio").sort((a, b)=>a.order - b.order);
+    if (visualSeqs.length === 0) return 0;
+    return visualSeqs.reduce((total, seq, i)=>{
+        const isLast = i === visualSeqs.length - 1;
         const overlap = !isLast && seq.transition ? seq.transition.durationInFrames : 0;
         return total + seq.durationInFrames - overlap;
     }, 0);

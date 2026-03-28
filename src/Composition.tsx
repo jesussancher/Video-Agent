@@ -11,13 +11,16 @@ import { wipe } from "@remotion/transitions/wipe";
 import { flip } from "@remotion/transitions/flip";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
 import {
-  CurtainScene,
-  ListCardsScene,
-  MetricsScene,
-  ContactScene,
-  ReelHookScene,
-  ReelTextCardScene,
-  ReelCtaScene,
+  ScIntroScene,
+  ScOutroScene,
+  StatHeroScene,
+  StatGridScene,
+  BarChartScene,
+  LineChartScene,
+  DonutChartScene,
+  ComparisonScene,
+  LeaderboardScene,
+  InsightScene,
 } from "./scenes/DataDrivenScenes";
 import { MediaScene } from "./scenes/MediaScene";
 import type {
@@ -65,32 +68,31 @@ function getTiming(t: SceneTransition) {
 
 function SceneRenderer({ sequence }: { sequence: SequenceType }) {
   switch (sequence.sceneType) {
-    case "logo-curtain":
-    case "intro":
-      return <CurtainScene sequence={sequence} />;
-    case "services":
-    case "products":
-      return <ListCardsScene sequence={sequence} />;
-    case "metrics":
-      return <MetricsScene sequence={sequence} />;
-    case "contact":
-      return <ContactScene sequence={sequence} />;
-    case "reel-hook":
-      return <ReelHookScene sequence={sequence} />;
-    case "reel-text-card":
-      return <ReelTextCardScene sequence={sequence} />;
-    case "reel-cta":
-      return <ReelCtaScene sequence={sequence} />;
+    case "sc-intro":
+      return <ScIntroScene sequence={sequence} />;
+    case "sc-outro":
+      return <ScOutroScene sequence={sequence} />;
+    case "stat-hero":
+      return <StatHeroScene sequence={sequence} />;
+    case "stat-grid":
+      return <StatGridScene sequence={sequence} />;
+    case "bar-chart":
+      return <BarChartScene sequence={sequence} />;
+    case "line-chart":
+      return <LineChartScene sequence={sequence} />;
+    case "donut-chart":
+      return <DonutChartScene sequence={sequence} />;
+    case "comparison":
+      return <ComparisonScene sequence={sequence} />;
+    case "leaderboard":
+      return <LeaderboardScene sequence={sequence} />;
+    case "insight":
+      return <InsightScene sequence={sequence} />;
     case "image":
     case "video":
-    case "gif":
-    case "animated-image":
     case "lottie":
-    case "text":
       return <MediaScene sequence={sequence} />;
-    case "light-leak":
     case "captions":
-    case "three-canvas":
     case "audio":
       return null;
     default:
@@ -102,28 +104,24 @@ function SceneRenderer({ sequence }: { sequence: SequenceType }) {
 //
 // Audio sequences are rendered as absolute RemotionSequence overlays so they
 // don't affect the TransitionSeries visual timeline. Their `from` frame is
-// computed by finding the first visual sequence whose order >= audio.order
-// (i.e. the scene the audio should accompany). Background music (order=0) maps
-// to frame 0 of the visual timeline.
+// computed by finding the first visual sequence whose order >= audio.order.
 //
 
 export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
   sequences = [],
 }) => {
-  const { width, height } = useVideoConfig();
+  const { width, height, durationInFrames: compositionDuration } = useVideoConfig();
 
   const sorted = useMemo(
     () => [...sequences].sort((a, b) => a.order - b.order),
     [sequences]
   );
 
-  // Split into visual and audio layers
   const { visualSeqs, audioSeqs } = useMemo(() => ({
     visualSeqs: sorted.filter((s) => s.sceneType !== "audio"),
     audioSeqs: sorted.filter((s) => s.sceneType === "audio"),
   }), [sorted]);
 
-  // Build the visual-only sequential timeline (frame positions)
   const visualFromMap = useMemo(() => {
     const map = new Map<string, number>();
     let acc = 0;
@@ -139,11 +137,9 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
     return map;
   }, [visualSeqs]);
 
-  // Map each audio sequence to a visual start frame
   const audioFromMap = useMemo(() => {
     const map = new Map<string, number>();
     for (const audio of audioSeqs) {
-      // Find the first visual seq whose order >= audio.order
       const anchor = visualSeqs.find((v) => v.order >= audio.order);
       map.set(audio.id, anchor ? (visualFromMap.get(anchor.id) ?? 0) : 0);
     }
@@ -154,7 +150,7 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
     return (
       <AbsoluteFill
         style={{
-          backgroundColor: "#050508",
+          backgroundColor: "#10171d",
           alignItems: "center",
           justifyContent: "center",
           color: "rgba(255,255,255,0.3)",
@@ -167,8 +163,8 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
   }
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#050508" }}>
-      {/* ── Visual layer (sequential with transitions) ── */}
+    <AbsoluteFill style={{ backgroundColor: "#10171d" }}>
+      {/* ── Visual layer ── */}
       <TransitionSeries>
         {visualSeqs.map((seq, index) => (
           <React.Fragment key={seq.id}>
@@ -188,24 +184,44 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
         ))}
       </TransitionSeries>
 
-      {/* ── Audio layer (absolute overlays, don't affect visual timeline) ── */}
-      {audioSeqs.map((seq) => (
-        <RemotionSequence
-          key={seq.id}
-          from={audioFromMap.get(seq.id) ?? 0}
-          durationInFrames={seq.durationInFrames}
-          layout="none"
-        >
-          <MediaScene sequence={seq} />
-        </RemotionSequence>
-      ))}
+      {/* ── Audio layer ── */}
+      {audioSeqs.map((seq) => {
+        const from = audioFromMap.get(seq.id) ?? 0;
+        const data = seq.sceneData as Record<string, unknown>;
+        const isLoop = data?.loop === true;
+
+        // Loop tracks = background music: fill composition + enforce low volume
+        // so the voice-over is always intelligible regardless of agent output.
+        const MUSIC_MAX_VOLUME = 0.12;
+        const VOICE_DEFAULT_VOLUME = 0.9;
+
+        const agentVolume = typeof data?.volume === "number" ? data.volume : undefined;
+        const enforcedVolume = isLoop
+          ? Math.min(agentVolume ?? MUSIC_MAX_VOLUME, MUSIC_MAX_VOLUME)
+          : (agentVolume ?? VOICE_DEFAULT_VOLUME);
+
+        const dur = isLoop ? compositionDuration - from : seq.durationInFrames;
+
+        const seqWithVolume: typeof seq = {
+          ...seq,
+          sceneData: { ...data, volume: enforcedVolume } as typeof seq.sceneData,
+        };
+
+        return (
+          <RemotionSequence
+            key={seq.id}
+            from={from}
+            durationInFrames={Math.max(1, dur)}
+            layout="none"
+          >
+            <MediaScene sequence={seqWithVolume} />
+          </RemotionSequence>
+        );
+      })}
     </AbsoluteFill>
   );
 };
 
-/**
- * MyComposition — alias para Remotion Studio (sin datos locales).
- */
 export const MyComposition: React.FC = () => (
   <DynamicComposition sequences={[]} />
 );

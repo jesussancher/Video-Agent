@@ -305,9 +305,9 @@ export function EditorClient({ composition: initialComposition }: EditorClientPr
           onClick: () => handlePasteSequence(target.insertOrder),
         },
         {
-          id: "add-text",
-          label: "Añadir texto",
-          onClick: () => handleAddFromPalette("text"),
+          id: "add-insight",
+          label: "Añadir insight",
+          onClick: () => handleAddFromPalette("insight"),
         },
         {
           id: "add-image",

@@ -15,8 +15,6 @@ import type {
   ImageData,
   VideoData,
   AudioData,
-  TextData,
-  GifData,
   LottieData,
 } from "../../../src/types";
 import { EasingPicker } from "./EasingPicker";
@@ -390,8 +388,6 @@ export function PropertiesPanel({ sequence, onChange }: PropertiesPanelProps) {
 
       {(sequence.sceneType === "image" ||
         sequence.sceneType === "video" ||
-        sequence.sceneType === "text" ||
-        sequence.sceneType === "gif" ||
         sequence.sceneType === "lottie") && (
         <div style={SECTION_STYLE}>
           <div style={SECTION_TITLE}>Layout</div>
@@ -542,52 +538,6 @@ export function PropertiesPanel({ sequence, onChange }: PropertiesPanelProps) {
               />
             </div>
           </>
-        )}
-        {sequence.sceneType === "text" && (
-          <>
-            <div>
-              <div style={LABEL_STYLE}>Texto</div>
-              <textarea
-                rows={3}
-                value={(sequence.sceneData as TextData).text}
-                onChange={(e) => updateSceneData({ text: e.target.value })}
-                style={{ ...INPUT_STYLE, resize: "vertical" }}
-              />
-            </div>
-            <div>
-              <div style={LABEL_STYLE}>Tamaño</div>
-              <input
-                type="number"
-                min={8}
-                value={(sequence.sceneData as TextData).fontSize ?? 48}
-                onChange={(e) =>
-                  updateSceneData({ fontSize: parseInt(e.target.value, 10) || 48 })
-                }
-                style={INPUT_STYLE}
-              />
-            </div>
-            <div>
-              <div style={LABEL_STYLE}>Color</div>
-              <input
-                type="text"
-                value={(sequence.sceneData as TextData).color ?? "#ffffff"}
-                onChange={(e) => updateSceneData({ color: e.target.value })}
-                style={INPUT_STYLE}
-              />
-            </div>
-          </>
-        )}
-        {sequence.sceneType === "gif" && (
-          <div>
-            <div style={LABEL_STYLE}>URL GIF</div>
-            <input
-              type="text"
-              placeholder="https://..."
-              value={(sequence.sceneData as GifData).src}
-              onChange={(e) => updateSceneData({ src: e.target.value })}
-              style={INPUT_STYLE}
-            />
-          </div>
         )}
         {sequence.sceneType === "lottie" && (
           <div>

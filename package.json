@@ -15,6 +15,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "@iconify/react": "^6.0.2",
     "@remotion/cli": "4.0.434",
     "@remotion/gif": "4.0.434",
     "@remotion/google-fonts": "4.0.434",

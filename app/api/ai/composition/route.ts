@@ -27,25 +27,23 @@ function assistantMessageText(
 
 // ─── Valid scene types ─────────────────────────────────────────────────────────
 const VALID_SCENE_TYPES = [
-  "logo-curtain",
-  "intro",
-  "services",
-  "products",
-  "metrics",
-  "contact",
+  // SocialCognitive analytics scenes
+  "sc-intro",
+  "stat-hero",
+  "stat-grid",
+  "bar-chart",
+  "line-chart",
+  "donut-chart",
+  "comparison",
+  "leaderboard",
+  "insight",
+  "sc-outro",
+  // Media / infrastructure
   "image",
   "video",
   "audio",
-  "gif",
-  "animated-image",
   "lottie",
-  "three-canvas",
-  "text",
   "captions",
-  "light-leak",
-  "reel-hook",
-  "reel-text-card",
-  "reel-cta",
 ] as const;
 
 function normalizeSceneType(s: string): (typeof VALID_SCENE_TYPES)[number] {
@@ -53,7 +51,7 @@ function normalizeSceneType(s: string): (typeof VALID_SCENE_TYPES)[number] {
   const found = VALID_SCENE_TYPES.find(
     (t) => t === lower || t.replace(/-/g, "") === lower.replace(/-/g, "")
   );
-  return found ?? "intro";
+  return found ?? "sc-intro";
 }
 
 // ─── Route handler ─────────────────────────────────────────────────────────────

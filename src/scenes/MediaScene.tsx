@@ -9,11 +9,13 @@ import type {
   ImageData,
   VideoData,
   AudioData,
-  GifData,
-  AnimatedImageData,
   LottieData,
-  TextData,
 } from "../types";
+
+// Local types for legacy layers (not used in active scene routing)
+type GifData = { src: string; width?: number; height?: number };
+type AnimatedImageData = { src: string; width?: number; height?: number; fit?: "fill" | "contain" | "cover"; playbackRate?: number; loopBehavior?: "loop" | "pause-after-finish" | "clear-after-finish" };
+type TextData = { text: string; fontFamily?: string; fontSize?: number; color?: string; align?: "left" | "center" | "right"; fontWeight?: string };
 import { AnimatedLayer } from "../components/AnimatedLayer";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -262,14 +264,8 @@ export function MediaScene({ sequence }: { sequence: Sequence }) {
       return <VideoLayer data={data as VideoData} sequence={sequence} />;
     case "audio":
       return <AudioLayer data={data as AudioData} />;
-    case "gif":
-      return <GifLayer data={data as GifData} sequence={sequence} />;
-    case "animated-image":
-      return <AnimatedImageLayer data={data as AnimatedImageData} sequence={sequence} />;
     case "lottie":
       return <LottieLayer data={data as LottieData} sequence={sequence} />;
-    case "text":
-      return <TextLayer data={data as TextData} sequence={sequence} />;
     default:
       return null;
   }
