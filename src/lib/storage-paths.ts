@@ -52,6 +52,9 @@ export const STORAGE_PATHS = {
   userAudio: (uid: string, filename: string) =>
     `users/${uid}/assets/${ASSET_DIR.audio}/${filename}`,
 
+  compositionAudio: (uid: string, compositionId: string, filename: string) =>
+    `users/${uid}/compositions/${compositionId}/assets/${ASSET_DIR.audio}/${filename}`,
+
   userFont: (uid: string, filename: string) =>
     `users/${uid}/assets/${ASSET_DIR.font}/${filename}`,
 

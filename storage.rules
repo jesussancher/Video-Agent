@@ -87,6 +87,17 @@ service firebase.storage {
     }
 
     // ─────────────────────────────────────────────────────────────────────
+    // users/{uid}/compositions/{compositionId}/assets/audio/{filename}
+    //   Audios generados por ElevenLabs vinculados a una composición.
+    //   Escritura solo desde Admin SDK; lectura del propietario (o con token).
+    // ─────────────────────────────────────────────────────────────────────
+    match /users/{uid}/compositions/{compositionId}/assets/audio/{filename} {
+      allow read: if isOwner(uid);
+      allow write: if false;  // Solo Admin SDK
+      allow delete: if isOwner(uid);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
     // users/{uid}/compositions/sessions/{sessionId}/…
     //   Mismos límites que assets (flujo subida del chat antes de crear composición).
     // ─────────────────────────────────────────────────────────────────────

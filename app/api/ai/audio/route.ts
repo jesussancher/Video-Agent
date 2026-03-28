@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
     durationMs?: number;
     durationSeconds?: number;
     voiceId?: string;
+    compositionId?: string;
   };
   try {
     body = await request.json();
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { type, text, prompt, durationMs, durationSeconds, voiceId } = body;
+  const { type, text, prompt, durationMs, durationSeconds, voiceId, compositionId } = body;
 
   if (!type || !["voice", "music", "sfx"].includes(type)) {
     return NextResponse.json(
@@ -186,18 +187,27 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 2. Subir a Firebase Storage ─────────────────────────────────────────
-    const storagePath = STORAGE_PATHS.userAudio(auth.uid, filename);
+    const storagePath = compositionId
+      ? STORAGE_PATHS.compositionAudio(auth.uid, compositionId, filename)
+      : STORAGE_PATHS.userAudio(auth.uid, filename);
     const bucket = adminStorage.bucket(STORAGE_BUCKET);
     const file = bucket.file(storagePath);
 
     // El download token se guarda como metadata custom → URL permanente
     const downloadToken = randomUUID();
-    await file.save(audioBuffer, {
-      metadata: {
-        contentType: "audio/mpeg",
-        metadata: { firebaseStorageDownloadTokens: downloadToken },
-      },
-    });
+    console.log(`[ai/audio] Saving ${type} (${audioBuffer.length} bytes) to gs://${STORAGE_BUCKET}/${storagePath}`);
+    try {
+      await file.save(audioBuffer, {
+        metadata: {
+          contentType: "audio/mpeg",
+          metadata: { firebaseStorageDownloadTokens: downloadToken },
+        },
+      });
+      console.log(`[ai/audio] Save OK → ${storagePath}`);
+    } catch (saveErr) {
+      console.error("[ai/audio] file.save() FAILED:", saveErr);
+      throw saveErr;
+    }
 
     const downloadUrl = firebaseStorageUrl(STORAGE_BUCKET, storagePath, downloadToken);
 

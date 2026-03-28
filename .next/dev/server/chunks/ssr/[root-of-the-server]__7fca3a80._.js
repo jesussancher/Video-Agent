@@ -249,7 +249,7 @@ async function getComposition(uid, compositionId) {
     if (!snap.exists) return null;
     return compositionToDTO(snap.id, snap.data());
 }
-async function createComposition(uid, input) {
+async function createComposition(uid, input, id) {
     const now = __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$firestore__$5b$external$5d$__$28$firebase$2d$admin$2f$firestore$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["FieldValue"].serverTimestamp();
     const docData = {
         ...input,
@@ -257,7 +257,14 @@ async function createComposition(uid, input) {
         createdAt: now,
         updatedAt: now
     };
-    const ref = await compositionsRef(uid).add(docData);
+    let ref;
+    if (id) {
+        ref = compositionRef(uid, id);
+        await ref.set(docData);
+    } else {
+        const newRef = await compositionsRef(uid).add(docData);
+        ref = compositionRef(uid, newRef.id);
+    }
     const snap = await ref.get();
     return compositionToDTO(snap.id, snap.data());
 }

@@ -81,7 +81,8 @@ function buildAssetContext(assets: AssetDTO[]): string {
 async function resolveAudio(
   sequences: Sequence[],
   apiUrl: string,
-  onProgress: (msg: string) => void
+  onProgress: (msg: string) => void,
+  compositionId: string
 ): Promise<Sequence[]> {
   const result: Sequence[] = [];
   for (const seq of sequences) {
@@ -99,7 +100,7 @@ async function resolveAudio(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ type: marker.type, text: marker.text, prompt: marker.prompt, durationMs: marker.durationMs, durationSeconds: marker.durationSeconds }),
+        body: JSON.stringify({ type: marker.type, text: marker.text, prompt: marker.prompt, durationMs: marker.durationMs, durationSeconds: marker.durationSeconds, compositionId }),
       });
       const audioData = await res.json() as { downloadUrl?: string };
       const { _elevenlabs: _rm, ...clean } = data;
@@ -771,10 +772,11 @@ export function CompositionChat({ open, onClose, onCreated }: CompositionChatPro
         (s) => (s.sceneData as Record<string, unknown>)?._elevenlabs
       ).length;
 
+      const compositionId = crypto.randomUUID();
       let resolvedSequences = comp.sequences;
       if (audioSeqCount > 0) {
         setStatusMsg(`Generando ${audioSeqCount} pista(s) de audio con ElevenLabs…`);
-        resolvedSequences = await resolveAudio(comp.sequences, API_URL, (msg) => setStatusMsg(msg));
+        resolvedSequences = await resolveAudio(comp.sequences, API_URL, (msg) => setStatusMsg(msg), compositionId);
       }
 
       const audioCount = resolvedSequences.filter(
@@ -793,7 +795,7 @@ export function CompositionChat({ open, onClose, onCreated }: CompositionChatPro
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ title: comp.title, sequences: resolvedSequences, fps: comp.fps, width: comp.width, height: comp.height, sessionId }),
+        body: JSON.stringify({ title: comp.title, sequences: resolvedSequences, fps: comp.fps, width: comp.width, height: comp.height, sessionId, compositionId }),
       });
       const createData = await createRes.json();
       if (!createRes.ok) throw new Error(createData.error ?? "Error al crear");
@@ -818,16 +820,17 @@ export function CompositionChat({ open, onClose, onCreated }: CompositionChatPro
       const audioSeqCount = lastComposition.sequences.filter(
         (s) => (s.sceneData as Record<string, unknown>)?._elevenlabs
       ).length;
+      const compositionId = crypto.randomUUID();
       let resolvedSequences = lastComposition.sequences;
       if (audioSeqCount > 0) {
         setStatusMsg(`Generando ${audioSeqCount} pista(s) de audio con ElevenLabs…`);
-        resolvedSequences = await resolveAudio(lastComposition.sequences, API_URL, (msg) => setStatusMsg(msg));
+        resolvedSequences = await resolveAudio(lastComposition.sequences, API_URL, (msg) => setStatusMsg(msg), compositionId);
       }
       const res = await fetch(`${API_URL}/api/compositions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ title: lastComposition.title, sequences: resolvedSequences, fps: lastComposition.fps, width: lastComposition.width, height: lastComposition.height, sessionId }),
+        body: JSON.stringify({ title: lastComposition.title, sequences: resolvedSequences, fps: lastComposition.fps, width: lastComposition.width, height: lastComposition.height, sessionId, compositionId }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error");

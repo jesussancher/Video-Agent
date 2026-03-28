@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
     status?: CompositionStatus;
     thumbnailUrl?: string;
     sessionId?: string;
+    compositionId?: string;
   };
 
   try {
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { title, sequences = [], fps = 30, width = 1920, height = 1080 } = body;
+  const { title, sequences = [], fps = 30, width = 1920, height = 1080, compositionId } = body;
 
   if (!title || typeof title !== "string" || title.trim() === "") {
     return NextResponse.json(
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
     if (body.description != null) data.description = body.description;
     if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
 
-    const composition = await createComposition(auth.uid, data);
+    const composition = await createComposition(auth.uid, data, compositionId);
 
     // Vincular assets de sesión a la composición recién creada
     if (body.sessionId) {

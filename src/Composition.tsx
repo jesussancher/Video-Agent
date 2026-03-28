@@ -188,6 +188,7 @@ export const DynamicComposition: React.FC<Partial<CompositionInputProps>> = ({
       {audioSeqs.map((seq) => {
         const from = audioFromMap.get(seq.id) ?? 0;
         const data = seq.sceneData as Record<string, unknown>;
+        if (!data?.src) return null; // Skip audio sequences with no resolved src
         const isLoop = data?.loop === true;
 
         // Loop tracks = background music: fill composition + enforce low volume

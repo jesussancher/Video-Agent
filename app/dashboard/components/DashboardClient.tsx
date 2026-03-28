@@ -23,6 +23,7 @@ export function DashboardClient({
   );
   const [chatOpen, setChatOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [renderingId, setRenderingId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; title: string } | null>(null);
   const [alertModal, setAlertModal] = useState<{ title: string; message: string } | null>(null);
 
@@ -37,6 +38,28 @@ export function DashboardClient({
   const handleCompositionCreated = (compositionId: string) => {
     router.refresh();
     setSelectedId(compositionId);
+  };
+
+  const handleDownload = async (e: React.MouseEvent, compositionId: string, title: string) => {
+    e.stopPropagation();
+    setRenderingId(compositionId);
+    try {
+      const res = await fetch(`/api/render/${compositionId}`);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setAlertModal({ title: "Error al renderizar", message: data.error ?? "No se pudo renderizar el video." });
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${title}.mp4`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setRenderingId(null);
+    }
   };
 
   const handleDeleteClick = (e: React.MouseEvent, compositionId: string, title: string) => {
@@ -177,6 +200,15 @@ export function DashboardClient({
                           </a>
                           <button
                             type="button"
+                            onClick={(e) => handleDownload(e, c.id, c.title)}
+                            disabled={!!renderingId}
+                            title="Renderizar y descargar MP4"
+                            style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid rgba(100,160,255,0.4)", background: "rgba(100,160,255,0.08)", color: "#64a0ff", fontSize: 12, cursor: renderingId ? "wait" : "pointer", letterSpacing: 0.5, opacity: renderingId ? 0.7 : 1 }}
+                          >
+                            {renderingId === c.id ? "Renderizando…" : "↓ MP4"}
+                          </button>
+                          <button
+                            type="button"
                             onClick={(e) => handleDeleteClick(e, c.id, c.title)}
                             disabled={deletingId === c.id}
                             style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid rgba(255,120,120,0.4)", background: "rgba(255,120,120,0.08)", color: "#ff7878", fontSize: 12, cursor: deletingId === c.id ? "wait" : "pointer", letterSpacing: 0.5, opacity: deletingId === c.id ? 0.7 : 1 }}
@@ -203,6 +235,14 @@ export function DashboardClient({
             >
               Editar en Remotion Studio
             </a>
+            <button
+              type="button"
+              onClick={(e) => handleDownload(e, selected.id, selected.title)}
+              disabled={!!renderingId}
+              style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid rgba(100,160,255,0.4)", background: "rgba(100,160,255,0.08)", color: "#64a0ff", fontSize: 13, cursor: renderingId ? "wait" : "pointer", letterSpacing: 1, opacity: renderingId ? 0.7 : 1 }}
+            >
+              {renderingId === selected.id ? "Renderizando… (puede tardar)" : "↓ Descargar MP4"}
+            </button>
             <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, letterSpacing: 1, margin: 0 }}>
               {selected.sequences.length} escenas ·{" "}
               {(selected.totalDurationInFrames / selected.fps).toFixed(1)}s ·{" "}

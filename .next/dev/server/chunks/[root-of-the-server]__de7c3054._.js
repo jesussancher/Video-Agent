@@ -327,7 +327,7 @@ async function getComposition(uid, compositionId) {
     if (!snap.exists) return null;
     return compositionToDTO(snap.id, snap.data());
 }
-async function createComposition(uid, input) {
+async function createComposition(uid, input, id) {
     const now = __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$firestore__$5b$external$5d$__$28$firebase$2d$admin$2f$firestore$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f$firebase$2d$admin$29$__["FieldValue"].serverTimestamp();
     const docData = {
         ...input,
@@ -335,7 +335,14 @@ async function createComposition(uid, input) {
         createdAt: now,
         updatedAt: now
     };
-    const ref = await compositionsRef(uid).add(docData);
+    let ref;
+    if (id) {
+        ref = compositionRef(uid, id);
+        await ref.set(docData);
+    } else {
+        const newRef = await compositionsRef(uid).add(docData);
+        ref = compositionRef(uid, newRef.id);
+    }
     const snap = await ref.get();
     return compositionToDTO(snap.id, snap.data());
 }
@@ -495,7 +502,7 @@ async function POST(request) {
             status: 400
         });
     }
-    const { title, sequences = [], fps = 30, width = 1920, height = 1080 } = body;
+    const { title, sequences = [], fps = 30, width = 1920, height = 1080, compositionId } = body;
     if (!title || typeof title !== "string" || title.trim() === "") {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: "El campo 'title' es obligatorio"
@@ -515,7 +522,7 @@ async function POST(request) {
         };
         if (body.description != null) data.description = body.description;
         if (body.thumbnailUrl != null) data.thumbnailUrl = body.thumbnailUrl;
-        const composition = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createComposition"])(auth.uid, data);
+        const composition = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createComposition"])(auth.uid, data, compositionId);
         // Vincular assets de sesión a la composición recién creada
         if (body.sessionId) {
             await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["linkAssetsToComposition"])(auth.uid, body.sessionId, composition.id).catch((err)=>{

@@ -188,11 +188,19 @@ export async function getComposition(
 
 export async function createComposition(
   uid: string,
-  input: Omit<CompositionDoc, "ownerId" | "createdAt" | "updatedAt">
+  input: Omit<CompositionDoc, "ownerId" | "createdAt" | "updatedAt">,
+  id?: string
 ): Promise<CompositionDTO> {
   const now = FieldValue.serverTimestamp();
   const docData = { ...input, ownerId: uid, createdAt: now, updatedAt: now };
-  const ref = await compositionsRef(uid).add(docData);
+  let ref: ReturnType<typeof compositionRef>;
+  if (id) {
+    ref = compositionRef(uid, id);
+    await ref.set(docData);
+  } else {
+    const newRef = await compositionsRef(uid).add(docData);
+    ref = compositionRef(uid, newRef.id);
+  }
   const snap = await ref.get();
   return compositionToDTO(snap.id, snap.data() as CompositionDoc);
 }

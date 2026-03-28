@@ -89,6 +89,7 @@ function VideoLayer({ data, sequence }: { data: VideoData; sequence: Sequence })
 // ─────────────────────────────────────────────────────────────────────────────
 
 function AudioLayer({ data }: { data: AudioData }) {
+  if (!data.src) return null;
   return (
     <Audio
       src={data.src}
